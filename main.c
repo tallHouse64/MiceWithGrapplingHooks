@@ -23,6 +23,36 @@ typedef struct MWG_Map {
     int numRects;
 } MWG_Map;
 
+/* This function draws a map onto a surface.
+ *
+ * s: The surface to draw onto.
+ * map: The map to draw.
+ * cameraX: The x position of the camera.
+ * cameraY: The x position of the camera.
+ * returns: 0 on success or a negative number on
+ *  failure.
+ */
+int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY){
+
+    if(s == D_NULL || map == D_NULL){
+        return -1;
+    };
+
+    D_Rect r = {0};
+    int i = 0;
+    while(i < map->numRects){
+
+        r.x = map->rect[i].x - cameraX;
+        r.y = map->rect[i].y - cameraY;
+
+        D_FillRect(s, &r, D_rgbaToFormat(s->format, map->rect[i].r, map->rect[i].g, map->rect[i].b, 255));
+
+        i++;
+    };
+
+    return 0;
+};
+
 int main(int argc, char ** argv){
     D_Surf * out = D_GetOutSurf(50, 50, 640, 480, "Mice With Grappling Hooks", 0);
     int running = 1;
