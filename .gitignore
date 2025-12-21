@@ -1,0 +1,7 @@
+
+#Ignore the exe
+MWGH
+MWGH.exe
+
+#Ignore the objects
+main.o
