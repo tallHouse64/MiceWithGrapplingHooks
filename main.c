@@ -9,6 +9,20 @@
 
 #define DELAY 1000/30
 
+#define MWG_MAX_MAP_RECTS 256
+
+typedef struct MWG_MapRect {
+    int x, y, w, h;
+
+    /* Box colour */
+    int r, g, b;
+} MWG_MapRect;
+
+typedef struct MWG_Map {
+    MWG_MapRect rect[MWG_MAX_MAP_RECTS];
+    int numRects;
+} MWG_Map;
+
 int main(int argc, char ** argv){
     D_Surf * out = D_GetOutSurf(50, 50, 640, 480, "Mice With Grappling Hooks", 0);
     int running = 1;
