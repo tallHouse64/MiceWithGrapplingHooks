@@ -56,8 +56,21 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY){
 int main(int argc, char ** argv){
     D_Surf * out = D_GetOutSurf(50, 50, 640, 480, "Mice With Grappling Hooks", 0);
     int running = 1;
+    int cameraX = 0;
+    int cameraY = 0;
     D_Event e = {0};
     D_uint8 keyboardState[D_NumKeys] = {0};
+
+    MWG_Map map = {
+        {
+            {
+                0, 0, 50, 10,
+                40, 40, 40
+            }
+        },
+        1 /* numRects*/
+    };
+
     D_StartEvents();
 
     while(running){
@@ -78,6 +91,21 @@ int main(int argc, char ** argv){
                     break;
             };
         };
+
+        if(keyboardState[D_Kw]){
+            cameraY -= 1;
+        }else if(keyboardState[D_Ka]){
+            cameraX -= 1;
+        }else if(keyboardState[D_Ks]){
+            cameraY += 1;
+        }else if(keyboardState[D_Kd]){
+            cameraX += 1;
+        };
+
+
+        D_FillRect(out, D_NULL, D_rgbaToFormat(out->format, 181, 233, 255, 255));
+
+        MWG_DrawMap(out, &map, cameraX, cameraY);
 
         D_FlipOutSurf(out);
 
