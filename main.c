@@ -57,6 +57,7 @@ int main(int argc, char ** argv){
     D_Surf * out = D_GetOutSurf(50, 50, 640, 480, "Mice With Grappling Hooks", 0);
     int running = 1;
     D_Event e = {0};
+    D_uint8 keyboardState[D_NumKeys] = {0};
     D_StartEvents();
 
     while(running){
@@ -66,6 +67,14 @@ int main(int argc, char ** argv){
             switch(e.type){
                 case D_QUIT:
                     running = 0;
+                    break;
+
+                case D_KEYDOWN:
+                    keyboardState[e.keyboard.key] = 1;
+                    break;
+
+                case D_KEYUP:
+                    keyboardState[e.keyboard.key] = 0;
                     break;
             };
         };
