@@ -42,8 +42,10 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY){
     int i = 0;
     while(i < map->numRects){
 
-        r.x = map->rect[i].x - cameraX;
-        r.y = map->rect[i].y - cameraY;
+        r.x = (map->rect[i].x - cameraX) + (s->w / 2);
+        r.y = (map->rect[i].y - cameraY) + (s->h / 2);
+        r.w = map->rect[i].w;
+        r.h = map->rect[i].h;
 
         D_FillRect(s, &r, D_rgbaToFormat(s->format, map->rect[i].r, map->rect[i].g, map->rect[i].b, 255));
 
@@ -64,7 +66,7 @@ int main(int argc, char ** argv){
     MWG_Map map = {
         {
             {
-                0, 0, 50, 10,
+                -250, 0, 500, 40,
                 40, 40, 40
             }
         },
