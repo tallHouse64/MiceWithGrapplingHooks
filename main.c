@@ -8,8 +8,19 @@
 #include"platform/sdld.h"
 
 #define DELAY 1000/30
-
 #define MWG_MAX_MAP_RECTS 256
+#define MWG_MAX_PLAYER 128
+#define MWG_PLAYER_WIDTH 50
+#define MWG_PLAYER_HEIGHT 50
+
+typedef struct MWG_Player {
+
+    /* This x, y position is the bottom-middle of
+     *  the player (like maro 64). */
+    int x, y;
+
+    D_double angle;
+} MWG_Player;
 
 typedef struct MWG_MapRect {
     int x, y, w, h;
@@ -21,6 +32,8 @@ typedef struct MWG_MapRect {
 typedef struct MWG_Map {
     MWG_MapRect rect[MWG_MAX_MAP_RECTS];
     int numRects;
+    MWG_Player player[MWG_MAX_PLAYER];
+    int numPlayers;
 } MWG_Map;
 
 /* This function draws a map onto a surface.
@@ -52,6 +65,19 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY){
         i++;
     };
 
+    i = 0;
+    while(i < map->numPlayers){
+
+        r.x = ((map->player[i].x - cameraX) + (s->w / 2)) - (MWG_PLAYER_WIDTH / 2);
+        r.y = ((map->player[i].y - cameraY) + (s->h / 2)) - MWG_PLAYER_HEIGHT;
+        r.w = MWG_PLAYER_WIDTH;
+        r.h = MWG_PLAYER_HEIGHT;
+
+        D_FillRect(s, &r, D_rgbaToFormat(s->format, 40, 40, 40, 255));
+
+        i++;
+    };
+
     return 0;
 };
 
@@ -64,13 +90,21 @@ int main(int argc, char ** argv){
     D_uint8 keyboardState[D_NumKeys] = {0};
 
     MWG_Map map = {
+        /* MapRects */
         {
             {
                 -250, 0, 500, 40,
-                40, 40, 40
+                17, 127, 11
             }
         },
-        1 /* numRects*/
+        1, /* numRects */
+
+        /* Players */
+        {
+            0, 0,
+            0.0
+        },
+        1 /* numPlayers*/
     };
 
     D_StartEvents();
