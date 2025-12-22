@@ -94,15 +94,10 @@ int main(int argc, char ** argv){
             };
         };
 
-        if(keyboardState[D_Kw]){
-            cameraY -= 1;
-        }else if(keyboardState[D_Ka]){
-            cameraX -= 1;
-        }else if(keyboardState[D_Ks]){
-            cameraY += 1;
-        }else if(keyboardState[D_Kd]){
-            cameraX += 1;
-        };
+        if(keyboardState[D_Kw]){cameraY -= 1;};
+        if(keyboardState[D_Ka]){cameraX -= 1;};
+        if(keyboardState[D_Ks]){cameraY += 1;};
+        if(keyboardState[D_Kd]){cameraX += 1;};
 
 
         D_FillRect(out, D_NULL, D_rgbaToFormat(out->format, 181, 233, 255, 255));
