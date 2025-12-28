@@ -19,6 +19,8 @@ typedef struct MWG_Player {
      *  the player (like maro 64). */
     int x, y;
 
+    int oldX, oldY;
+
     D_double angle;
 } MWG_Player;
 
@@ -81,6 +83,117 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY){
     return 0;
 };
 
+int MWG_CalcPhysics(MWG_Map * map){
+
+    int i = 0;
+    int j = 0;
+    int temp1 = 0;
+    int temp2 = 0;
+    int xEntryPoint = 0;
+    int yEntryPoint = 0;
+    while(i < map->numPlayers){
+
+        /* Apply gravity */
+        map->player[i].oldY = map->player[i].oldY - 5;
+
+        /* Apply air resistance (halve the
+         *  speed) */
+        map->player[i].oldX = (map->player[i].oldX + map->player[i].x) / 2;
+        map->player[i].oldY = (map->player[i].oldY + map->player[i].y) / 2;
+
+        /* Loop through all the map rectangles. */
+        j = 0;
+        xEntryPoint = 0;
+        yEntryPoint = 0;
+        while(j < map->numRects){
+
+            /* Is the player in this rect?
+             *  (collision detection). */
+            if( map->player[i].x >= map->rect[j].x &&
+                map->player[i].x <  map->rect[j].x + map->rect[j].w &&
+                map->player[i].y >= map->rect[j].y &&
+                map->player[i].y <  map->rect[j].y + map->rect[j].h
+            ){
+
+                /* Collision detected, now do
+                 *  collision resolution. */
+
+                /* Is the old position in the
+                 *  rect? */
+                if( map->player[i].oldX >= map->rect[j].x &&
+                    map->player[i].oldX <  map->rect[j].x + map->rect[j].w &&
+                    map->player[i].oldY >= map->rect[j].y &&
+                    map->player[i].oldY <  map->rect[j].y + map->rect[j].h
+                ){
+                    /* For now don't bother doing
+                     *  collision resolution in
+                     *  this case. */
+
+                    j++;
+                    continue;
+                };
+
+                /* Was the player player to the
+                 *  left of the rect last frame? */
+                if(map->player[i].oldX < map->rect[j].x){
+                    /* Original equation (only
+                     *  works for floats and
+                     *  doubles, not ints):
+                     *  (((map->rect[j].x - map->player[i].oldX) / (map->player[i].x - map->player[i].oldX)) * (map->player[i].y - map->player[i].oldY)) + map->player[i].oldY
+                     */
+                    yEntryPoint = ((((map->rect[j].x - map->player[i].oldX) * (map->player[i].y - map->player[i].oldY)) / (map->player[i].x - map->player[i].oldX))) + map->player[i].oldY;
+
+                    /* The yEntry point may be
+                     *  wrong, check if it's on
+                     *  the border of the rect.*/
+                    if(yEntryPoint < map->rect[j].y){
+                        /* yEntryPoint is wrong,
+                         *  don't bother
+                         *  correcting it, at
+                         *  this point in the
+                         *  logic the player must
+                         *  have collided with
+                         *  the top of the rect.
+                         */
+
+                        map->player[i].y = map->rect[j].y - 1;
+
+                    }else if(yEntryPoint >= map->rect[j].y + map->rect[j].h){
+                        /*yEntryPoint is wrong,
+                         *  don't bother
+                         *  correcting it,
+                         *  the player must have
+                         *  collided with the
+                         *  bottom.
+                         */
+
+                        map->player[i].y = map->rect[j].y + map->rect[j].h;
+                    };
+                };
+
+            };
+
+            j++;
+        };
+
+
+        /* Move player */
+
+        temp1 = map->player[i].x;
+        temp2 = map->player[i].y;
+
+        map->player[i].x = map->player[i].x + (map->player[i].x - map->player[i].oldX);
+        map->player[i].y = map->player[i].y + (map->player[i].y - map->player[i].oldY);
+
+        map->player[i].oldX = temp1;
+        map->player[i].oldY = temp2;
+
+        i++;
+    };
+
+    return 0;
+};
+
 int main(int argc, char ** argv){
     D_Surf * out = D_GetOutSurf(50, 50, 640, 480, "Mice With Grappling Hooks", 0);
     int running = 1;
@@ -101,6 +214,7 @@ int main(int argc, char ** argv){
 
         /* Players */
         {
+            0, 0,
             0, 0,
             0.0
         },
@@ -132,6 +246,8 @@ int main(int argc, char ** argv){
         if(keyboardState[D_Ka]){cameraX -= 1;};
         if(keyboardState[D_Ks]){cameraY += 1;};
         if(keyboardState[D_Kd]){cameraX += 1;};
+
+        MWG_CalcPhysics(&map);
 
 
         D_FillRect(out, D_NULL, D_rgbaToFormat(out->format, 181, 233, 255, 255));
