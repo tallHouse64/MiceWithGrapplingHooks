@@ -6,3 +6,7 @@ MWGH.exe
 #Ignore the objects
 main.o
 physics/physics.o
+
+#Ignore tests
+tests/findEntryPointTest
+tests/findEntryPointTest.exe
