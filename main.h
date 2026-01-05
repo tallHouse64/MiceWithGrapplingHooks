@@ -1,6 +1,8 @@
 #ifndef MWG_MAIN_H
 #define MWG_MAIN_H
 
+#include"d.h"
+
 
 #define DELAY 1000/30
 #define MWG_MAX_MAP_RECTS 256

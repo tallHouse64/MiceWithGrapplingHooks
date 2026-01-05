@@ -5,3 +5,4 @@ MWGH.exe
 
 #Ignore the objects
 main.o
+physics/physics.o
