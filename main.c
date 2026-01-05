@@ -7,11 +7,8 @@
 #define D_PLATFORM_IMPLEMENTATION
 #include"platform/sdld.h"
 
-#define DELAY 1000/30
-#define MWG_MAX_MAP_RECTS 256
-#define MWG_MAX_PLAYER 128
-#define MWG_PLAYER_WIDTH 50
-#define MWG_PLAYER_HEIGHT 50
+#include"main.h"
+#include"physics/physics.h"
 
 
 /* This function draws a map onto a surface.
