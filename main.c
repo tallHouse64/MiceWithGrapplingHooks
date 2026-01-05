@@ -83,6 +83,91 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY){
     return 0;
 };
 
+/* This function finds the entry point of a
+ *  player into a rect if that player has just
+ *  entered this frame. This is useful for
+ *  collision resolution.
+ *
+ * This function assumes that the player was
+ *  outside the rect last frame, but is inside
+ *  this frame (otherwise there may be a division
+ *  by zero and the program would crash).
+ *
+ * player: The player that just entered a
+ *  rectangle.
+ * rect: The rectangle that the player just
+ *  entered.
+ * xEntryPoint: A number that gets filled in with
+ *  the x position of where the player entered.
+ * yEntryPoint: A number that gets filled in with
+ *  the y position of where the player entered.
+ * returns: 0 on success or a negative number on
+ *  failure.
+ */
+int MWG_FindEntryPoint(MWG_Player * player, MWG_MapRect * rect, int * xEntryPoint, int * yEntryPoint){
+
+    if(player == D_NULL || rect == D_NULL || xEntryPoint == D_NULL || yEntryPoint == D_NULL){
+        return -1;
+    };
+
+    /* Was the player to the left of the rect
+     *  last frame? */
+    if(player->oldX < rect->x){
+
+        /* Find the y entry point, this may be
+         *  wrong, check in the next if
+         *  statement. */
+        *yEntryPoint = ((((rect->x - player->oldX) * (player->y - player->oldY)) / (player->x - player->oldX))) + player->oldY;
+
+        /* Is yEntryPoint on the border of the
+         *  rect? */
+        if(*yEntryPoint >= rect->y && *yEntryPoint < rect->y + rect->h){
+            /* The yEntry point is correct, set
+             *  xEnrtyPoint and return. */
+
+            *xEntryPoint = rect->x;
+            return 0;
+        };
+    };
+
+    /* At this point, the entry point can't be on
+     *  the left wall of the rect (the function
+     *  would have returned). */
+
+    /* Was the player to the right of the rect
+     *  last frame? */
+    if(player->oldX >= rect->x + rect->w){
+
+
+        /* Find the y entry point (this time on
+         *  the right wall, not left), this may
+         *  be wrong, check in the next if
+         *  statement. */
+        *yEntryPoint = (((((rect->x + rect->w) - player->oldX) * (player->y - player->oldY)) / (player->x - player->oldX))) + player->oldY;
+
+        /* Is yEntryPoint on the border of the
+         *  rect? */
+        if(*yEntryPoint >= rect->y && *yEntryPoint < rect->y + rect->h){
+            /* The yEntry point is correct, set
+             *  xEnrtyPoint and return. */
+
+            *xEntryPoint = rect->x + rect->w;
+            return 0;
+        };
+    };
+
+    /* Now the entry point must be either the top
+     *  or bottom wall. */
+
+    /* Was the player above the rect last
+     *  frame? */
+    if(player->oldY < rect->y){
+
+    };
+
+    return 0;
+};
+
 int MWG_CalcPhysics(MWG_Map * map){
 
     int i = 0;
@@ -101,6 +186,7 @@ int MWG_CalcPhysics(MWG_Map * map){
         map->player[i].oldX = (map->player[i].oldX + map->player[i].x) / 2;
         map->player[i].oldY = (map->player[i].oldY + map->player[i].y) / 2;
 
+#if 0
         /* Loop through all the map rectangles. */
         j = 0;
         xEntryPoint = 0;
@@ -169,12 +255,20 @@ int MWG_CalcPhysics(MWG_Map * map){
 
                         map->player[i].y = map->rect[j].y + map->rect[j].h;
                     };
+
+                    /* Was the player to the
+                     *  right of the rect last
+                     *  frame? */
+                }else if(map->player[i].oldX >= map->rect[j].x + map->rect[j].w){
+
                 };
 
             };
 
             j++;
         };
+
+#endif
 
 
         /* Move player */
