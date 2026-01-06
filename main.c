@@ -70,9 +70,13 @@ int main(int argc, char ** argv){
             {
                 -250, 30, 500, 40,
                 17, 127, 11
+            },
+            {
+                -80, -100, 100, 100,
+                17, 127, 11
             }
         },
-        1, /* numRects */
+        2, /* numRects */
 
         /* Players */
         {
@@ -96,6 +100,11 @@ int main(int argc, char ** argv){
 
                 case D_KEYDOWN:
                     keyboardState[e.keyboard.key] = 1;
+
+                    if(e.keyboard.key == D_KSpace){
+                        map.player[0].oldY += 70;
+                    };
+
                     break;
 
                 case D_KEYUP:
@@ -104,12 +113,12 @@ int main(int argc, char ** argv){
             };
         };
 
-        if(keyboardState[D_Kw]){cameraY -= 1;};
-        if(keyboardState[D_Ka]){cameraX -= 1;};
-        if(keyboardState[D_Ks]){cameraY += 1;};
-        if(keyboardState[D_Kd]){cameraX += 1;};
-
         MWG_CalcPhysics(&map);
+
+        /*if(keyboardState[D_Kw]){};*/
+        if(keyboardState[D_Ka]){map.player[0].oldX += 10;};
+        /*if(keyboardState[D_Ks]){};*/
+        if(keyboardState[D_Kd]){map.player[0].oldX -= 10;};
 
 
         D_FillRect(out, D_NULL, D_rgbaToFormat(out->format, 181, 233, 255, 255));
