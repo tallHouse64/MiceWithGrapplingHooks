@@ -101,6 +101,7 @@ int MWG_FindEntryPoint(MWG_Player * player, MWG_MapRect * rect, int * xEntryPoin
         /* The entry point must be on the bottom
          *  wall of the rectangle. */
         *yEntryPoint = rect->y + rect->h;
+        return 0;
     };
 
     /* At this point the player must have been
@@ -161,10 +162,9 @@ int MWG_CalcPhysics(MWG_Map * map){
         map->player[i].oldY = temp2;
 
 
-        /* Loop through all the map rectangles. */
+        /* Loop through all the map rectangles
+         *  and detect collisions. */
         j = 0;
-        xEntryPoint = 0;
-        yEntryPoint = 0;
         while(j < map->numRects){
 
             /* Is the player in this rect?
@@ -175,6 +175,8 @@ int MWG_CalcPhysics(MWG_Map * map){
                 map->player[i].y <  map->rect[j].y + map->rect[j].h
             ){
 
+                xEntryPoint = 0;
+                yEntryPoint = 0;
                 if(MWG_FindEntryPoint(&map->player[i], &map->rect[j], &xEntryPoint, &yEntryPoint) == -2){
                     /* The player was inside the
                      *  rect last frame, do
@@ -191,7 +193,7 @@ int MWG_CalcPhysics(MWG_Map * map){
 
                     /* Snap to the top of the
                      *  rectangle. */
-                    map->player[i].y = map->rect[i].y - 1;
+                    map->player[i].y = map->rect[j].y - 1;
 
                     j++;
                     continue;
@@ -201,7 +203,7 @@ int MWG_CalcPhysics(MWG_Map * map){
                 }else if(xEntryPoint == map->rect[j].x){
 
                     /* Snap to the left wall. */
-                    map->player[i].x = map->rect[j].x;
+                    map->player[i].x = map->rect[j].x - 1;
 
                     /* Did the player hit the right
                      *  wall? */
