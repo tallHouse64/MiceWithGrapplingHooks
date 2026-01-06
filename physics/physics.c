@@ -110,7 +110,23 @@ int MWG_FindEntryPoint(MWG_Player * player, MWG_MapRect * rect, int * xEntryPoin
     return -2;
 };
 
+/* This function moves calculates the physics for
+ *  all players in the map for one frame. This
+ *  function should be called once per frame.
+ *
+ * It's safe to pass null for map, the function
+ *  would do nothing and return -1.
+ *
+ * map: The map to move forward by one frame
+ *  (it's safe to pass null for this).
+ * returns: 0 on success or a negative number on
+ *  failure.
+ */
 int MWG_CalcPhysics(MWG_Map * map){
+
+    if(map == D_NULL){
+        return -1;
+    };
 
     int i = 0;
     int j = 0;
@@ -120,6 +136,9 @@ int MWG_CalcPhysics(MWG_Map * map){
     int yEntryPoint = 0;
     while(i < map->numPlayers){
 
+
+
+
         /* Apply gravity */
         map->player[i].oldY = map->player[i].oldY - 5;
 
@@ -128,7 +147,20 @@ int MWG_CalcPhysics(MWG_Map * map){
         map->player[i].oldX = (map->player[i].oldX + map->player[i].x) / 2;
         map->player[i].oldY = (map->player[i].oldY + map->player[i].y) / 2;
 
-        #if 0
+
+
+        /* Move player */
+
+        temp1 = map->player[i].x;
+        temp2 = map->player[i].y;
+
+        map->player[i].x = map->player[i].x + (map->player[i].x - map->player[i].oldX);
+        map->player[i].y = map->player[i].y + (map->player[i].y - map->player[i].oldY);
+
+        map->player[i].oldX = temp1;
+        map->player[i].oldY = temp2;
+
+
         /* Loop through all the map rectangles. */
         j = 0;
         xEntryPoint = 0;
@@ -141,90 +173,58 @@ int MWG_CalcPhysics(MWG_Map * map){
                 map->player[i].x <  map->rect[j].x + map->rect[j].w &&
                 map->player[i].y >= map->rect[j].y &&
                 map->player[i].y <  map->rect[j].y + map->rect[j].h
-                ){
+            ){
 
-                /* Collision detected, now do
-                 *  collision resolution. */
-
-                /* Is the old position in the
-                 *  rect? */
-                if( map->player[i].oldX >= map->rect[j].x &&
-                    map->player[i].oldX <  map->rect[j].x + map->rect[j].w &&
-                    map->player[i].oldY >= map->rect[j].y &&
-                    map->player[i].oldY <  map->rect[j].y + map->rect[j].h
-                    ){
-                    /* For now don't bother doing
-                     *  collision resolution in
-                     *  this case. */
+                if(MWG_FindEntryPoint(&map->player[i], &map->rect[j], &xEntryPoint, &yEntryPoint) == -2){
+                    /* The player was inside the
+                     *  rect last frame, do
+                     *  nothing. */
 
                     j++;
-                continue;
-    };
+                    continue;
+                };
 
-    /* Was the player player to the
-     *  left of the rect last frame? */
-    if(map->player[i].oldX < map->rect[j].x){
-        /* Original equation (only
-         *  works for floats and
-         *  doubles, not ints):
-         *  (((map->rect[j].x - map->player[i].oldX) / (map->player[i].x - map->player[i].oldX)) * (map->player[i].y - map->player[i].oldY)) + map->player[i].oldY
-         */
-        yEntryPoint = ((((map->rect[j].x - map->player[i].oldX) * (map->player[i].y - map->player[i].oldY)) / (map->player[i].x - map->player[i].oldX))) + map->player[i].oldY;
+                /* Now do collision resolution */
 
-        /* The yEntry point may be
-         *  wrong, check if it's on
-         *  the border of the rect.*/
-        if(yEntryPoint < map->rect[j].y){
-            /* yEntryPoint is wrong,
-             *  don't bother
-             *  correcting it, at
-             *  this point in the
-             *  logic the player must
-             *  have collided with
-             *  the top of the rect.
-             */
+                /* Did the player hit the top? */
+                if(yEntryPoint == map->rect[j].y){
 
-            map->player[i].y = map->rect[j].y - 1;
+                    /* Snap to the top of the
+                     *  rectangle. */
+                    map->player[i].y = map->rect[i].y - 1;
 
-    }else if(yEntryPoint >= map->rect[j].y + map->rect[j].h){
-        /*yEntryPoint is wrong,
-         *  don't bother
-         *  correcting it,
-         *  the player must have
-         *  collided with the
-         *  bottom.
-         */
+                    j++;
+                    continue;
 
-        map->player[i].y = map->rect[j].y + map->rect[j].h;
-    };
+                    /* Did the player hit the left
+                     *  wall? */
+                }else if(xEntryPoint == map->rect[j].x){
 
-    /* Was the player to the
-     *  right of the rect last
-     *  frame? */
-    }else if(map->player[i].oldX >= map->rect[j].x + map->rect[j].w){
+                    /* Snap to the left wall. */
+                    map->player[i].x = map->rect[j].x;
 
-    };
+                    /* Did the player hit the right
+                     *  wall? */
+                }else if(xEntryPoint == map->rect[j].x + map->rect[j].w){
 
-    };
+                    /* Snap to the right wall. */
+                    map->player[i].x = map->rect[j].x + map->rect[j].w;
 
-    j++;
-    };
+                    /* Did the player hit the bottom
+                     *  of the rect? */
+                }else if(yEntryPoint == map->rect[j].y + map->rect[j].h){
 
-    #endif
+                    /* Snap to the bottom of the
+                     *  rect. */
+                    map->player[i].y = map->rect[j].y + map->rect[j].h;
+                };
 
+            };
 
-    /* Move player */
+            j++;
+        };
 
-    temp1 = map->player[i].x;
-    temp2 = map->player[i].y;
-
-    map->player[i].x = map->player[i].x + (map->player[i].x - map->player[i].oldX);
-    map->player[i].y = map->player[i].y + (map->player[i].y - map->player[i].oldY);
-
-    map->player[i].oldX = temp1;
-    map->player[i].oldY = temp2;
-
-    i++;
+        i++;
     };
 
     return 0;
