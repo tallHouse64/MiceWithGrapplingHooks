@@ -111,6 +111,47 @@ int MWG_FindEntryPoint(MWG_Player * player, MWG_MapRect * rect, int * xEntryPoin
     return -2;
 };
 
+/* This function detects a collision between a
+ *  player's hitbox and a rectangle.
+ *
+ * If there is a collision, the function returns
+ *  1, otherwise it returns 0. Bear in mind that
+ *  if null is passed for player or rect the
+ *  function just returns -1 which is important
+ *  if you call it in an if statement.
+ *
+ * player: The player test for a collision (it's
+ *  safe to pass null for this).
+ * rect: The rectangle to test for a collision
+ *  (it's safe to pass null for this).
+ * returns: On success 1 gets returned when there
+ *  is a collision, otherwise 0. A negative
+ *  number gets returned on failure.
+ */
+int MWG_DetectCollision(MWG_Player * player, MWG_MapRect * rect){
+
+    if(player == D_NULL || rect == D_NULL){
+        return -1;
+    };
+
+    /* Find the hitbox of the player, with
+     *  absolute coordinates (relative to the
+     *  origin of the map). */
+    D_Rect hitbox = {player->x + player->hitboxX, player->y + player->hitboxY, player->hitboxW, player->hitboxH};
+
+    /* Does the hitbox overlap with the
+     *  rectangle. */
+    if( hitbox.x + hitbox.w > rect->x &&
+        hitbox.x < rect->x + rect->w &&
+        hitbox.y + hitbox.h > rect->y &&
+        hitbox.y < rect->y + rect->h
+        ){
+        return 1;
+    };
+
+    return 0;
+};
+
 /* This function moves calculates the physics for
  *  all players in the map for one frame. This
  *  function should be called once per frame.
