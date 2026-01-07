@@ -82,6 +82,7 @@ int main(int argc, char ** argv){
         {
             0, 0,
             0, 0,
+            -(MWG_PLAYER_WIDTH / 2), -MWG_PLAYER_HEIGHT, MWG_PLAYER_WIDTH, MWG_PLAYER_HEIGHT,
             0.0
         },
         1 /* numPlayers*/
