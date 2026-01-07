@@ -19,6 +19,12 @@ typedef struct MWG_Player {
 
     int oldX, oldY;
 
+    /* The hitbox is relative to the x, y of the
+     *  player, it is recommended to set the
+     *  hitboxX to -(hitboxW / 2) and set hitboxY
+     *  to -hitboxH. */
+    int hitboxX, hitboxY, hitboxW, hitboxH;
+
     D_double angle;
 } MWG_Player;
 
