@@ -184,6 +184,34 @@ int MWG_PointInRect(int rx, int ry, int rw, int rh, int px, int py){
     return 0;
 };
 
+/*
+ * It is safe to pass null for all of the
+ *  parameters of this function, it would do
+ *  nothing and return -1.
+ *
+ * newX: A pointer that gets filled in with the
+ *  players new x position after resolving the
+ *  collision.
+ * newY: A pointer that gets filled in with the
+ *  players new y position after resolving the
+ *  collision.
+ */
+int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, int * newY){
+
+    if(player == D_NULL || rect == D_NULL || newX == D_NULL || newY == D_NULL){
+        return -1;
+    };
+
+    /* Is the top left of the hitbox inside the
+     *  rectangle? */
+    if(MWG_PointInRect(rect->x, rect->y, rect->w, rect->h, player->x + player->hitboxX, player->y + player->hitboxY)){
+        /*MWG_FindEntryPoint();*/
+    };
+
+    return 0;
+};
+
+
 /* This function moves calculates the physics for
  *  all players in the map for one frame. This
  *  function should be called once per frame.
