@@ -21,20 +21,20 @@
  * returns: 0 on success or a negative number on
  *  failure.
  */
-int MWG_FindEntryPoint(MWG_Player * player, MWG_MapRect * rect, int * xEntryPoint, int * yEntryPoint){
+int MWG_FindEntryPoint(int currentX, int currentY, int oldX, int oldY, MWG_MapRect * rect, int * xEntryPoint, int * yEntryPoint){
 
-    if(player == D_NULL || rect == D_NULL || xEntryPoint == D_NULL || yEntryPoint == D_NULL){
+    if(rect == D_NULL || xEntryPoint == D_NULL || yEntryPoint == D_NULL){
         return -1;
     };
 
     /* Was the player to the left of the rect
      *  last frame? */
-    if(player->oldX < rect->x){
+    if(oldX < rect->x){
 
         /* Find the y entry point, this may be
          *  wrong, check in the next if
          *  statement. */
-        *yEntryPoint = ((((rect->x - player->oldX) * (player->y - player->oldY)) / (player->x - player->oldX))) + player->oldY;
+        *yEntryPoint = ((((rect->x - oldX) * (currentY - oldY)) / (currentX - oldX))) + oldY;
 
         /* Is yEntryPoint on the border of the
          *  rect? */
@@ -53,14 +53,14 @@ int MWG_FindEntryPoint(MWG_Player * player, MWG_MapRect * rect, int * xEntryPoin
 
     /* Was the player to the right of the rect
      *  last frame? */
-    if(player->oldX >= rect->x + rect->w){
+    if(oldX >= rect->x + rect->w){
 
 
         /* Find the y entry point (this time on
          *  the right wall, not left), this may
          *  be wrong, check in the next if
          *  statement. */
-        *yEntryPoint = (((((rect->x + rect->w) - player->oldX) * (player->y - player->oldY)) / (player->x - player->oldX))) + player->oldY;
+        *yEntryPoint = (((((rect->x + rect->w) - oldX) * (currentY - oldY)) / (currentX - oldX))) + oldY;
 
         /* Is yEntryPoint on the border of the
          *  rect? */
@@ -78,14 +78,14 @@ int MWG_FindEntryPoint(MWG_Player * player, MWG_MapRect * rect, int * xEntryPoin
 
     /* Was the player above the rect last
      *  frame? */
-    if(player->oldY < rect->y){
+    if(oldY < rect->y){
 
         /* Original equation (doesn't work for
          *  integers).
          * (((rect.y - player->oldY) / (player->y - player->oldY)) * (player->x - player->oldX)) + player->oldX
          */
 
-        *xEntryPoint = (((rect->y - player->oldY) * (player->x - player->oldX)) / (player->y - player->oldY)) + player->oldX;
+        *xEntryPoint = (((rect->y - oldY) * (currentX - oldX)) / (currentY - oldY)) + oldX;
 
         /* The entry point must be on the top
          *  wall of the rectangle. */
@@ -94,9 +94,9 @@ int MWG_FindEntryPoint(MWG_Player * player, MWG_MapRect * rect, int * xEntryPoin
     };
 
     /* Was the player below the rect last frame? */
-    if(player->oldY >= rect->y + rect->h){
+    if(oldY >= rect->y + rect->h){
 
-        *xEntryPoint = ((((rect->y + rect->h) - player->oldY) * (player->x - player->oldX)) / (player->y - player->oldY)) + player->oldX;
+        *xEntryPoint = ((((rect->y + rect->h) - oldY) * (currentX - oldX)) / (currentY - oldY)) + oldX;
 
         /* The entry point must be on the bottom
          *  wall of the rectangle. */
@@ -262,7 +262,7 @@ int MWG_CalcPhysics(MWG_Map * map){
         map->player[i].oldX = temp1;
         map->player[i].oldY = temp2;
 
-
+#if 0
         /* Loop through all the map rectangles
          *  and detect collisions. */
         j = 0;
@@ -326,6 +326,7 @@ int MWG_CalcPhysics(MWG_Map * map){
 
             j++;
         };
+#endif
 
         i++;
     };
