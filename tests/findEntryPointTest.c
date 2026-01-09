@@ -70,7 +70,7 @@ int main(int argc, char ** argv){
         D_FillRect(out, &rect, D_rgbaToFormat(out->format, 17, 127, 11, 255));
 
         /* Test function */
-        MWG_FindEntryPoint(&player, &mapRect, &entryPointR.x, &entryPointR.y);
+        MWG_FindEntryPoint(player.x, player.y, player.oldX, player.oldY, &mapRect, &entryPointR.x, &entryPointR.y);
         entryPointR.x -= 4;
         entryPointR.y -= 4;
 
