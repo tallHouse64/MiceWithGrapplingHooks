@@ -184,17 +184,28 @@ int MWG_PointInRect(int rx, int ry, int rw, int rh, int px, int py){
     return 0;
 };
 
-/*
+/* This function resolves a collision between a
+ *  rectangle and a player by moving the player
+ *  (this function does consider the hitbox of
+ *  the player).
+ *
  * It is safe to pass null for all of the
  *  parameters of this function, it would do
  *  nothing and return -1.
  *
+ * player: The player to move.
+ * rect: The rectangle that is colliding with the
+ *  player.
  * newX: A pointer that gets filled in with the
  *  players new x position after resolving the
  *  collision.
  * newY: A pointer that gets filled in with the
  *  players new y position after resolving the
  *  collision.
+ * returns: On success, 1 gets returned when a
+ *  collision is resolved and 0 gets returned if
+ *  the function detects there is no collision. A
+ *  negative number gets returned on failure.
  */
 int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, int * newY){
 
@@ -205,7 +216,57 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
     /* Is the top left of the hitbox inside the
      *  rectangle? */
     if(MWG_PointInRect(rect->x, rect->y, rect->w, rect->h, player->x + player->hitboxX, player->y + player->hitboxY)){
-        /*MWG_FindEntryPoint();*/
+        MWG_FindEntryPoint(player->x + player->hitboxX, player->y + player->hitboxY,
+                           player->oldX + player->hitboxX, player->oldY + player->hitboxY,
+                           rect,
+                           newX, newY);
+
+        newX = newX - player->hitboxX;
+        newY = newY - player->hitboxY;
+
+        return 1;
+    };
+
+    /* Is the top right of the hitbox inside the
+     *  rectangle? */
+    if(MWG_PointInRect(rect->x, rect->y, rect->w, rect->h, player->x + player->hitboxX + player->hitboxW, player->y + player->hitboxY)){
+        MWG_FindEntryPoint(player->x + player->hitboxX + player->hitboxW, player->y + player->hitboxY,
+                           player->oldX + player->hitboxX + player->hitboxW, player->oldY + player->hitboxY,
+                           rect,
+                           newX, newY);
+
+        newX = newX - (player->hitboxX + player->hitboxW);
+        newY = newY - player->hitboxY;
+
+        return 1;
+    };
+
+    /* Is the bottom left of the hitbox inside
+     *  the rectangle? */
+    if(MWG_PointInRect(rect->x, rect->y, rect->w, rect->h, player->x + player->hitboxX, player->y + player->hitboxY + player->hitboxH)){
+        MWG_FindEntryPoint(player->x + player->hitboxX, player->y + player->hitboxY + player->hitboxH,
+                           player->oldX + player->hitboxX, player->oldY + player->hitboxY + player->hitboxH,
+                           rect,
+                           newX, newY);
+
+        newX = newX - player->hitboxX;
+        newY = newY - (player->hitboxY + player->hitboxH);
+
+        return 1;
+    };
+
+    /* Is the bottom right of the hitbox inside
+     *  the rectangle? */
+    if(MWG_PointInRect(rect->x, rect->y, rect->w, rect->h, player->x + player->hitboxX + player->hitboxW, player->y + player->hitboxY + player->hitboxH)){
+        MWG_FindEntryPoint(player->x + player->hitboxX + player->hitboxW, player->y + player->hitboxY + player->hitboxH,
+                           player->oldX + player->hitboxX + player->hitboxW, player->oldY + player->hitboxY + player->hitboxH,
+                           rect,
+                           newX, newY);
+
+        newX = newX - (player->hitboxX + player->hitboxW);
+        newY = newY - (player->hitboxY + player->hitboxH);
+
+        return 1;
     };
 
     return 0;
