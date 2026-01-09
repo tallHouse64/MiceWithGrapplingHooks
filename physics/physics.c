@@ -221,8 +221,8 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
                            rect,
                            newX, newY);
 
-        newX = newX - player->hitboxX;
-        newY = newY - player->hitboxY;
+        *newX = *newX - player->hitboxX;
+        *newY = *newY - player->hitboxY;
 
         return 1;
     };
@@ -235,8 +235,16 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
                            rect,
                            newX, newY);
 
-        newX = newX - (player->hitboxX + player->hitboxW);
-        newY = newY - player->hitboxY;
+        /* If the player's new position is
+         *  touching the left wall, move the
+         *  player left by 1 pixel (instead of
+         *  getting moved into the wall). */
+        if(*newX == rect->x){
+            *newX = *newX - 1;
+        };
+
+        *newX = *newX - (player->hitboxX + player->hitboxW);
+        *newY = *newY - player->hitboxY;
 
         return 1;
     };
@@ -249,8 +257,16 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
                            rect,
                            newX, newY);
 
-        newX = newX - player->hitboxX;
-        newY = newY - (player->hitboxY + player->hitboxH);
+        /* If the player's new position is
+         *  touching the top wall, move the
+         *  player up by 1 pixel (instead of
+         *  getting moved into the wall). */
+        if(*newY == rect->y){
+            *newY = *newY - 1;
+        };
+
+        *newX = *newX - player->hitboxX;
+        *newY = *newY - (player->hitboxY + player->hitboxH);
 
         return 1;
     };
@@ -263,8 +279,24 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
                            rect,
                            newX, newY);
 
-        newX = newX - (player->hitboxX + player->hitboxW);
-        newY = newY - (player->hitboxY + player->hitboxH);
+        /* If the player's new position is
+         *  touching the left wall, move the
+         *  player left by 1 pixel (instead of
+         *  getting moved into the wall). */
+        if(*newX == rect->x){
+            *newX = *newX - 1;
+        };
+
+        /* If the player's new position is
+         *  touching the top wall, move the
+         *  player up by 1 pixel (instead of
+         *  getting moved into the wall). */
+        if(*newY == rect->y){
+            *newY = *newY - 1;
+        };
+
+        *newX = *newX - (player->hitboxX + player->hitboxW);
+        *newY = *newY - (player->hitboxY + player->hitboxH);
 
         return 1;
     };
