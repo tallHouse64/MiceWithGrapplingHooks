@@ -72,7 +72,7 @@ int main(int argc, char ** argv){
                 17, 127, 11
             },
             {
-                -80, -100, 100, 100,
+                -200, -100, 100, 100,
                 17, 127, 11
             }
         },
@@ -80,7 +80,7 @@ int main(int argc, char ** argv){
 
         /* Players */
         {
-            0, 0,
+            100, 0,
             0, 0,
             -(MWG_PLAYER_WIDTH / 2), -MWG_PLAYER_HEIGHT, MWG_PLAYER_WIDTH, MWG_PLAYER_HEIGHT,
             0.0

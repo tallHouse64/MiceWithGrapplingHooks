@@ -295,8 +295,8 @@ int MWG_CalcPhysics(MWG_Map * map){
     int j = 0;
     int temp1 = 0;
     int temp2 = 0;
-    int xEntryPoint = 0;
-    int yEntryPoint = 0;
+    int newX = 0;
+    int newY = 0;
     while(i < map->numPlayers){
 
 
@@ -323,71 +323,25 @@ int MWG_CalcPhysics(MWG_Map * map){
         map->player[i].oldX = temp1;
         map->player[i].oldY = temp2;
 
-#if 0
+        newX = map->player[i].x;
+        newY = map->player[i].y;
+
         /* Loop through all the map rectangles
          *  and detect collisions. */
         j = 0;
         while(j < map->numRects){
 
-            /* Is the player in this rect?
-             *  (collision detection). */
-            if( map->player[i].x >= map->rect[j].x &&
-                map->player[i].x <  map->rect[j].x + map->rect[j].w &&
-                map->player[i].y >= map->rect[j].y &&
-                map->player[i].y <  map->rect[j].y + map->rect[j].h
-            ){
+            if(MWG_DetectCollision(&map->player[i], &map->rect[j])){
 
-                xEntryPoint = 0;
-                yEntryPoint = 0;
-                if(MWG_FindEntryPoint(&map->player[i], &map->rect[j], &xEntryPoint, &yEntryPoint) == -2){
-                    /* The player was inside the
-                     *  rect last frame, do
-                     *  nothing. */
-
-                    j++;
-                    continue;
-                };
-
-                /* Now do collision resolution */
-
-                /* Did the player hit the top? */
-                if(yEntryPoint == map->rect[j].y){
-
-                    /* Snap to the top of the
-                     *  rectangle. */
-                    map->player[i].y = map->rect[j].y - 1;
-
-                    j++;
-                    continue;
-
-                    /* Did the player hit the left
-                     *  wall? */
-                }else if(xEntryPoint == map->rect[j].x){
-
-                    /* Snap to the left wall. */
-                    map->player[i].x = map->rect[j].x - 1;
-
-                    /* Did the player hit the right
-                     *  wall? */
-                }else if(xEntryPoint == map->rect[j].x + map->rect[j].w){
-
-                    /* Snap to the right wall. */
-                    map->player[i].x = map->rect[j].x + map->rect[j].w;
-
-                    /* Did the player hit the bottom
-                     *  of the rect? */
-                }else if(yEntryPoint == map->rect[j].y + map->rect[j].h){
-
-                    /* Snap to the bottom of the
-                     *  rect. */
-                    map->player[i].y = map->rect[j].y + map->rect[j].h;
-                };
+                MWG_ResolveCollision(&map->player[i], &map->rect[j], &newX, &newY);
+                map->player[i].x = newX;
+                map->player[i].y = newY;
 
             };
 
             j++;
         };
-#endif
+
 
         i++;
     };
