@@ -152,6 +152,38 @@ int MWG_DetectCollision(MWG_Player * player, MWG_MapRect * rect){
     return 0;
 };
 
+/* This function checks if a point is in a
+ *  rectangle and returns 1 if it is, otherwise
+ *  0.
+ *
+ * The reason this function exists is because
+ *  using D_PointInRect() would mean converting
+ *  many numbers into D_Point and D_Rect structs.
+ *  Using this function where it's convenient
+ *  should make code more compact and readable.
+ *
+ * rx: The x position of the rectangle.
+ * ry: The y position of the rectangle.
+ * rw: The width of the rectangle.
+ * rh: The height of the rectangle.
+ * px: The x position of the point.
+ * py: The y position of the point.
+ * returns: 1 when the point is in the rectangle,
+ *  otherwise 0.
+ */
+int MWG_PointInRect(int rx, int ry, int rw, int rh, int px, int py){
+
+    if( px >= rx &&
+        px < rx + rw &&
+        py >= ry &&
+        py < ry + rh
+    ){
+        return 1;
+    };
+
+    return 0;
+};
+
 /* This function moves calculates the physics for
  *  all players in the map for one frame. This
  *  function should be called once per frame.
