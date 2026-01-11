@@ -229,9 +229,9 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
 
     /* Is the top right of the hitbox inside the
      *  rectangle? */
-    if(MWG_PointInRect(rect->x, rect->y, rect->w, rect->h, player->x + player->hitboxX + player->hitboxW, player->y + player->hitboxY)){
-        MWG_FindEntryPoint(player->x + player->hitboxX + player->hitboxW, player->y + player->hitboxY,
-                           player->oldX + player->hitboxX + player->hitboxW, player->oldY + player->hitboxY,
+    if(MWG_PointInRect(rect->x, rect->y, rect->w, rect->h, player->x + player->hitboxX + player->hitboxW - 1, player->y + player->hitboxY)){
+        MWG_FindEntryPoint(player->x + player->hitboxX + player->hitboxW - 1, player->y + player->hitboxY,
+                           player->oldX + player->hitboxX + player->hitboxW - 1, player->oldY + player->hitboxY,
                            rect,
                            newX, newY);
 
@@ -243,7 +243,7 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
             *newX = *newX - 1;
         };
 
-        *newX = *newX - (player->hitboxX + player->hitboxW);
+        *newX = *newX - (player->hitboxX + player->hitboxW - 1);
         *newY = *newY - player->hitboxY;
 
         return 1;
@@ -251,9 +251,9 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
 
     /* Is the bottom left of the hitbox inside
      *  the rectangle? */
-    if(MWG_PointInRect(rect->x, rect->y, rect->w, rect->h, player->x + player->hitboxX, player->y + player->hitboxY + player->hitboxH)){
-        MWG_FindEntryPoint(player->x + player->hitboxX, player->y + player->hitboxY + player->hitboxH,
-                           player->oldX + player->hitboxX, player->oldY + player->hitboxY + player->hitboxH,
+    if(MWG_PointInRect(rect->x, rect->y, rect->w, rect->h, player->x + player->hitboxX, player->y + player->hitboxY + player->hitboxH - 1)){
+        MWG_FindEntryPoint(player->x + player->hitboxX, player->y + player->hitboxY + player->hitboxH - 1,
+                           player->oldX + player->hitboxX, player->oldY + player->hitboxY + player->hitboxH - 1,
                            rect,
                            newX, newY);
 
@@ -266,16 +266,16 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
         };
 
         *newX = *newX - player->hitboxX;
-        *newY = *newY - (player->hitboxY + player->hitboxH);
+        *newY = *newY - (player->hitboxY + player->hitboxH - 1);
 
         return 1;
     };
 
     /* Is the bottom right of the hitbox inside
      *  the rectangle? */
-    if(MWG_PointInRect(rect->x, rect->y, rect->w, rect->h, player->x + player->hitboxX + player->hitboxW, player->y + player->hitboxY + player->hitboxH)){
-        MWG_FindEntryPoint(player->x + player->hitboxX + player->hitboxW, player->y + player->hitboxY + player->hitboxH,
-                           player->oldX + player->hitboxX + player->hitboxW, player->oldY + player->hitboxY + player->hitboxH,
+    if(MWG_PointInRect(rect->x, rect->y, rect->w, rect->h, player->x + player->hitboxX + player->hitboxW - 1, player->y + player->hitboxY + player->hitboxH - 1)){
+        MWG_FindEntryPoint(player->x + player->hitboxX + player->hitboxW - 1, player->y + player->hitboxY + player->hitboxH - 1,
+                           player->oldX + player->hitboxX + player->hitboxW - 1, player->oldY + player->hitboxY + player->hitboxH - 1,
                            rect,
                            newX, newY);
 
@@ -295,8 +295,8 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
             *newY = *newY - 1;
         };
 
-        *newX = *newX - (player->hitboxX + player->hitboxW);
-        *newY = *newY - (player->hitboxY + player->hitboxH);
+        *newX = *newX - (player->hitboxX + player->hitboxW - 1);
+        *newY = *newY - (player->hitboxY + player->hitboxH - 1);
 
         return 1;
     };
@@ -355,17 +355,15 @@ int MWG_CalcPhysics(MWG_Map * map){
         map->player[i].oldX = temp1;
         map->player[i].oldY = temp2;
 
-        newX = map->player[i].x;
-        newY = map->player[i].y;
+        newX = map->player[i].oldX;
+        newY = map->player[i].oldY;
 
         /* Loop through all the map rectangles
          *  and detect collisions. */
         j = 0;
         while(j < map->numRects){
 
-            if(MWG_DetectCollision(&map->player[i], &map->rect[j])){
-
-                MWG_ResolveCollision(&map->player[i], &map->rect[j], &newX, &newY);
+            if(MWG_ResolveCollision(&map->player[i], &map->rect[j], &newX, &newY)){
                 map->player[i].x = newX;
                 map->player[i].y = newY;
 
