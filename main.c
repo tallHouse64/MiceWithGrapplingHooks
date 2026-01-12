@@ -13,27 +13,40 @@
 
 /* This function draws a map onto a surface.
  *
+ * You can choose what size the map should be
+ *  drawn by controlling the zoom number. Set
+ *  this number to 256 for no zoom effect. Make
+ *  it smaller to zoom in and bigger to zoom out.
+ *  If zoom is set to 0, the function would do
+ *  nothing and return -2.
+ *
  * s: The surface to draw onto.
  * map: The map to draw.
  * cameraX: The x position of the camera.
  * cameraY: The x position of the camera.
+ * zoom: Zoom number to scale the result (read
+ *  above).
  * returns: 0 on success or a negative number on
  *  failure.
  */
-int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY){
+int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
 
     if(s == D_NULL || map == D_NULL){
         return -1;
+    };
+
+    if(zoom == 0){
+        return -2;
     };
 
     D_Rect r = {0};
     int i = 0;
     while(i < map->numRects){
 
-        r.x = (map->rect[i].x - cameraX) + (s->w / 2);
-        r.y = (map->rect[i].y - cameraY) + (s->h / 2);
-        r.w = map->rect[i].w;
-        r.h = map->rect[i].h;
+        r.x = (((map->rect[i].x - cameraX) * 256) / zoom) + (s->w / 2);
+        r.y = (((map->rect[i].y - cameraY) * 256) / zoom) + (s->h / 2);
+        r.w = (map->rect[i].w * 256) / zoom;
+        r.h = (map->rect[i].h * 256) / zoom;
 
         D_FillRect(s, &r, D_rgbaToFormat(s->format, map->rect[i].r, map->rect[i].g, map->rect[i].b, 255));
 
@@ -43,10 +56,10 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY){
     i = 0;
     while(i < map->numPlayers){
 
-        r.x = ((map->player[i].x - cameraX) + (s->w / 2)) - (MWG_PLAYER_WIDTH / 2);
-        r.y = ((map->player[i].y - cameraY) + (s->h / 2)) - MWG_PLAYER_HEIGHT;
-        r.w = MWG_PLAYER_WIDTH;
-        r.h = MWG_PLAYER_HEIGHT;
+        r.x = ( (((map->player[i].x - cameraX) * 256) / zoom) + (s->w / 2)) - (((MWG_PLAYER_WIDTH * 256) / zoom) / 2);
+        r.y = ( (((map->player[i].y - cameraY) * 256) / zoom) + (s->h / 2)) - ((MWG_PLAYER_HEIGHT * 256) / zoom);
+        r.w = (MWG_PLAYER_WIDTH * 256) / zoom;
+        r.h = (MWG_PLAYER_HEIGHT * 256) / zoom;
 
         D_FillRect(s, &r, D_rgbaToFormat(s->format, 40, 40, 40, 255));
 
@@ -63,6 +76,7 @@ int main(int argc, char ** argv){
     int cameraY = 0;
     D_Event e = {0};
     D_uint8 keyboardState[D_NumKeys] = {0};
+    int zoom = 256;
 
     MWG_Map map = {
         /* MapRects */
@@ -121,10 +135,13 @@ int main(int argc, char ** argv){
         /*if(keyboardState[D_Ks]){};*/
         if(keyboardState[D_Kd]){map.player[0].oldX -= 10;};
 
+        if(keyboardState[D_Kq]){zoom -= 10;};
+        if(keyboardState[D_Ke]){zoom += 10;};
+
 
         D_FillRect(out, D_NULL, D_rgbaToFormat(out->format, 181, 233, 255, 255));
 
-        MWG_DrawMap(out, &map, cameraX, cameraY);
+        MWG_DrawMap(out, &map, map.player[0].x, map.player[0].y, zoom);
 
         D_FlipOutSurf(out);
 
