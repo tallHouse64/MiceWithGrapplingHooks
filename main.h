@@ -25,6 +25,18 @@ typedef struct MWG_Player {
      *  to -hitboxH. */
     int hitboxX, hitboxY, hitboxW, hitboxH;
 
+    D_Surf * image;
+
+    /* The image rectangle is relative to the x,
+     *  y of the player.*/
+    int imageX, imageY, imageW, imageH;
+
+    /* This is the centre of rotation for the
+     *  image, it is relative to the top left of
+     *  the image rectangle (which is relative to
+     *  the player). */
+    int rotateCentreX, rotateCentreY;
+
     D_double angle;
 } MWG_Player;
 

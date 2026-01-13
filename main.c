@@ -100,6 +100,9 @@ int main(int argc, char ** argv){
             100, 0,
             0, 0,
             -(MWG_PLAYER_WIDTH / 2), -MWG_PLAYER_HEIGHT, MWG_PLAYER_WIDTH, MWG_PLAYER_HEIGHT,
+            mouseImage,
+            -(mouseDataW / 2), -mouseDataH, mouseDataW, mouseDataH, /*Image x, y, w, h*/
+            mouseDataW / 2, mouseDataH / 2,
             0.0
         },
         1 /* numPlayers*/
