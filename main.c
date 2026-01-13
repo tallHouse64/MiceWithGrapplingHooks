@@ -10,6 +10,8 @@
 #include"main.h"
 #include"physics/physics.h"
 
+#include"assets/mouse.h"
+
 
 /* This function draws a map onto a surface.
  *
@@ -77,6 +79,7 @@ int main(int argc, char ** argv){
     D_Event e = {0};
     D_uint8 keyboardState[D_NumKeys] = {0};
     int zoom = 256;
+    D_Surf * mouseImage = D_CreateSurfFrom(mouseDataW, mouseDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), mouseData);
 
     MWG_Map map = {
         /* MapRects */
