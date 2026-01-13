@@ -9,10 +9,10 @@ IMAGE_HEADERS := assets/mouse.h
 
 .PHONY: clean
 
-all: $(OBJ) $(IMAGE_HEADERS)
+all: $(OBJ)
 	$(CC) $(OBJ) -o MWGH $(FLAGS)
 
-main.o: main.c
+main.o: main.c $(IMAGE_HEADERS)
 	$(CC) main.c -c -o main.o $(FLAGS)
 
 physics/physics.o: physics/physics.c
