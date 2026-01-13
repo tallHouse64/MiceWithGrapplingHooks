@@ -42,6 +42,7 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
     };
 
     D_Rect r = {0};
+    D_Point centre = {0};
     int i = 0;
     while(i < map->numRects){
 
@@ -58,12 +59,14 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
     i = 0;
     while(i < map->numPlayers){
 
-        r.x = ( (((map->player[i].x - cameraX) * 256) / zoom) + (s->w / 2)) - (((MWG_PLAYER_WIDTH * 256) / zoom) / 2);
-        r.y = ( (((map->player[i].y - cameraY) * 256) / zoom) + (s->h / 2)) - ((MWG_PLAYER_HEIGHT * 256) / zoom);
-        r.w = (MWG_PLAYER_WIDTH * 256) / zoom;
-        r.h = (MWG_PLAYER_HEIGHT * 256) / zoom;
+        r.x = ((((map->player[i].x + map->player[i].imageX) - cameraX) * 256) / zoom) + (s->w / 2);
+        r.y = ((((map->player[i].y + map->player[i].imageY) - cameraY) * 256) / zoom) + (s->h / 2);
+        r.w = (map->player[i].imageW * 256) / zoom;
+        r.h = (map->player[i].imageH * 256) / zoom;
 
-        D_FillRect(s, &r, D_rgbaToFormat(s->format, 40, 40, 40, 255));
+        centre.x = (map->player[i].rotateCentreX * 256) / zoom;
+        centre.y = (map->player[i].rotateCentreY * 256) / zoom;
+        D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle);
 
         i++;
     };
@@ -101,8 +104,8 @@ int main(int argc, char ** argv){
             0, 0,
             -(MWG_PLAYER_WIDTH / 2), -MWG_PLAYER_HEIGHT, MWG_PLAYER_WIDTH, MWG_PLAYER_HEIGHT,
             mouseImage,
-            -(mouseDataW / 2), -mouseDataH, mouseDataW, mouseDataH, /*Image x, y, w, h*/
-            mouseDataW / 2, mouseDataH / 2,
+            -((mouseDataW * 2) / 2), -(mouseDataH * 2), (mouseDataW * 2), (mouseDataH * 2), /*Image x, y, w, h*/
+            (mouseDataW * 2) / 2, (mouseDataH * 2) / 2,
             0.0
         },
         1 /* numPlayers*/
@@ -141,8 +144,12 @@ int main(int argc, char ** argv){
         /*if(keyboardState[D_Ks]){};*/
         if(keyboardState[D_Kd]){map.player[0].oldX -= 10;};
 
-        if(keyboardState[D_Kq]){zoom -= 10;};
-        if(keyboardState[D_Ke]){zoom += 10;};
+        /* Control zoom with the i and o keys */
+        if(keyboardState[D_Ki]){zoom -= 10;};
+        if(keyboardState[D_Ko]){zoom += 10;};
+
+        if(keyboardState[D_Ke]){map.player[0].angle += 16;};
+        if(keyboardState[D_Kq]){map.player[0].angle -= 16;};
 
 
         D_FillRect(out, D_NULL, D_rgbaToFormat(out->format, 181, 233, 255, 255));
