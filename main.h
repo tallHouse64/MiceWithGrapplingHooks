@@ -10,6 +10,18 @@
 #define MWG_PLAYER_WIDTH 50
 #define MWG_PLAYER_HEIGHT 50
 
+/* This is an integer lerp macro (linear
+ *  interpolation).
+ *
+ * When t is 256 a gets returned, when it is 0 b
+ *  is returned.
+ *
+ * a: The first number (returned when t is 0).
+ * b: The second number (returned when t is 256).
+ * returns: An interpolated number between a and
+ *  b.
+*/
+#define LERP_INT(a, b, t) ( (((a) * (256 - (t))) / 256) + (((b) * (t)) / 256) )
 
 typedef struct MWG_Player {
 
