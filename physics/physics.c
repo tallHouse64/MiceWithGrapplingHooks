@@ -370,13 +370,20 @@ int MWG_CalcPhysics(MWG_Map * map){
         map->player[i].oldX = temp1;
         map->player[i].oldY = temp2;
 
-        newX = map->player[i].oldX;
-        newY = map->player[i].oldY;
 
         /* Loop through all the map rectangles
          *  and detect collisions. */
         j = 0;
         while(j < map->numRects){
+
+            /* If newX and newY are not
+             *  overwritten by
+             *  MWG_ResolveCollision() and it
+             *  still returns non-zero, the
+             *  player should bounce because of
+             *  the two lines below. */
+            newX = LERP_INT(map->player[i].oldX, map->player[i].x, -256);
+            newY = LERP_INT(map->player[i].oldY, map->player[i].y, -256);
 
             if(MWG_ResolveCollision(&map->player[i], &map->rect[j], &newX, &newY)){
                 map->player[i].x = newX;
