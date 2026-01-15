@@ -335,13 +335,23 @@ int MWG_CalcPhysics(MWG_Map * map){
 
 
         /* Apply gravity */
-        map->player[i].oldY = map->player[i].oldY - 5;
+        /*map->player[i].oldY = map->player[i].oldY - 5;*/
+        map->player[i].oldY = map->player[i].oldY - ((70 * DELAY)/256);
 
         /* Apply air resistance (halve the
          *  speed) */
-        map->player[i].oldX = (map->player[i].oldX + map->player[i].x) / 2;
-        map->player[i].oldY = (map->player[i].oldY + map->player[i].y) / 2;
+        map->player[i].oldX = LERP_INT(map->player[i].oldX, map->player[i].x, 64);
+        map->player[i].oldY = LERP_INT(map->player[i].oldY, map->player[i].y, 64);
 
+
+        /* Apply static friction */
+        /*if(map->player[i].oldX >= map->player[i].x - 1 && map->player[i].oldX <= map->player[i].x + 1){
+            map->player[i].oldX = map->player[i].x;
+        };
+
+        if(map->player[i].oldY >= map->player[i].y - 1 && map->player[i].oldY <= map->player[i].y + 1){
+            map->player[i].oldY = map->player[i].y;
+        };*/
 
 
         /* Move player */
