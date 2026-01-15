@@ -344,14 +344,19 @@ int MWG_CalcPhysics(MWG_Map * map){
         map->player[i].oldY = LERP_INT(map->player[i].oldY, map->player[i].y, 64);
 
 
-        /* Apply static friction */
-        /*if(map->player[i].oldX >= map->player[i].x - 1 && map->player[i].oldX <= map->player[i].x + 1){
+        /* Stop the player moving when the speed
+         *  is very slow (this is probably
+         *  masking a bug where the player's
+         *  speed changes depending on what
+         *  quadrant around the origin the player
+         *  is). */
+        if(map->player[i].oldX >= map->player[i].x - 1 && map->player[i].oldX <= map->player[i].x + 1){
             map->player[i].oldX = map->player[i].x;
         };
 
         if(map->player[i].oldY >= map->player[i].y - 1 && map->player[i].oldY <= map->player[i].y + 1){
             map->player[i].oldY = map->player[i].y;
-        };*/
+        };
 
 
         /* Move player */
