@@ -140,9 +140,9 @@ int main(int argc, char ** argv){
         MWG_CalcPhysics(&map);
 
         /*if(keyboardState[D_Kw]){};*/
-        if(keyboardState[D_Ka]){map.player[0].oldX += 10;};
+        if(keyboardState[D_Ka]){map.player[0].oldX += (78 * DELAY) / 256;};
         /*if(keyboardState[D_Ks]){};*/
-        if(keyboardState[D_Kd]){map.player[0].oldX -= 10;};
+        if(keyboardState[D_Kd]){map.player[0].oldX -= (78 * DELAY) / 256;};
 
         /* Control zoom with the i and o keys */
         if(keyboardState[D_Ki]){zoom -= 10;};
