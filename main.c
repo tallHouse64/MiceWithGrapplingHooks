@@ -66,7 +66,7 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
 
         centre.x = (map->player[i].rotateCentreX * 256) / zoom;
         centre.y = (map->player[i].rotateCentreY * 256) / zoom;
-        D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle);
+        D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle, 0, 0);
 
         i++;
     };
