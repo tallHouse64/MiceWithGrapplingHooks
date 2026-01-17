@@ -148,8 +148,21 @@ int main(int argc, char ** argv){
         if(keyboardState[D_Ki]){zoom -= 10;};
         if(keyboardState[D_Ko]){zoom += 10;};
 
-        if(keyboardState[D_Ke]){map.player[0].angle += 16;};
-        if(keyboardState[D_Kq]){map.player[0].angle -= 16;};
+        if(keyboardState[D_Ke]){
+            map.player[0].angle += 15;
+
+            if(map.player[0].angle > 90){
+                map.player[0].angle = 90;
+            };
+        };
+
+        if(keyboardState[D_Kq]){
+            map.player[0].angle -= 15;
+
+            if(map.player[0].angle < -90){
+                map.player[0].angle = -90;
+            };
+        };
 
 
         D_FillRect(out, D_NULL, D_rgbaToFormat(out->format, 181, 233, 255, 255));
