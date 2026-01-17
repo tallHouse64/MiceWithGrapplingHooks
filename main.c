@@ -66,7 +66,13 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
 
         centre.x = (map->player[i].rotateCentreX * 256) / zoom;
         centre.y = (map->player[i].rotateCentreY * 256) / zoom;
-        D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle, 0, 0);
+
+        /* Is the player looking right? */
+        if(map->player[i].angle <= 90 && map->player[i].angle >= -90){
+            D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle, 0, 0);
+        }else{
+            D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle, 1, 0);
+        };
 
         i++;
     };
@@ -139,28 +145,97 @@ int main(int argc, char ** argv){
 
         MWG_CalcPhysics(&map);
 
-        /*if(keyboardState[D_Kw]){};*/
-        if(keyboardState[D_Ka]){map.player[0].oldX += (78 * DELAY) / 256;};
-        /*if(keyboardState[D_Ks]){};*/
-        if(keyboardState[D_Kd]){map.player[0].oldX -= (78 * DELAY) / 256;};
+        /* When a is pressed move left */
+        if(keyboardState[D_Ka]){
+            map.player[0].oldX += (78 * DELAY) / 256;
+
+            /* Is the player looking right? */
+            if(map.player[0].angle <= 90 &&
+                map.player[0].angle >= -90){
+
+                /*Flip the player to look left*/
+                map.player[0].angle = 180 - map.player[0].angle;
+            };
+        };
+
+        /* When d is pressed move right */
+        if(keyboardState[D_Kd]){
+            map.player[0].oldX -= (78 * DELAY) / 256;
+
+            /* Is the player looking left? */
+            if(map.player[0].angle > 90 ||
+                map.player[0].angle < -90){
+
+                /*Flip the player to look right*/
+                map.player[0].angle = 180 - map.player[0].angle;
+                };
+        };
 
         /* Control zoom with the i and o keys */
         if(keyboardState[D_Ki]){zoom -= 10;};
         if(keyboardState[D_Ko]){zoom += 10;};
 
+        /* When e is pressed change the player's
+         *  angle */
         if(keyboardState[D_Ke]){
-            map.player[0].angle += 15;
 
-            if(map.player[0].angle > 90){
-                map.player[0].angle = 90;
+            /* Is the player looking right? */
+            if( map.player[0].angle <= 90 &&
+                map.player[0].angle >= -90
+                ){
+
+                /* Change the angle */
+                map.player[0].angle += 15;
+
+                /* Limit the angle to be 90 or
+                 *  less. */
+                if(map.player[0].angle > 90){
+                    map.player[0].angle = 90;
+                };
+            }else{
+                /* At this point the player must
+                 *  be looking left */
+
+                /* Change the angle */
+                 map.player[0].angle += 15;
+
+                 /* Limit the angle to be 269 or
+                  *  less. */
+                 if(map.player[0].angle >= 269){
+                     map.player[0].angle = 269;
+                 };
             };
         };
 
+        /* When q is pressed change the player's
+         *  angle (the opposite way) */
         if(keyboardState[D_Kq]){
-            map.player[0].angle -= 15;
 
-            if(map.player[0].angle < -90){
-                map.player[0].angle = -90;
+            /* Is the player looking right? */
+            if( map.player[0].angle <= 90 &&
+                map.player[0].angle >= -90
+            ){
+
+                /* Change the angle */
+                map.player[0].angle -= 15;
+
+                /* Limit the angle to be -90 or
+                 *  more. */
+                if(map.player[0].angle < -90){
+                    map.player[0].angle = -90;
+                };
+            }else{
+                /* At this point the player must
+                 *  be looking left */
+
+                /* Change the angle */
+                map.player[0].angle -= 15;
+
+                /* Limit the angle to be 91 or
+                 *  more. */
+                if(map.player[0].angle <= 91){
+                    map.player[0].angle = 91;
+                };
             };
         };
 
