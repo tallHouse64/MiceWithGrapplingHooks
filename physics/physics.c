@@ -60,7 +60,7 @@ int MWG_FindEntryPoint(int currentX, int currentY, int oldX, int oldY, MWG_MapRe
      *  have the ability to skip to the end of it
      *  using "break;". The loop should only run
      *  once. */
-    while(usedPointB){
+    while(usedPointB == 0){
 
         /* The two lines below assume that there
          *  is a valid entry or exit point on the
@@ -72,7 +72,7 @@ int MWG_FindEntryPoint(int currentX, int currentY, int oldX, int oldY, MWG_MapRe
 
         /* Is there actually a valid entry/exit
          *  point on the top wall? */
-        if(pointAX > rect->x && pointAX <= rect->x + rect->w){
+        if(pointAX >= rect->x && pointAX <= rect->x + rect->w){
             pointBX = pointAX;
             pointBY = pointAY;
             usedPointB = 1;

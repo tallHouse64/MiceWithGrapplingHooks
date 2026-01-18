@@ -21,6 +21,8 @@
  *  current position (green). The entry point
  *  (white) should be between them on the border
  *  of the rectangle.
+ *
+ * An exit point has been added (blue).
  */
 
 int main(int argc, char ** argv){
@@ -30,6 +32,7 @@ int main(int argc, char ** argv){
     MWG_Player player = {100, 80, 40, 110};
     D_Rect rect = {70, 70, 100, 100};
     D_Rect entryPointR = {0, 0, 8, 8};
+    D_Rect exitPointR = {0, 0, 8, 8};
     D_Rect playerPosR = {0, 0, 8, 8};
     D_Rect oldPlayerPosR = {0, 0, 8, 8};
     MWG_MapRect mapRect = {rect.x, rect.y, rect.w, rect.h};
@@ -70,12 +73,17 @@ int main(int argc, char ** argv){
         D_FillRect(out, &rect, D_rgbaToFormat(out->format, 17, 127, 11, 255));
 
         /* Test function */
-        MWG_FindEntryPoint(player.x, player.y, player.oldX, player.oldY, &mapRect, &entryPointR.x, &entryPointR.y);
+        MWG_FindEntryPoint(player.x, player.y, player.oldX, player.oldY, &mapRect, &entryPointR.x, &entryPointR.y, &exitPointR.x, &exitPointR.y);
         entryPointR.x -= 4;
         entryPointR.y -= 4;
+        exitPointR.x -= 4;
+        exitPointR.y -= 4;
 
         /* Draw entry point */
         D_FillRect(out, &entryPointR, D_rgbaToFormat(out->format, 255, 255, 255, 255));
+
+        /* Draw exit point */
+        D_FillRect(out, &exitPointR, D_rgbaToFormat(out->format, 0, 0, 255, 255));
 
         playerPosR.x = player.x - 4;
         playerPosR.y = player.y - 4;
