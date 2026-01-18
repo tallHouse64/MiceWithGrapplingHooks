@@ -10,6 +10,10 @@
  *  this frame (otherwise there may be a division
  *  by zero and the program would crash).
  *
+ * It is safe to pass null for xEntryPoint,
+ *  yEntryPoint, xExitPoint and yExitPoint if you
+ *  don't need all the values.
+ *
  * player: The player that just entered a
  *  rectangle.
  * rect: The rectangle that the player just
@@ -18,97 +22,156 @@
  *  the x position of where the player entered.
  * yEntryPoint: A number that gets filled in with
  *  the y position of where the player entered.
+ * xExitPoint: A number that gets filled in with
+ *  the x position of where the player would exit
+ *  if the player kept moving.
+ * yExitPoint: A number that gets filled in with
+ *  the y position of where the player would exit
+ *  if the player kept moving.
  * returns: 0 on success or a negative number on
  *  failure.
  */
-int MWG_FindEntryPoint(int currentX, int currentY, int oldX, int oldY, MWG_MapRect * rect, int * xEntryPoint, int * yEntryPoint){
+int MWG_FindEntryPoint(int currentX, int currentY, int oldX, int oldY, MWG_MapRect * rect, int * xEntryPoint, int * yEntryPoint, int * xExitPoint, int * yExitPoint){
 
-    if(rect == D_NULL || xEntryPoint == D_NULL || yEntryPoint == D_NULL){
+    /* This function is unfinished. */
+
+    if(rect == D_NULL){
         return -1;
     };
 
-    /* Was the player to the left of the rect
-     *  last frame? */
-    if(oldX < rect->x){
+    /* There are two points below, one is an
+     *  entry point the other is an exit point.
+     *  It is unknown which is the entry point
+     *  until the end of the function. */
 
-        /* Find the y entry point, this may be
-         *  wrong, check in the next if
-         *  statement. */
-        *yEntryPoint = ((((rect->x - oldX) * (currentY - oldY)) / (currentX - oldX))) + oldY;
+    /* Point A */
+    int pointAX = 0;
+    int pointAY = 0;
 
-        /* Is yEntryPoint on the border of the
-         *  rect? */
-        if(*yEntryPoint >= rect->y && *yEntryPoint < rect->y + rect->h){
-            /* The yEntry point is correct, set
-             *  xEnrtyPoint and return. */
+    /* Point B */
+    int pointBX = 0;
+    int pointBY = 0;
 
-            *xEntryPoint = rect->x;
-            return 0;
+    /* Set this to 1 when point B get filled with
+     *  coordinates of a valid entry point. */
+    int usedPointB = 0;
+
+    /* The whole point of this while loop is to
+     *  have the ability to skip to the end of it
+     *  using "break;". The loop should only run
+     *  once. */
+    while(usedPointB){
+
+        /* The two lines below assume that there
+         *  is a valid entry or exit point on the
+         *  top wall. */
+        pointAX = LERP_INT(oldX, currentX, ((rect->y - oldY) * 256) / (currentY - oldY));
+        pointAY = rect->y - 1;
+        /* Minus one above to make it just
+         *  outside by 1 pixel. */
+
+        /* Is there actually a valid entry/exit
+         *  point on the top wall? */
+        if(pointAX > rect->x && pointAX <= rect->x + rect->w){
+            pointBX = pointAX;
+            pointBY = pointAY;
+            usedPointB = 1;
         };
-    };
-
-    /* At this point, the entry point can't be on
-     *  the left wall of the rect (the function
-     *  would have returned). */
-
-    /* Was the player to the right of the rect
-     *  last frame? */
-    if(oldX >= rect->x + rect->w){
 
 
-        /* Find the y entry point (this time on
-         *  the right wall, not left), this may
-         *  be wrong, check in the next if
-         *  statement. */
-        *yEntryPoint = (((((rect->x + rect->w) - oldX) * (currentY - oldY)) / (currentX - oldX))) + oldY;
 
-        /* Is yEntryPoint on the border of the
-         *  rect? */
-        if(*yEntryPoint >= rect->y && *yEntryPoint < rect->y + rect->h){
-            /* The yEntry point is correct, set
-             *  xEnrtyPoint and return. */
+        /* The two lines below assume that there
+         *  is a valid entry or exit point on the
+         *  left wall. */
+        pointAX = rect->x - 1;
+        pointAY = LERP_INT(oldY, currentY, ((rect->x - oldX) * 256) / (currentX - oldX));
 
-            *xEntryPoint = rect->x + rect->w;
-            return 0;
+        /* Is there actually a valid entry/exit
+         *  point on the left wall? */
+        if(pointAY > rect->y && pointAY <= rect->y + rect->h){
+            if(usedPointB){
+                /* Entry and exit points are
+                 *  found, skip to the end. */
+                break;
+            };
+
+            pointBX = pointAX;
+            pointBY = pointAY;
+            usedPointB = 1;
         };
+
+
+        /* The two lines below assume that there
+         *  is a valid entry or exit point on the
+         *  right wall. */
+        pointAX = rect->x + rect->w;
+        pointAY = LERP_INT(oldY, currentY, (((rect->x + rect->w) - oldX) * 256) / (currentX - oldX));
+         /* pointAX is already outside by 1
+          *  pixel. */
+
+        /* Is there actually a valid entry/exit
+         *  point on the right wall? */
+        if(pointAY > rect->y && pointAY <= rect->y + rect->h){
+            if(usedPointB){
+                /* Entry and exit points are
+                 *  found, skip to the end. */
+                break;
+            };
+
+            pointBX = pointAX;
+            pointBY = pointAY;
+            usedPointB = 1;
+        };
+
+
+        /* The two lines below assume that there
+         *  is a valid entry or exit point on the
+         *  bottom wall. */
+        pointAX = LERP_INT(oldX, currentX, (((rect->y + rect->h) - oldY) * 256) / (currentY - oldY));
+        pointAY = rect->y + rect->h;
+        /* Minus one above to make it just
+         *  outside by 1 pixel. */
+
+        /* Is there actually a valid entry/exit
+         *  point on the bottom wall? */
+        if(pointAX > rect->x && pointAX <= rect->x + rect->w){
+            if(usedPointB){
+                /* Entry and exit points are
+                 *  found, skip to the end. */
+                break;
+            };
+
+            pointBX = pointAX;
+            pointBY = pointAY;
+            usedPointB = 1;
+        };
+
+        return -2;
     };
 
-    /* Now the entry point must be either the top
-     *  or bottom wall. */
+    /* Todo: Check which points, A or B, are the
+     *  entry and exit points. Then fill in the
+     *  pointers and return. */
 
-    /* Was the player above the rect last
-     *  frame? */
-    if(oldY < rect->y){
-
-        /* Original equation (doesn't work for
-         *  integers).
-         * (((rect.y - player->oldY) / (player->y - player->oldY)) * (player->x - player->oldX)) + player->oldX
-         */
-
-        *xEntryPoint = (((rect->y - oldY) * (currentX - oldX)) / (currentY - oldY)) + oldX;
-
-        /* The entry point must be on the top
-         *  wall of the rectangle. */
-        *yEntryPoint = rect->y;
-        return 0;
+    /* For now just use point A as the entry
+     *  point and B as the exit. */
+    if(xEntryPoint != D_NULL){
+        *xEntryPoint = pointAX;
     };
 
-    /* Was the player below the rect last frame? */
-    if(oldY >= rect->y + rect->h){
-
-        *xEntryPoint = ((((rect->y + rect->h) - oldY) * (currentX - oldX)) / (currentY - oldY)) + oldX;
-
-        /* The entry point must be on the bottom
-         *  wall of the rectangle. */
-        *yEntryPoint = rect->y + rect->h;
-        return 0;
+    if(yEntryPoint != D_NULL){
+        *yEntryPoint = pointAY;
     };
 
-    /* At this point the player must have been
-     *  inside the rect last frame, do nothing
-     *  and return -2. */
+    if(xExitPoint != D_NULL){
+        *xExitPoint = pointBX;
+    };
 
-    return -2;
+    if(yExitPoint != D_NULL){
+        *yExitPoint = pointBY;
+    };
+
+    return 0;
 };
 
 /* This function detects a collision between a
@@ -219,7 +282,9 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
         MWG_FindEntryPoint(player->x + player->hitboxX, player->y + player->hitboxY,
                            player->oldX + player->hitboxX, player->oldY + player->hitboxY,
                            rect,
-                           newX, newY);
+                           newX, newY,
+                           D_NULL,
+                           D_NULL);
 
         *newX = *newX - player->hitboxX;
         *newY = *newY - player->hitboxY;
@@ -233,7 +298,9 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
         MWG_FindEntryPoint(player->x + player->hitboxX + player->hitboxW - 1, player->y + player->hitboxY,
                            player->oldX + player->hitboxX + player->hitboxW - 1, player->oldY + player->hitboxY,
                            rect,
-                           newX, newY);
+                           newX, newY,
+                           D_NULL,
+                           D_NULL);
 
         /* If the player's new position is
          *  touching the left wall, move the
@@ -255,7 +322,9 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
         MWG_FindEntryPoint(player->x + player->hitboxX, player->y + player->hitboxY + player->hitboxH - 1,
                            player->oldX + player->hitboxX, player->oldY + player->hitboxY + player->hitboxH - 1,
                            rect,
-                           newX, newY);
+                           newX, newY,
+                           D_NULL,
+                           D_NULL);
 
         /* If the player's new position is
          *  touching the top wall, move the
@@ -277,7 +346,9 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
         MWG_FindEntryPoint(player->x + player->hitboxX + player->hitboxW - 1, player->y + player->hitboxY + player->hitboxH - 1,
                            player->oldX + player->hitboxX + player->hitboxW - 1, player->oldY + player->hitboxY + player->hitboxH - 1,
                            rect,
-                           newX, newY);
+                           newX, newY,
+                           D_NULL,
+                           D_NULL);
 
         /* If the player's new position is
          *  touching the left wall, move the
