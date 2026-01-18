@@ -5,17 +5,14 @@
  *  entered this frame. This is useful for
  *  collision resolution.
  *
- * This function assumes that the player was
- *  outside the rect last frame, but is inside
- *  this frame (otherwise there may be a division
- *  by zero and the program would crash).
- *
  * It is safe to pass null for xEntryPoint,
  *  yEntryPoint, xExitPoint and yExitPoint if you
  *  don't need all the values.
  *
- * player: The player that just entered a
- *  rectangle.
+ * currentX: The players current x position.
+ * currentY: The players current y position.
+ * oldX: The players x position last frame.
+ * oldY: The players y position last frame.
  * rect: The rectangle that the player just
  *  entered.
  * xEntryPoint: A number that gets filled in with
@@ -33,7 +30,12 @@
  */
 int MWG_FindEntryPoint(int currentX, int currentY, int oldX, int oldY, MWG_MapRect * rect, int * xEntryPoint, int * yEntryPoint, int * xExitPoint, int * yExitPoint){
 
-    /* This function is unfinished. */
+    /* This function has a known bug, for some
+     *  edge cases it does not give an exit or
+     *  entry point when it should. In game this
+     *  is probably the cause of the
+     *  unexplainable bouncing and clipping that
+     *  sometimes happens. */
 
     if(rect == D_NULL){
         return -1;
@@ -56,6 +58,48 @@ int MWG_FindEntryPoint(int currentX, int currentY, int oldX, int oldY, MWG_MapRe
      *  coordinates of a valid entry point. */
     int usedPointB = 0;
 
+    /* Avoid a division by 0, solving the problem
+     *  in a different way for this edge case. */
+    if(oldX == currentX){
+
+        /* Does the player pass through the
+         *  rect? */
+        if(oldX >= rect->x && oldX < rect->x + rect->w){
+
+            pointAX = oldX;
+            pointAY = rect->y;
+
+            pointBX = oldX;
+            pointBY = rect->y + rect->h;
+
+            usedPointB = 1;
+
+        }else{
+            return -2;
+        };
+    };
+
+    /* Avoid a division by 0*/
+    if(oldY == currentY){
+
+        /* Does the player pass through the
+         *  rect? */
+        if(oldY >= rect->y && oldY < rect->y + rect->h){
+
+            pointAX = rect->x;
+            pointAY = oldY;
+
+            pointBX = rect->x + rect->w;
+            pointBY = oldY;
+
+            usedPointB = 1;
+
+        }else{
+            return -2;
+        };
+    };
+
+
     /* The whole point of this while loop is to
      *  have the ability to skip to the end of it
      *  using "break;". The loop should only run
@@ -65,7 +109,7 @@ int MWG_FindEntryPoint(int currentX, int currentY, int oldX, int oldY, MWG_MapRe
         /* The two lines below assume that there
          *  is a valid entry or exit point on the
          *  top wall. */
-        pointAX = LERP_INT(oldX, currentX, ((rect->y - oldY) * 256) / (currentY - oldY));
+        pointAX = LERP_INT(oldX, currentX, (((rect->y - oldY) * 256) / (currentY - oldY)));
         pointAY = rect->y - 1;
         /* Minus one above to make it just
          *  outside by 1 pixel. */
@@ -84,7 +128,7 @@ int MWG_FindEntryPoint(int currentX, int currentY, int oldX, int oldY, MWG_MapRe
          *  is a valid entry or exit point on the
          *  left wall. */
         pointAX = rect->x - 1;
-        pointAY = LERP_INT(oldY, currentY, ((rect->x - oldX) * 256) / (currentX - oldX));
+        pointAY = LERP_INT(oldY, currentY, (((rect->x - oldX) * 256) / (currentX - oldX)));
 
         /* Is there actually a valid entry/exit
          *  point on the left wall? */
@@ -105,7 +149,7 @@ int MWG_FindEntryPoint(int currentX, int currentY, int oldX, int oldY, MWG_MapRe
          *  is a valid entry or exit point on the
          *  right wall. */
         pointAX = rect->x + rect->w;
-        pointAY = LERP_INT(oldY, currentY, (((rect->x + rect->w) - oldX) * 256) / (currentX - oldX));
+        pointAY = LERP_INT(oldY, currentY, ((((rect->x + rect->w) - oldX) * 256) / (currentX - oldX)));
          /* pointAX is already outside by 1
           *  pixel. */
 
@@ -127,7 +171,7 @@ int MWG_FindEntryPoint(int currentX, int currentY, int oldX, int oldY, MWG_MapRe
         /* The two lines below assume that there
          *  is a valid entry or exit point on the
          *  bottom wall. */
-        pointAX = LERP_INT(oldX, currentX, (((rect->y + rect->h) - oldY) * 256) / (currentY - oldY));
+        pointAX = LERP_INT(oldX, currentX, ((((rect->y + rect->h) - oldY) * 256) / (currentY - oldY)));
         pointAY = rect->y + rect->h;
         /* Minus one above to make it just
          *  outside by 1 pixel. */
@@ -149,26 +193,47 @@ int MWG_FindEntryPoint(int currentX, int currentY, int oldX, int oldY, MWG_MapRe
         return -2;
     };
 
-    /* Todo: Check which points, A or B, are the
-     *  entry and exit points. Then fill in the
-     *  pointers and return. */
+    /* Now find which point, A or B is the entry
+     *  point. */
 
-    /* For now just use point A as the entry
-     *  point and B as the exit. */
-    if(xEntryPoint != D_NULL){
-        *xEntryPoint = pointAX;
-    };
+    /* Is point A closer to old x, y? */
+    if(((pointAX - oldX) * (pointAX - oldX)) + ((pointAY - oldY) * (pointAY - oldY)) <
+       ((pointBX - oldX) * (pointBX - oldX)) + ((pointBY - oldY) * (pointBY - oldY))){
+        /* Point A is the entry point! */
 
-    if(yEntryPoint != D_NULL){
-        *yEntryPoint = pointAY;
-    };
+        if(xEntryPoint != D_NULL){
+            *xEntryPoint = pointAX;
+        };
 
-    if(xExitPoint != D_NULL){
-        *xExitPoint = pointBX;
-    };
+        if(yEntryPoint != D_NULL){
+            *yEntryPoint = pointAY;
+        };
 
-    if(yExitPoint != D_NULL){
-        *yExitPoint = pointBY;
+        if(xExitPoint != D_NULL){
+            *xExitPoint = pointBX;
+        };
+
+        if(yExitPoint != D_NULL){
+            *yExitPoint = pointBY;
+        };
+    }else{
+        /* Point B is the entry point! */
+
+        if(xEntryPoint != D_NULL){
+            *xEntryPoint = pointBX;
+        };
+
+        if(yEntryPoint != D_NULL){
+            *yEntryPoint = pointBY;
+        };
+
+        if(xExitPoint != D_NULL){
+            *xExitPoint = pointAX;
+        };
+
+        if(yExitPoint != D_NULL){
+            *yExitPoint = pointAY;
+        };
     };
 
     return 0;
