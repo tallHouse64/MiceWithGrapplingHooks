@@ -23,6 +23,11 @@
 */
 #define LERP_INT(a, b, t) ( (((a) * (256 - (t))) / 256) + (((b) * (t)) / 256) )
 
+typedef enum MWG_HookState {
+    MWG_HOOK_UNATTACHED,
+    MWG_HOOK_ATTACHED
+} MWG_HookState;
+
 typedef struct MWG_Player {
 
     /* This x, y position is the bottom-middle of
@@ -48,6 +53,13 @@ typedef struct MWG_Player {
      *  the image rectangle (which is relative to
      *  the player). */
     int rotateCentreX, rotateCentreY;
+
+    /* This is the position of the player's
+     *  grappling hook. These are absolute
+     *  coordinates, NOT relative. */
+    int hookX, hookY;
+
+    MWG_HookState hookState;
 
     D_double angle;
 } MWG_Player;

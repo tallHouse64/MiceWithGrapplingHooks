@@ -112,6 +112,8 @@ int main(int argc, char ** argv){
             mouseImage,
             -((mouseDataW * 2) / 2), -(mouseDataH * 2), (mouseDataW * 2), (mouseDataH * 2), /*Image x, y, w, h*/
             (mouseDataW * 2) / 2, (mouseDataH * 2) / 2,
+            0, 0,
+            MWG_HOOK_UNATTACHED,
             0.0
         },
         1 /* numPlayers*/
