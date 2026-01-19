@@ -80,6 +80,53 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
     return 0;
 };
 
+int MWG_FireHook(MWG_Map * map, MWG_Player * player){
+
+    if(map == D_NULL || player == D_NULL){
+        return -1;
+    };
+
+    /* The code below multiplies complex numbers to rotate the point degR and degC on the complex plane. */
+
+    /* Note that this pR and pC rotate a point by
+     *  0.01 degrees, not 1 degree. */
+    const D_double pR = 0.999999984769;
+    const D_double pC = 0.000174532924313;
+
+    D_double temp = 0;
+
+    D_double hookDirectionX = 100;
+    D_double hookDirectionY = 0;
+
+    /* Convert player->angle from degrees to a
+     *  point on the complex plane */
+    D_double reps = 0;
+    while(reps < player->angle){
+
+        /* Add one degree to degR and degC */
+        temp = D_COMPLEXMULTR(hookDirectionX, hookDirectionY, pR, pC);
+        hookDirectionY = D_COMPLEXMULTC(hookDirectionX, hookDirectionY, pR, pC);
+        hookDirectionX = temp;
+
+        reps += 0.01;
+    };
+
+    int i = 0;
+    int tempHookX = 0;
+    int tempHookY = 0;
+    while(i < map->numRects){
+        if(MWG_FindEntryPoint(hookDirectionX, hookDirectionY, player->x, player->y, &map->rect[i], &tempHookX, &tempHookY, D_NULL, D_NULL) == 0){
+            player->hookX = tempHookX;
+            player->hookY = tempHookY;
+            player->hookState = MWG_HOOK_ATTACHED;
+        };
+
+        i++;
+    };
+
+    return 0;
+};
+
 int main(int argc, char ** argv){
     D_Surf * out = D_GetOutSurf(50, 50, 640, 480, "Mice With Grappling Hooks", 0);
     int running = 1;
@@ -239,6 +286,14 @@ int main(int argc, char ** argv){
                     map.player[0].angle = 91;
                 };
             };
+        };
+
+        if(keyboardState[D_Kw]){
+            MWG_FireHook(&map, &map.player[0]);
+        };
+
+        if(keyboardState[D_Ks]){
+            map.player[0].hookState = MWG_HOOK_UNATTACHED;
         };
 
 
