@@ -481,29 +481,8 @@ int MWG_CalcPhysics(MWG_Map * map){
 
         if(map->player[i].hookState == MWG_HOOK_ATTACHED){
 
-            /* Is the player to the right of the
-             *  grappling hook? */
-            if(map->player[i].x > map->player[i].hookX){
-                /* Apply a force, moving the
-                 *  player left. */
-                map->player[i].oldX = map->player[i].oldX + 10;
-            }else{
-                /* Apply a force, moving the
-                 *  player right. */
-                map->player[i].oldX = map->player[i].oldX - 10;
-            };
-
-            /* Is the player to the above the
-             *  grappling hook? */
-            if(map->player[i].y < map->player[i].hookY){
-                /* Apply a force, moving the
-                 *  player down. */
-                map->player[i].oldY = map->player[i].oldY - 10;
-            }else{
-                /* Apply a force, moving the
-                 *  player up. */
-                map->player[i].oldY = map->player[i].oldY + 10;
-            };
+            map->player[i].oldX = LERP_INT(map->player[i].oldX, map->player[i].hookX, -32);
+            map->player[i].oldY = LERP_INT(map->player[i].oldY, map->player[i].hookY, -32);
         };
 
 
