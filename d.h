@@ -89,7 +89,9 @@
 #define D_uint8 unsigned char
 #endif
 
-typedef double D_double;
+#ifndef D_double
+#define D_double double
+#endif
 
 #ifndef D_CALLOC
 #define D_CALLOC calloc
@@ -1397,6 +1399,268 @@ int D_FillRect(D_Surf * s, D_Rect * rect, D_uint32 col){
             x++;
         };
         y++;
+    };
+
+    return 0;
+};
+
+/* The macros below are the loops for
+ *  D_DrawLine(). The are only intended for use
+ *  by that function.
+ *
+ * The macros below are a mess. Don't try to edit
+ *  them directly. Instead edit the code below
+ *  which is commented out (which is the readable
+ *  version), then delete the macro code
+ *  replacing it with a copy of the readable
+ *  version removing all newlines and comments.
+ *
+ * The reason this is necessary is because in C
+ *  you can only pass data types to macros, you
+ *  can't pass a data type to a function. The
+ *  pixel data needs to be dereferenced using the
+ *  correct pointer type so that writing to a
+ *  pixel doesn't corrupt any neighbour pixels.
+ *  Also multi-line macros usually cause gcc to
+ *  give the wrong line number when there is an
+ *  error.
+ *
+ * The same thing is done for D_SurfCopyScale()
+ *  and D_SurfCopyScaleRot().
+ *
+ * dstType: The data type to cast pixel data to.
+ */
+
+#define D_D_DRAWLINELOOP1(dstType) {for(; x < xLimit; x++){y = ((((x - a2.x) * (b2.y - a2.y)) / (b2.x - a2.x)) + a2.y);if(y >= s->safeArea.y + s->safeArea.h){thickCount = (y - (s->safeArea.y + s->safeArea.h)) + 1;}else{thickCount = 0;};for(; thickCount < thickness && y - thickCount >= s->safeArea.y; thickCount++){*((dstType *)(((D_uint8 *)(s->pix)) + ((((y - thickCount) * s->w) + x) * (D_BITDEPTHTOBYTES(s->format.bitDepth))) + (s->pitch * (y - thickCount)))) = col;};};}
+
+#define D_D_DRAWLINELOOP2(dstType) {for(; y < yLimit; y++){x = ((((y - a2.y) * (b2.x - a2.x)) / (b2.y - a2.y)) + a2.x);if(x >= s->safeArea.x + s->safeArea.w){thickCount = (x - (s->safeArea.x + s->safeArea.w)) + 1;}else{thickCount = 0;};for(; thickCount < thickness && x - thickCount >= s->safeArea.x; thickCount++){*((dstType *)(((D_uint8 *)(s->pix)) + (((y * s->w) + (x - thickCount)) * (D_BITDEPTHTOBYTES(s->format.bitDepth))) + (s->pitch * y))) = col;};};}
+
+#if 0
+
+/* Loop 1 */
+{
+    /* For each column of pixels between A and B.
+     */
+    for(; x < xLimit; x++){
+
+        y = ((((x - a2.x) * (b2.y - a2.y)) / (b2.x - a2.x)) + a2.y);
+
+        /* If the pixel is outside the safe area
+         *  (off the bottom) then set thickCount
+         *  so it never draws below the safe
+         *  area.*/
+        if(y >= s->safeArea.y + s->safeArea.h){
+            thickCount = (y - (s->safeArea.y + s->safeArea.h)) + 1;
+        }else{
+            thickCount = 0;
+        };
+
+        /* Draw the pixels for this column */
+        for(; thickCount < thickness && y - thickCount >= s->safeArea.y; thickCount++){
+            *((dstType *)(((D_uint8 *)(s->pix)) + ((((y - thickCount) * s->w) + x) * (D_BITDEPTHTOBYTES(s->format.bitDepth))) + (s->pitch * (y - thickCount)))) = col;
+        };
+    };
+}
+
+/* Loop 2 */
+{
+    /* For each row of pixels between A and B. */
+    for(; y < yLimit; y++){
+
+        x = ((((y - a2.y) * (b2.x - a2.x)) / (b2.y - a2.y)) + a2.x);
+
+        /* If the pixel is outside the safe area
+         *  (to the right) then set thickCount so
+         *  it only draws inside the safe area.*/
+        if(x >= s->safeArea.x + s->safeArea.w){
+            thickCount = (x - (s->safeArea.x + s->safeArea.w)) + 1;
+        }else{
+            thickCount = 0;
+        };
+
+        /* Draw the pixels for this row (right to
+         *  left) */
+        for(; thickCount < thickness && x - thickCount >= s->safeArea.x; thickCount++){
+            *((dstType *)(((D_uint8 *)(s->pix)) + (((y * s->w) + (x - thickCount)) * (D_BITDEPTHTOBYTES(s->format.bitDepth))) + (s->pitch * y))) = col;
+        };
+    };
+}
+#endif
+
+/* This function draws a line between two points
+ *  on a surface.
+ *
+ * The example below draws a green line on a
+ *  surface.
+ *
+ * Example:
+ *  D_Surf * surf = D_CreateSurf(640, 480, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32));
+ *  D_Point a = {10, 10};
+ *  D_Point b = {100, 70};
+ *  D_DrawLine(surf, &a, &b, 1, D_rgbaToFormat(surf->format, 0, 255, 0, 255));
+ *
+ * Like D_FillRect(), to pass a colour into this
+ *  function you need D_rgbaToFormat(). Its
+ *  return value can be passed into col.
+ *
+ * It is safe to pass null for s, a, and b. The
+ *  function would do nothing and return -1.
+ *
+ * If thickness is less than 1, the function does
+ *  nothing and returns -2.
+ *
+ * s: The surface to draw onto.
+ * a: A point on the surface to draw between.
+ * b: Another point on the surface to draw
+ *  between.
+ * thickness: The thickness to draw the line.
+ * col: The colour to draw the line.
+ * returns: 0 on success or a negative number on
+ *  failure.
+ */
+int D_DrawLine(D_Surf * s, D_Point * a, D_Point * b, int thickness, D_uint32 col){
+
+    int x = 0;
+    int y = 0;
+
+    int xLimit = 0;
+    int yLimit = 0;
+
+    /* Thickness counter */
+    int thickCount = 0;
+
+    D_Point * temp = D_NULL;
+
+    /* We need to make copies of a and b that can
+     *  be changed without affecting the original
+     *  values passed into the function. They get
+     *  copied later in the function. Bear in
+     *  mind the pointers may get swaped (read
+     *  below). */
+    D_Point a2 = {0};
+    D_Point b2 = {0};
+
+    if(s == D_NULL || a == D_NULL || b == D_NULL){
+        return -1;
+    };
+
+    if(thickness < 1){
+        return -2;
+    };
+
+    /* Swap pointers to A and B if the line is
+     *  more than 45 degrees anticlockwise from
+     *  the x axis (comment out the statement to
+     *  see what happens and understand it
+     *  better). */
+    if(-(b->y - a->y) > (b->x - a->x)){
+        temp = a;
+        a = b;
+        b = temp;
+    };
+
+    if((b->x - a->x) > (b->y - a->y)){
+
+        /* Copy Points a and b, while moving them
+         *  down by half the thickness. */
+        a2.x = a->x;
+        a2.y = a->y + (thickness / 2);
+
+        b2.x = b->x;
+        b2.y = b->y + (thickness / 2);
+
+        /* Edge case which would involve a
+         *  division by 0 */
+        if(b2.x == a2.x){
+            /* Do nothing */
+            return 0;
+        };
+
+        if(a2.x >= s->safeArea.x){
+            x = a2.x;
+        }else{
+            x = s->safeArea.x;
+        };
+
+        /* Set the xLimit to b2.x or the right
+         *  edge of the safe area, whichever is
+         *  smaller (leftmost). */
+        if(b2.x < s->safeArea.x + s->safeArea.w){
+            xLimit = b2.x;
+        }else{
+            xLimit = s->safeArea.x + s->safeArea.w;
+        };
+
+        /* At this point, a pixel should not be
+         *  drawn to the right of the x limit for
+         *  memory safety but yLimit can be
+         *  ignored. (Also don't draw on the
+         *  xLimit). */
+
+        switch(D_BITDEPTHTOBYTES(s->format.bitDepth)){
+            case 4:
+                D_D_DRAWLINELOOP1(D_uint32);
+                break;
+
+            case 2:
+                D_D_DRAWLINELOOP1(D_uint16);
+                break;
+
+            case 1:
+                D_D_DRAWLINELOOP1(D_uint8);
+                break;
+        };
+
+    }else{
+
+        /* Copy Points a and b, while moving them
+         *  right by half the thickness. */
+        a2.x = a->x + (thickness / 2);
+        a2.y = a->y;
+
+        b2.x = b->x + (thickness / 2);
+        b2.y = b->y;
+
+        /* Edge case which would involve a
+         *  division by 0 */
+        if(b2.y == a2.y){
+            /* Do nothing */
+            return 0;
+        };
+
+        if(a2.y >= s->safeArea.y){
+            y = a2.y;
+        }else{
+            y = s->safeArea.y;
+        };
+
+        /* Set the yLimit to b2.y or the bottom
+         *  edge of the safe area, whichever is
+         *  smaller (above). */
+        if(b2.y < s->safeArea.y + s->safeArea.h){
+            yLimit = b2.y;
+        }else{
+            yLimit = s->safeArea.y + s->safeArea.h;
+        };
+
+        /* At this point, a pixel should not be
+         *  drawn below the y limit for memory
+         *  safety but xLimit can be ignored.
+         *  (Also don't draw on the yLimit). */
+
+        switch(D_BITDEPTHTOBYTES(s->format.bitDepth)){
+            case 4:
+                D_D_DRAWLINELOOP2(D_uint32);
+                break;
+
+            case 2:
+                D_D_DRAWLINELOOP2(D_uint16);
+                break;
+
+            case 1:
+                D_D_DRAWLINELOOP2(D_uint8);
+                break;
+        };
     };
 
     return 0;
