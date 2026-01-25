@@ -61,6 +61,18 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
     D_Point player = {0};
     while(i < map->numPlayers){
 
+        /* Is the player's grappling hook
+         *  attached to something? */
+        if(map->player[i].hookState == MWG_HOOK_ATTACHED){
+
+            /* Draw the grappling hook line */
+            hook.x = ((((map->player[i].hookX) - cameraX) * 256) / zoom) + (s->w / 2);
+            hook.y = ((((map->player[i].hookY) - cameraY) * 256) / zoom) + (s->h / 2);
+            player.x = ((((map->player[i].x) - cameraX) * 256) / zoom) + (s->w / 2);
+            player.y = ((((map->player[i].y) - cameraY) * 256) / zoom) + (s->h / 2);
+            D_DrawLine(s, &hook, &player, (5 * 256) / zoom, D_rgbaToFormat(s->format, 70, 70, 70, 255));
+        };
+
         r.x = ((((map->player[i].x + map->player[i].imageX) - cameraX) * 256) / zoom) + (s->w / 2);
         r.y = ((((map->player[i].y + map->player[i].imageY) - cameraY) * 256) / zoom) + (s->h / 2);
         r.w = (map->player[i].imageW * 256) / zoom;
@@ -74,16 +86,6 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
             D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle, 0, 0);
         }else{
             D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle, 1, 0);
-        };
-
-        /* Is the player's grappling hook
-         *  attached to something? */
-        if(map->player[i].hookState == MWG_HOOK_ATTACHED){
-            hook.x = ((((map->player[i].hookX) - cameraX) * 256) / zoom) + (s->w / 2);
-            hook.y = ((((map->player[i].hookY) - cameraY) * 256) / zoom) + (s->h / 2);
-            player.x = ((((map->player[i].x) - cameraX) * 256) / zoom) + (s->w / 2);
-            player.y = ((((map->player[i].y) - cameraY) * 256) / zoom) + (s->h / 2);
-            D_DrawLine(s, &hook, &player, (5 * 256) / zoom, D_rgbaToFormat(s->format, 70, 70, 70, 255));
         };
 
         i++;
