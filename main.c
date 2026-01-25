@@ -238,6 +238,17 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
         return -1;
     };
 
+    if(e != D_NULL){
+        if(e->type == D_KEYDOWN){
+            if(e->keyboard.key == D_KSpace){
+
+                /* Jump when the space key goes
+                 *  down. */
+                p->oldY += 70;
+            };
+        };
+    };
+
     /* At this point onwards in the function, all
      *  the key press checks need keyboard state
      *  to be non-null. */
@@ -403,6 +414,9 @@ int main(int argc, char ** argv){
         D_PumpEvents();
 
         while(D_GetEvent(&e) != -1){
+
+            MWG_ControlPlayer(&map.player[0], &e, D_NULL, &map);
+
             switch(e.type){
                 case D_QUIT:
                     running = 0;
@@ -410,11 +424,6 @@ int main(int argc, char ** argv){
 
                 case D_KEYDOWN:
                     keyboardState[e.keyboard.key] = 1;
-
-                    if(e.keyboard.key == D_KSpace){
-                        map.player[0].oldY += 70;
-                    };
-
                     break;
 
                 case D_KEYUP:
