@@ -30,8 +30,8 @@ typedef enum MWG_HookState {
 
 typedef struct MWG_Player {
 
-    /* This x, y position is the bottom-middle of
-     *  the player (like maro 64). */
+    /* This x, y position is the center of the
+     *  player. */
     int x, y;
 
     int oldX, oldY;
@@ -39,7 +39,7 @@ typedef struct MWG_Player {
     /* The hitbox is relative to the x, y of the
      *  player, it is recommended to set the
      *  hitboxX to -(hitboxW / 2) and set hitboxY
-     *  to -hitboxH. */
+     *  to -(hitboxH / 2). */
     int hitboxX, hitboxY, hitboxW, hitboxH;
 
     D_Surf * image;

@@ -229,16 +229,30 @@ int main(int argc, char ** argv){
 
         /* Players */
         {
-            100, 0,
-            0, 0,
-            -(MWG_PLAYER_WIDTH / 2), -MWG_PLAYER_HEIGHT, MWG_PLAYER_WIDTH, MWG_PLAYER_HEIGHT,
+            100, 0, /* x, y */
+            0, 0, /* oldX, oldY */
+
+            /* Hitbox x, y, w, h */
+            -(MWG_PLAYER_WIDTH / 2), -(MWG_PLAYER_HEIGHT / 2), MWG_PLAYER_WIDTH, MWG_PLAYER_HEIGHT,
+
+            /* Surface */
             mouseImage,
-            -((mouseDataW * 2) / 2), -(mouseDataH * 2), (mouseDataW * 2), (mouseDataH * 2), /*Image x, y, w, h*/
+
+            /* Image x, y, w, h */
+            -((mouseDataW * 2) / 2), -((mouseDataH * 2) / 2), (mouseDataW * 2), (mouseDataH * 2),
+
+            /* Center of rotation */
             (mouseDataW * 2) / 2, (mouseDataH * 2) / 2,
+
+            /* Grappling hook x, y */
             0, 0,
+
             MWG_HOOK_UNATTACHED,
+
+            /* Angle */
             0.0
         },
+
         1 /* numPlayers*/
     };
 
