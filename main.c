@@ -110,12 +110,18 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
     D_double hookDirectionX = 100;
     D_double hookDirectionY = 0;
 
-    /* Convert player->angle from degrees to a
-     *  point on the complex plane */
-    D_double reps = 0;
-    while(reps < player->angle){
+    /* Make angle2, non-negative */
+    D_double angle2 = player->angle;
+    while(angle2 < 0){
+        angle2 += 360;
+    };
 
-        /* Add one degree to degR and degC */
+    /* Convert angle2 from degrees to a point on
+     *  the complex plane */
+    D_double reps = 0;
+    while(reps < angle2){
+
+        /* Add 0.01 degree to degR and degC */
         temp = D_COMPLEXMULTR(hookDirectionX, hookDirectionY, pR, pC);
         hookDirectionY = D_COMPLEXMULTC(hookDirectionX, hookDirectionY, pR, pC);
         hookDirectionX = temp;
@@ -123,17 +129,39 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
         reps += 0.01;
     };
 
+    /* Convert hook direction to absolute coordinates. */
+    hookDirectionX = hookDirectionX + player->x;
+    hookDirectionY = hookDirectionY + player->y;
+
     int i = 0;
     int tempHookX = 0;
     int tempHookY = 0;
-    while(i < map->numRects){
+    for(; i < map->numRects; i++){
         if(MWG_FindEntryPoint(hookDirectionX, hookDirectionY, player->x, player->y, &map->rect[i], &tempHookX, &tempHookY, D_NULL, D_NULL) == 0){
+
+            /* Is the player looking right? */
+            if(player->angle <= 90 && player->angle >= -90){
+
+                /* If the player isn't looking at
+                 *  the hook point, the player
+                 *  didn't mean to shoot there.
+                 *  Ignore this result. */
+                if(tempHookX < player->x){
+                    continue;
+                };
+
+            }else{
+                /* The player is looking left. */
+
+                if(tempHookX > player->x){
+                    continue;
+                };
+            };
+
             player->hookX = tempHookX;
             player->hookY = tempHookY;
             player->hookState = MWG_HOOK_ATTACHED;
         };
-
-        i++;
     };
 
     return 0;
