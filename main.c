@@ -98,7 +98,9 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
         return -1;
     };
 
-    /* The code below multiplies complex numbers to rotate the point degR and degC on the complex plane. */
+    /* The code below multiplies complex numbers
+     *  to rotate the point degR and degC on the
+     *  complex plane. */
 
     /* Note that this pR and pC rotate a point by
      *  0.01 degrees, not 1 degree. */
@@ -129,13 +131,15 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
         reps += 0.01;
     };
 
-    /* Convert hook direction to absolute coordinates. */
+    /* Convert hook direction to absolute
+     *  coordinates. */
     hookDirectionX = hookDirectionX + player->x;
     hookDirectionY = hookDirectionY + player->y;
 
     int i = 0;
     int tempHookX = 0;
     int tempHookY = 0;
+    int foundAHookPosition = 0;
     for(; i < map->numRects; i++){
         if(MWG_FindEntryPoint(hookDirectionX, hookDirectionY, player->x, player->y, &map->rect[i], &tempHookX, &tempHookY, D_NULL, D_NULL) == 0){
 
@@ -158,9 +162,41 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
                 };
             };
 
-            player->hookX = tempHookX;
-            player->hookY = tempHookY;
-            player->hookState = MWG_HOOK_ATTACHED;
+            /* Is the player looking down? */
+            if(player->angle > 0 && player->angle <= 180){
+
+                /* If the player isn't looking at
+                 *  the hook point, the player
+                 *  didn't mean to shoot there.
+                 *  Ignore this result. */
+                if(tempHookY < player->y){
+                    continue;
+                };
+
+            }else{
+                /* The player is looking up. */
+
+                if(tempHookY > player->y){
+                    continue;
+                };
+            };
+
+            /* If this is the first hook position
+             *  found (this function call), then
+             *  set it to the player's hook
+             *  position. Otherwise only set the
+             *  player's hook position if it
+             *  closer than the last hook
+             *  position found. */
+            if( !foundAHookPosition ||
+                ((tempHookX     - player->x) * (tempHookX     - player->x)) + ((tempHookY     - player->y) * (tempHookY     - player->y)) <
+                ((player->hookX - player->x) * (player->hookX - player->x)) + ((player->hookY - player->y) * (player->hookY - player->y))
+            ){
+                foundAHookPosition = 1;
+                player->hookX = tempHookX;
+                player->hookY = tempHookY;
+                player->hookState = MWG_HOOK_ATTACHED;
+            };
         };
     };
 
