@@ -205,6 +205,145 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
     return 0;
 };
 
+/* This function controls a player based off
+ *  input.
+ *
+ * This function takes input from keyboard state
+ *  and an event struct separately. This is
+ *  because some actions like moving left or
+ *  right need to know weather a key is down and
+ *  therefore need the state of a key, but an
+ *  actions like jump only need to run on a
+ *  single frame when a key goes down and needs
+ *  an event.
+ *
+ * It is safe to pass null for all the
+ *  parameters. If map is null, the player won't
+ *  be able to shoot a grappling hook. If "p" is
+ *  null, the function would do nothing and
+ *  return -1.
+ *
+ * p: The player to control.
+ * e: An input event.
+ * keyboardState: An array of uint8s that is the
+ *  length of D_NumKeys.
+ * map: The map the player is in (needed when the
+ *  player fires a grappling hook).
+ * returns: 0 on success or a negative number on
+ *  failure.
+ */
+int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_Map * map){
+
+    if(p == D_NULL){
+        return -1;
+    };
+
+    /* At this point onwards in the function, all
+     *  the key press checks need keyboard state
+     *  to be non-null. */
+
+    if(keyboardState == D_NULL){
+        /* Running the rest of the function at
+         *  this point would crash the program.
+         *  So just return. */
+        return 0;
+    };
+
+    /* When a is pressed move left */
+    if(keyboardState[D_Ka]){
+        p->oldX += (78 * DELAY) / 256;
+
+        /* Is the player looking right? */
+        if(p->angle <= 90 && p->angle >= -90){
+
+            /*Flip the player to look left*/
+            p->angle = 180 - p->angle;
+        };
+    };
+
+    /* When d is pressed move right */
+    if(keyboardState[D_Kd]){
+        p->oldX -= (78 * DELAY) / 256;
+
+        /* Is the player looking left? */
+        if(p->angle > 90 || p->angle < -90){
+
+            /*Flip the player to look right*/
+            p->angle = 180 - p->angle;
+        };
+    };
+
+    /* When e is pressed change the player's
+     *  angle */
+    if(keyboardState[D_Ke]){
+
+        /* Is the player looking right? */
+        if( p->angle <= 90 && p->angle >= -90){
+
+            /* Change the angle */
+            p->angle += 15;
+
+            /* Limit the angle to be 90 or
+             *  less. */
+            if(p->angle > 90){
+                p->angle = 90;
+            };
+        }else{
+            /* At this point the player must
+             *  be looking left */
+
+            /* Change the angle */
+            p->angle += 15;
+
+            /* Limit the angle to be 269 or
+             *  less. */
+            if(p->angle >= 269){
+                p->angle = 269;
+            };
+        };
+    };
+
+    /* When q is pressed change the player's
+     *  angle (the opposite way) */
+    if(keyboardState[D_Kq]){
+
+        /* Is the player looking right? */
+        if( p->angle <= 90 && p->angle >= -90){
+
+            /* Change the angle */
+            p->angle -= 15;
+
+            /* Limit the angle to be -90 or
+             *  more. */
+            if(p->angle < -90){
+                p->angle = -90;
+            };
+        }else{
+            /* At this point the player must
+             *  be looking left */
+
+            /* Change the angle */
+            p->angle -= 15;
+
+            /* Limit the angle to be 91 or
+             *  more. */
+            if(p->angle <= 91){
+                p->angle = 91;
+            };
+        };
+    };
+
+    if(keyboardState[D_Kw] && map != D_NULL){
+        MWG_FireHook(map, p);
+    };
+
+    if(keyboardState[D_Ks]){
+        p->hookState = MWG_HOOK_UNATTACHED;
+    };
+
+    return 0;
+};
+
 int main(int argc, char ** argv){
     D_Surf * out = D_GetOutSurf(50, 50, 640, 480, "Mice With Grappling Hooks", 0);
     int running = 1;
@@ -286,107 +425,11 @@ int main(int argc, char ** argv){
 
         MWG_CalcPhysics(&map);
 
-        /* When a is pressed move left */
-        if(keyboardState[D_Ka]){
-            map.player[0].oldX += (78 * DELAY) / 256;
-
-            /* Is the player looking right? */
-            if(map.player[0].angle <= 90 &&
-                map.player[0].angle >= -90){
-
-                /*Flip the player to look left*/
-                map.player[0].angle = 180 - map.player[0].angle;
-            };
-        };
-
-        /* When d is pressed move right */
-        if(keyboardState[D_Kd]){
-            map.player[0].oldX -= (78 * DELAY) / 256;
-
-            /* Is the player looking left? */
-            if(map.player[0].angle > 90 ||
-                map.player[0].angle < -90){
-
-                /*Flip the player to look right*/
-                map.player[0].angle = 180 - map.player[0].angle;
-                };
-        };
+        MWG_ControlPlayer(&map.player[0], D_NULL, keyboardState, &map);
 
         /* Control zoom with the i and o keys */
         if(keyboardState[D_Ki]){zoom -= 10;};
         if(keyboardState[D_Ko]){zoom += 10;};
-
-        /* When e is pressed change the player's
-         *  angle */
-        if(keyboardState[D_Ke]){
-
-            /* Is the player looking right? */
-            if( map.player[0].angle <= 90 &&
-                map.player[0].angle >= -90
-                ){
-
-                /* Change the angle */
-                map.player[0].angle += 15;
-
-                /* Limit the angle to be 90 or
-                 *  less. */
-                if(map.player[0].angle > 90){
-                    map.player[0].angle = 90;
-                };
-            }else{
-                /* At this point the player must
-                 *  be looking left */
-
-                /* Change the angle */
-                 map.player[0].angle += 15;
-
-                 /* Limit the angle to be 269 or
-                  *  less. */
-                 if(map.player[0].angle >= 269){
-                     map.player[0].angle = 269;
-                 };
-            };
-        };
-
-        /* When q is pressed change the player's
-         *  angle (the opposite way) */
-        if(keyboardState[D_Kq]){
-
-            /* Is the player looking right? */
-            if( map.player[0].angle <= 90 &&
-                map.player[0].angle >= -90
-            ){
-
-                /* Change the angle */
-                map.player[0].angle -= 15;
-
-                /* Limit the angle to be -90 or
-                 *  more. */
-                if(map.player[0].angle < -90){
-                    map.player[0].angle = -90;
-                };
-            }else{
-                /* At this point the player must
-                 *  be looking left */
-
-                /* Change the angle */
-                map.player[0].angle -= 15;
-
-                /* Limit the angle to be 91 or
-                 *  more. */
-                if(map.player[0].angle <= 91){
-                    map.player[0].angle = 91;
-                };
-            };
-        };
-
-        if(keyboardState[D_Kw]){
-            MWG_FireHook(&map, &map.player[0]);
-        };
-
-        if(keyboardState[D_Ks]){
-            map.player[0].hookState = MWG_HOOK_UNATTACHED;
-        };
 
 
         D_FillRect(out, D_NULL, D_rgbaToFormat(out->format, 181, 233, 255, 255));
