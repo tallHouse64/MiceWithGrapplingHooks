@@ -67,6 +67,8 @@ typedef struct MWG_Player {
 typedef struct MWG_MapRect {
     int x, y, w, h;
 
+    D_Surf * image;
+
     /* Box colour */
     int r, g, b;
 } MWG_MapRect;
