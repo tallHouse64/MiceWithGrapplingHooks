@@ -447,7 +447,7 @@ int main(int argc, char ** argv){
 
     MWG_Map map = testMap;
 
-    MWG_AddPlayer(&map, 0, 0, 50, 50, mouseImage, mouseDataW * 2, mouseDataH * 2);
+    MWG_AddPlayer(&map, 0, 0, 40, 40, mouseImage, mouseDataW * 2, mouseDataH * 2);
 
 
     D_StartEvents();
