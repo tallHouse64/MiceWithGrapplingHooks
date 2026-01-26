@@ -9,6 +9,7 @@ assets/convert.exe
 
 #Ignore generated image header files
 assets/mouse.h
+assets/font.h
 
 #Ignore the objects
 main.o

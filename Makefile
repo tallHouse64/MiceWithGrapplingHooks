@@ -5,7 +5,7 @@ FLAGS := `sdl2-config --cflags --libs`
 
 OBJ := main.o physics/physics.o maps/maps.o
 
-IMAGE_HEADERS := assets/mouse.h
+IMAGE_HEADERS := assets/mouse.h assets/font.h
 
 .PHONY: clean
 
@@ -25,6 +25,9 @@ maps/maps.o: maps/maps.c maps/maps.h main.h
 #Convert mouse.png to an array
 assets/mouse.h: assets/mouse.png assets/convert
 	./assets/convert assets/mouse.png assets/mouse.h mouseData
+
+assets/font.h: assets/font.png assets/convert
+	./assets/convert assets/font.png assets/font.h fontData
 
 assets/convert: assets/convert.c assets/stb_image.h
 	$(CC) assets/convert.c -o assets/convert -lm

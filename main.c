@@ -12,6 +12,7 @@
 #include"maps/maps.h"
 
 #include"assets/mouse.h"
+#include"assets/font.h"
 
 
 /* This function draws a map onto a surface.
@@ -443,6 +444,7 @@ int main(int argc, char ** argv){
     D_uint8 keyboardState[D_NumKeys] = {0};
     int zoom = 256;
     D_Surf * mouseImage = D_CreateSurfFrom(mouseDataW, mouseDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), mouseData);
+    D_Surf * fontImage = D_CreateSurfFrom(fontDataW, fontDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), fontData);
 
 
     MWG_Map map = testMap;
