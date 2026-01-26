@@ -358,6 +358,82 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
     return 0;
 };
 
+/* This function adds a player to a map.
+ *
+ * If the map is full, the function would do
+ *  nothing and return -2.
+ *
+ * It is safe to pass null for image, bear in
+ *  mind that this may cause a crash elsewhere in
+ *  the program (but it should be possible to set
+ *  this to null for a player without an image).
+ *
+ * It is safe to pass null for map, it would do
+ *  nothing and return -1.
+ *
+ * map: The map to add a player to.
+ * x: The x position of where the player should
+ *  appear.
+ * y: The y position of where the player should
+ *  appear.
+ * hitboxW: The width of the hit box.
+ * hitboxH: The height of the hit box.
+ * image: The image to set the player.
+ * imageW: The width the image should be drawn,
+ *  this does NOT have to match the width of the
+ *  image itself.
+ * imageH: The height the image should be drawn,
+ *  this does NOT have to match the width of the
+ *  image itself.
+ * returns: 0 on success or a negative number on
+ *  failure.
+ */
+int MWG_AddPlayer(MWG_Map * map, int x, int y, int hitboxW, int hitboxH, D_Surf * image, int imageW, int imageH){
+
+    int i = 0;
+
+    if(map == D_NULL){
+        return -1;
+    };
+
+    if(map->numPlayers >= MWG_MAX_PLAYER){
+        return -2;
+    };
+
+    i = map->numPlayers;
+
+    map->player[i].x = x;
+    map->player[i].y = y;
+    map->player[i].oldX = x;
+    map->player[i].oldY = y;
+
+    map->player[i].hitboxX = -(hitboxW / 2);
+    map->player[i].hitboxY = -(hitboxH / 2);
+    map->player[i].hitboxW = hitboxW;
+    map->player[i].hitboxH = hitboxH;
+
+    map->player[i].image = image;
+
+    map->player[i].imageX = -(imageW / 2);
+    map->player[i].imageY = -(imageH / 2);
+    map->player[i].imageW = imageW;
+    map->player[i].imageH = imageH;
+
+    map->player[i].rotateCentreX = imageW / 2;
+    map->player[i].rotateCentreY = imageH / 2;
+
+    map->player[i].hookX = 0;
+    map->player[i].hookY = 0;
+
+    map->player[i].hookState = MWG_HOOK_UNATTACHED;
+
+    map->player[i].angle = 0.0;
+
+    map->numPlayers = map->numPlayers + 1;
+
+    return 0;
+};
+
 int main(int argc, char ** argv){
     D_Surf * out = D_GetOutSurf(50, 50, 640, 480, "Mice With Grappling Hooks", 0);
     int running = 1;
@@ -370,28 +446,8 @@ int main(int argc, char ** argv){
 
 
     MWG_Map map = testMap;
-    map.player[0].x =  100; map.player[0].y =    0;
-    map.player[0].oldX = 0; map.player[0].oldY = 0;
 
-    map.player[0].hitboxX = -(MWG_PLAYER_WIDTH / 2); map.player[0].hitboxY = -(MWG_PLAYER_HEIGHT / 2);
-    map.player[0].hitboxW = MWG_PLAYER_WIDTH;        map.player[0].hitboxH = MWG_PLAYER_HEIGHT;
-
-    map.player[0].image = mouseImage;
-
-    map.player[0].imageX = -((mouseDataW * 2) / 2); map.player[0].imageY = -((mouseDataH * 2) / 2);
-    map.player[0].imageW = (mouseDataW * 2);        map.player[0].imageH = (mouseDataH * 2);
-
-    map.player[0].rotateCentreX = (mouseDataW * 2) / 2;
-    map.player[0].rotateCentreY = (mouseDataH * 2) / 2;
-
-    map.player[0].hookX = 0;
-    map.player[0].hookY = 0;
-
-    map.player[0].hookState = MWG_HOOK_UNATTACHED;
-
-    map.player[0].angle = 0.0;
-
-    map.numPlayers = 1;
+    MWG_AddPlayer(&map, 0, 0, 50, 50, mouseImage, mouseDataW * 2, mouseDataH * 2);
 
 
     D_StartEvents();
