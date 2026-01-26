@@ -13,6 +13,7 @@ assets/mouse.h
 #Ignore the objects
 main.o
 physics/physics.o
+maps/maps.o
 
 #Ignore tests
 tests/findEntryPointTest

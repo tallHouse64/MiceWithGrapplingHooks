@@ -9,6 +9,7 @@
 
 #include"main.h"
 #include"physics/physics.h"
+#include"maps/maps.h"
 
 #include"assets/mouse.h"
 
@@ -367,50 +368,31 @@ int main(int argc, char ** argv){
     int zoom = 256;
     D_Surf * mouseImage = D_CreateSurfFrom(mouseDataW, mouseDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), mouseData);
 
-    MWG_Map map = {
-        /* MapRects */
-        {
-            {
-                -250, 30, 500, 40,
-                D_NULL,
-                17, 127, 11
-            },
-            {
-                -200, -210, 100, 100,
-                D_NULL,
-                17, 127, 11
-            }
-        },
-        2, /* numRects */
 
-        /* Players */
-        {
-            100, 0, /* x, y */
-            0, 0, /* oldX, oldY */
+    MWG_Map map = testMap;
+    map.player[0].x =  100; map.player[0].y =    0;
+    map.player[0].oldX = 0; map.player[0].oldY = 0;
 
-            /* Hitbox x, y, w, h */
-            -(MWG_PLAYER_WIDTH / 2), -(MWG_PLAYER_HEIGHT / 2), MWG_PLAYER_WIDTH, MWG_PLAYER_HEIGHT,
+    map.player[0].hitboxX = -(MWG_PLAYER_WIDTH / 2); map.player[0].hitboxY = -(MWG_PLAYER_HEIGHT / 2);
+    map.player[0].hitboxW = MWG_PLAYER_WIDTH;        map.player[0].hitboxH = MWG_PLAYER_HEIGHT;
 
-            /* Surface */
-            mouseImage,
+    map.player[0].image = mouseImage;
 
-            /* Image x, y, w, h */
-            -((mouseDataW * 2) / 2), -((mouseDataH * 2) / 2), (mouseDataW * 2), (mouseDataH * 2),
+    map.player[0].imageX = -((mouseDataW * 2) / 2); map.player[0].imageY = -((mouseDataH * 2) / 2);
+    map.player[0].imageW = (mouseDataW * 2);        map.player[0].imageH = (mouseDataH * 2);
 
-            /* Center of rotation */
-            (mouseDataW * 2) / 2, (mouseDataH * 2) / 2,
+    map.player[0].rotateCentreX = (mouseDataW * 2) / 2;
+    map.player[0].rotateCentreY = (mouseDataH * 2) / 2;
 
-            /* Grappling hook x, y */
-            0, 0,
+    map.player[0].hookX = 0;
+    map.player[0].hookY = 0;
 
-            MWG_HOOK_UNATTACHED,
+    map.player[0].hookState = MWG_HOOK_UNATTACHED;
 
-            /* Angle */
-            0.0
-        },
+    map.player[0].angle = 0.0;
 
-        1 /* numPlayers*/
-    };
+    map.numPlayers = 1;
+
 
     D_StartEvents();
 

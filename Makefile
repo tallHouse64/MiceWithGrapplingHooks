@@ -3,7 +3,7 @@ CC := gcc
 
 FLAGS := `sdl2-config --cflags --libs`
 
-OBJ := main.o physics/physics.o
+OBJ := main.o physics/physics.o maps/maps.o
 
 IMAGE_HEADERS := assets/mouse.h
 
@@ -17,6 +17,9 @@ main.o: main.c $(IMAGE_HEADERS)
 
 physics/physics.o: physics/physics.c
 	$(CC) physics/physics.c -c -o physics/physics.o $(FLAGS)
+
+maps/maps.o: maps/maps.c maps/maps.h main.h
+	$(CC) maps/maps.c -c -o maps/maps.o $(FLAGS)
 
 
 #Convert mouse.png to an array
