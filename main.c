@@ -53,6 +53,8 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
 
         D_FillRect(s, &r, D_rgbaToFormat(s->format, map->rect[i].r, map->rect[i].g, map->rect[i].b, 255));
 
+        D_SurfCopyScale(map->rect[i].image, D_NULL, s, &r);
+
         i++;
     };
 
