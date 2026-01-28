@@ -119,6 +119,7 @@ typedef struct MWG_Menu {
     int hoveredButton;
 
     MWG_Button button[MWG_MAX_BUTTONS];
+    int numButtons;
 } MWG_Menu;
 
 #endif
