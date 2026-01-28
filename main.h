@@ -109,6 +109,9 @@ typedef struct MWG_Button {
 
     /* Colour */
     int r, g, b;
+
+    /* Colour when hovered over */
+    int hovR, hovG, hovB;
 } MWG_Button;
 
 typedef struct MWG_Menu {

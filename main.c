@@ -550,7 +550,8 @@ int main(int argc, char ** argv){
             -1,
             D_NULL,
             D_NULL,
-            0, 0, 0 /* Colour */
+            0, 0, 0, /* Colour */
+            100, 100, 100 /* Hover colour */
         },
         {
             {-210, -10, 120, 30},
@@ -562,7 +563,8 @@ int main(int argc, char ** argv){
             -1,
             D_NULL,
             D_NULL,
-            0, 0, 0 /* Colour */
+            0, 0, 0, /* Colour */
+            100, 100, 100 /* Hover colour */
         }
         },
         2 /* Num buttons */
