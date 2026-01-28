@@ -264,7 +264,7 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
 };
 
 /* This function controls a player based off
- *  input.
+ *  input, it also handles input for a menu.
  *
  * This function takes input from keyboard state
  *  and an event struct separately. This is
@@ -282,6 +282,7 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
  *  return -1.
  *
  * p: The player to control.
+ * menu: The menu to control (if there is one).
  * e: An input event.
  * keyboardState: An array of uint8s that is the
  *  length of D_NumKeys.
@@ -290,7 +291,43 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
  * returns: 0 on success or a negative number on
  *  failure.
  */
-int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_Map * map){
+int MWG_ControlPlayer(MWG_Player * p, MWG_Menu * menu, D_Event * e, D_uint8 * keyboardState, MWG_Map * map){
+
+    if(menu != D_NULL && e != D_NULL){
+        switch(e->type){
+            case D_KEYDOWN:
+
+                /* When any button is pressed, if
+                 *  no button is being hovered
+                 *  over then hover over the
+                 *  zeroth one. */
+                if(menu->hoveredButton < 0){
+                    menu->hoveredButton = 0;
+                };
+
+                if((e->keyboard.key == D_Kw || e->keyboard.key == D_KUp) && menu->button[menu->hoveredButton].upButton >= 0){
+                    menu->hoveredButton = menu->button[menu->hoveredButton].upButton;
+                };
+
+                if((e->keyboard.key == D_Ks || e->keyboard.key == D_KDown) && menu->button[menu->hoveredButton].downButton >= 0){
+                    menu->hoveredButton = menu->button[menu->hoveredButton].downButton;
+                };
+
+                if((e->keyboard.key == D_Ka || e->keyboard.key == D_KLeft) && menu->button[menu->hoveredButton].leftButton >= 0){
+                    menu->hoveredButton = menu->button[menu->hoveredButton].leftButton;
+                };
+
+                if((e->keyboard.key == D_Kd || e->keyboard.key == D_KRight) && menu->button[menu->hoveredButton].rightButton >= 0){
+                    menu->hoveredButton = menu->button[menu->hoveredButton].rightButton;
+                };
+
+                break;
+        };
+    };
+
+    /* The code below only handles player input
+     *  on a map (not a menu). This is why it
+     *  returns -1 if p is null. */
 
     if(p == D_NULL){
         return -1;
@@ -508,7 +545,7 @@ int main(int argc, char ** argv){
             "Start crashing",
             14,
             -1,
-            -1,
+            1,
             -1,
             -1,
             D_NULL,
@@ -519,7 +556,7 @@ int main(int argc, char ** argv){
             {-210, -10, 120, 30},
             "Exit",
             14,
-            -1,
+            0,
             -1,
             -1,
             -1,
@@ -543,7 +580,7 @@ int main(int argc, char ** argv){
 
         while(D_GetEvent(&e) != -1){
 
-            MWG_ControlPlayer(&map.player[0], &e, D_NULL, &map);
+            MWG_ControlPlayer(&map.player[0], &mainMenu, &e, D_NULL, &map);
 
             switch(e.type){
                 case D_QUIT:
@@ -562,7 +599,7 @@ int main(int argc, char ** argv){
 
         MWG_CalcPhysics(&map);
 
-        MWG_ControlPlayer(&map.player[0], D_NULL, keyboardState, &map);
+        MWG_ControlPlayer(&map.player[0], &mainMenu, D_NULL, keyboardState, &map);
 
         /* Control zoom with the i and o keys */
         if(keyboardState[D_Ki]){zoom -= 10;};
