@@ -142,8 +142,15 @@ int MWG_DrawMenu(D_Surf * s, MWG_Menu * menu, D_Surf * font, int zoom){
         r.w = (menu->button[i].rect.w * 256) / zoom;
         r.h = (menu->button[i].rect.h * 256) / zoom;
 
-        D_FillRect(s, &r, D_rgbaToFormat(s->format, menu->button[i].r, menu->button[i].g, menu->button[i].b, 255));
+        /* Draw the button (use hover colours if
+         *  the button is being hovered over). */
+        if(i == menu->hoveredButton){
+            D_FillRect(s, &r, D_rgbaToFormat(s->format, menu->button[i].hovR, menu->button[i].hovG, menu->button[i].hovB, 255));
+        }else{
+            D_FillRect(s, &r, D_rgbaToFormat(s->format, menu->button[i].r, menu->button[i].g, menu->button[i].b, 255));
+        };
 
+        /* Draw the text */
         textPoint.x = r.x;
         textPoint.y = r.y;
         D_PrintToSurf(s, font, &textPoint, r.h, 0, menu->button[i].text);
