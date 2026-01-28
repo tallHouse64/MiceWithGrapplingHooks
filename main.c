@@ -98,6 +98,60 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
     return 0;
 };
 
+/* This function draws a menu onto a surface.
+ *
+ * It is safe to pass null for s, font and menu,
+ *  the function would do nothing and return -1.
+ *
+ * If zoom is 0 the function does nothing and
+ *  returns -2.
+ *
+ * If there are too many buttons in the menu, the
+ *  function returns -3.
+ *
+ * s: The surface to draw on.
+ * menu: The menu to draw.
+ * font: The font to draw text with (see the
+ *  documentation for D_PrintToSurf()).
+ * zoom: How much to zoom (256 for no zoom
+ *  effect).
+ * returns: 0 on success or a negative number on
+ *  failure.
+ */
+int MWG_DrawMenu(D_Surf * s, MWG_Menu * menu, D_Surf * font, int zoom){
+
+    int i = 0;
+    D_Rect r = {0};
+    D_Point textPoint = {0};
+
+    if(s == D_NULL || font == D_NULL || menu == D_NULL){
+        return -1;
+    };
+
+    if(zoom == 0){
+        return -2;
+    };
+
+    if(menu->numButtons > MWG_MAX_BUTTONS){
+        return -3;
+    };
+
+    for(;i < menu->numButtons; i++){
+        r.x = ((menu->button[i].rect.x * 256) / zoom) + (s->w / 2);
+        r.y = ((menu->button[i].rect.y * 256) / zoom) + (s->h / 2);
+        r.w = (menu->button[i].rect.w * 256) / zoom;
+        r.h = (menu->button[i].rect.h * 256) / zoom;
+
+        D_FillRect(s, &r, D_rgbaToFormat(s->format, menu->button[i].r, menu->button[i].g, menu->button[i].b, 255));
+
+        textPoint.x = r.x;
+        textPoint.y = r.y;
+        D_PrintToSurf(s, font, &textPoint, r.h, 0, menu->button[i].text);
+    };
+
+    return 0;
+};
+
 int MWG_FireHook(MWG_Map * map, MWG_Player * player){
 
     if(map == D_NULL || player == D_NULL){
@@ -446,6 +500,24 @@ int main(int argc, char ** argv){
     D_Surf * mouseImage = D_CreateSurfFrom(mouseDataW, mouseDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), mouseData);
     D_Surf * fontImage = D_CreateSurfFrom(fontDataW, fontDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), fontData);
 
+    MWG_Menu mainMenu = {
+        -1,
+        {
+        {
+            {-210, -50, 420, 30},
+            "Start crashing",
+            14,
+            -1,
+            -1,
+            -1,
+            -1,
+            D_NULL,
+            D_NULL,
+            0, 0, 0 /* Colour */
+        }
+        },
+        1 /* Num buttons */
+    };
 
     MWG_Map map = testMap;
 
@@ -488,6 +560,7 @@ int main(int argc, char ** argv){
         D_FillRect(out, D_NULL, D_rgbaToFormat(out->format, 181, 233, 255, 255));
 
         MWG_DrawMap(out, &map, map.player[0].x, map.player[0].y, zoom);
+        MWG_DrawMenu(out, &mainMenu, fontImage, zoom);
 
         D_FlipOutSurf(out);
 
