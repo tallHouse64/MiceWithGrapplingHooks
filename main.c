@@ -514,9 +514,21 @@ int main(int argc, char ** argv){
             D_NULL,
             D_NULL,
             0, 0, 0 /* Colour */
+        },
+        {
+            {-210, -10, 120, 30},
+            "Exit",
+            14,
+            -1,
+            -1,
+            -1,
+            -1,
+            D_NULL,
+            D_NULL,
+            0, 0, 0 /* Colour */
         }
         },
-        1 /* Num buttons */
+        2 /* Num buttons */
     };
 
     MWG_Map map = testMap;
