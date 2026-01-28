@@ -15,6 +15,7 @@ assets/font.h
 main.o
 physics/physics.o
 maps/maps.o
+menus/menus.o
 
 #Ignore tests
 tests/findEntryPointTest

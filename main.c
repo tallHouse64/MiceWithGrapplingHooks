@@ -10,6 +10,7 @@
 #include"main.h"
 #include"physics/physics.h"
 #include"maps/maps.h"
+#include"menus/menus.h"
 
 #include"assets/mouse.h"
 #include"assets/font.h"
@@ -544,38 +545,7 @@ int main(int argc, char ** argv){
     D_Surf * mouseImage = D_CreateSurfFrom(mouseDataW, mouseDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), mouseData);
     D_Surf * fontImage = D_CreateSurfFrom(fontDataW, fontDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), fontData);
 
-    MWG_Menu mainMenu = {
-        -1,
-        {
-        {
-            {-210, -50, 420, 30},
-            "Start crashing",
-            14,
-            -1,
-            1,
-            -1,
-            -1,
-            D_NULL,
-            D_NULL,
-            0, 0, 0, /* Colour */
-            100, 100, 100 /* Hover colour */
-        },
-        {
-            {-210, -10, 120, 30},
-            "Exit",
-            14,
-            0,
-            -1,
-            -1,
-            -1,
-            D_NULL,
-            D_NULL,
-            0, 0, 0, /* Colour */
-            100, 100, 100 /* Hover colour */
-        }
-        },
-        2 /* Num buttons */
-    };
+    MWG_Menu menu = mainMenu;
 
     MWG_Map map = testMap;
 
@@ -589,7 +559,7 @@ int main(int argc, char ** argv){
 
         while(D_GetEvent(&e) != -1){
 
-            MWG_ControlPlayer(&map.player[0], &mainMenu, &e, D_NULL, &map);
+            MWG_ControlPlayer(&map.player[0], &menu, &e, D_NULL, &map);
 
             switch(e.type){
                 case D_QUIT:
@@ -608,7 +578,7 @@ int main(int argc, char ** argv){
 
         MWG_CalcPhysics(&map);
 
-        MWG_ControlPlayer(&map.player[0], &mainMenu, D_NULL, keyboardState, &map);
+        MWG_ControlPlayer(&map.player[0], &menu, D_NULL, keyboardState, &map);
 
         /* Control zoom with the i and o keys */
         if(keyboardState[D_Ki]){zoom -= 10;};
@@ -618,7 +588,7 @@ int main(int argc, char ** argv){
         D_FillRect(out, D_NULL, D_rgbaToFormat(out->format, 181, 233, 255, 255));
 
         MWG_DrawMap(out, &map, map.player[0].x, map.player[0].y, zoom);
-        MWG_DrawMenu(out, &mainMenu, fontImage, zoom);
+        MWG_DrawMenu(out, &menu, fontImage, zoom);
 
         D_FlipOutSurf(out);
 
