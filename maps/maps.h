@@ -5,6 +5,4 @@
 
 extern MWG_Map testMap;
 
-extern MWG_Map mainMenu;
-
 #endif

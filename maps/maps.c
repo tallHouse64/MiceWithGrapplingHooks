@@ -22,25 +22,3 @@ MWG_Map testMap = {
 
     0 /* numPlayers*/
 };
-
-MWG_Map mainMenu = {
-    /* MapRects */
-    {
-        {
-            -150, -50, 300, 100,
-            D_NULL,
-            255, 255, 255
-        },
-        {
-            -150, 70, 300, 100,
-            D_NULL,
-            255, 255, 255
-        }
-    },
-    2, /* NumRects */
-
-    /* Players */
-    {},
-
-    0 /* numPlayers */
-};
