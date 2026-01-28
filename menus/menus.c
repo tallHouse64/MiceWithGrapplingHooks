@@ -1,5 +1,6 @@
 #include"../d.h"
 #include"../main.h"
+#include"menus.h"
 
 MWG_Menu mainMenu = {
     -1,
@@ -12,7 +13,7 @@ MWG_Menu mainMenu = {
             1,
             -1,
             -1,
-            D_NULL,
+            &levelMenu,
             D_NULL,
             0, 0, 0, /* Colour */
             100, 100, 100 /* Hover colour */
@@ -32,4 +33,24 @@ MWG_Menu mainMenu = {
         }
     },
     2 /* Num buttons */
+};
+
+MWG_Menu levelMenu = {
+    -1,
+    {
+    {
+        {-25, -25, 50, 50},
+        "1",
+        1,
+        -1,
+        -1,
+        -1,
+        -1,
+        D_NULL,
+        D_NULL,
+        0, 0, 0, /* Colour */
+        100, 100, 100 /* Hover colour */
+    }
+    },
+    1 /* Num buttons */
 };

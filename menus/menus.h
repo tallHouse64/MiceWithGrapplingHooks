@@ -5,4 +5,6 @@
 
 extern MWG_Menu mainMenu;
 
+extern MWG_Menu levelMenu;
+
 #endif
