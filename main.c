@@ -283,6 +283,14 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
  *  single frame when a key goes down and needs
  *  an event.
  *
+ * If a menu is shown and the player activates a
+ *  button which changes the menu (for example
+ *  mainMenu to levelMenu), then the menu passed
+ *  into the function gets overwritten with a new
+ *  menu. The same is true if the button changes
+ *  the map, the map that was passed into the
+ *  function gets overwritten.
+ *
  * It is safe to pass null for all the
  *  parameters. If map is null, the player won't
  *  be able to shoot a grappling hook. If "p" is
@@ -327,6 +335,24 @@ int MWG_ControlPlayer(MWG_Player * p, MWG_Menu * menu, D_Event * e, D_uint8 * ke
 
                 if((e->keyboard.key == D_Kd || e->keyboard.key == D_KRight) && menu->button[menu->hoveredButton].rightButton >= 0){
                     menu->hoveredButton = menu->button[menu->hoveredButton].rightButton;
+                };
+
+                /* If space or enter have been
+                 *  pressed. */
+                if(e->keyboard.key == D_KSpace || e->keyboard.key == D_KEnter){
+
+                    /* Change the menu if this
+                     *  button points to another
+                     *  menu. */
+                    if(menu->button[menu->hoveredButton].nextMenu != D_NULL){
+                        *menu = *((MWG_Menu *)(menu->button[menu->hoveredButton].nextMenu));
+
+                    /* Otherwise change the map
+                     *  if this button points to
+                     *  a map. */
+                    }else if(menu->button[menu->hoveredButton].nextMap != D_NULL && map != D_NULL){
+                        *map = *(menu->button[menu->hoveredButton].nextMap);
+                    };
                 };
 
                 break;
