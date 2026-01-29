@@ -1,6 +1,8 @@
 #ifndef MWG_PHYSICS_H
 #define MWG_PHYSICS_H
 
+#include"../maps/maps.h"
+
 int MWG_FindEntryPoint(int currentX, int currentY, int oldX, int oldY, MWG_MapRect * rect, int * xEntryPoint, int * yEntryPoint, int * xExitPoint, int * yExitPoint);
 
 int MWG_DetectCollision(MWG_Player * player, MWG_MapRect * rect);

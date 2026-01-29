@@ -66,20 +66,5 @@ typedef struct MWG_Player {
     D_double angle;
 } MWG_Player;
 
-typedef struct MWG_MapRect {
-    int x, y, w, h;
-
-    D_Surf * image;
-
-    /* Box colour */
-    int r, g, b;
-} MWG_MapRect;
-
-typedef struct MWG_Map {
-    MWG_MapRect rect[MWG_MAX_MAP_RECTS];
-    int numRects;
-    MWG_Player player[MWG_MAX_PLAYER];
-    int numPlayers;
-} MWG_Map;
 
 #endif

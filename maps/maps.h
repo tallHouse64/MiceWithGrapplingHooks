@@ -3,6 +3,24 @@
 
 #include"../main.h"
 
+
+typedef struct MWG_MapRect {
+    int x, y, w, h;
+
+    D_Surf * image;
+
+    /* Box colour */
+    int r, g, b;
+} MWG_MapRect;
+
+typedef struct MWG_Map {
+    MWG_MapRect rect[MWG_MAX_MAP_RECTS];
+    int numRects;
+    MWG_Player player[MWG_MAX_PLAYER];
+    int numPlayers;
+} MWG_Map;
+
+
 extern MWG_Map testMap;
 
 #endif

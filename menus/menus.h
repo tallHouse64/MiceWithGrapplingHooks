@@ -2,6 +2,7 @@
 #define MWG_MENUS_H
 
 #include"../main.h"
+#include"../maps/maps.h"
 
 
 typedef struct MWG_Button {

@@ -1,4 +1,5 @@
 #include"../main.h"
+#include"../maps/maps.h"
 
 /* This function finds the entry point of a
  *  player into a rect if that player has just
