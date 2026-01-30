@@ -511,8 +511,8 @@ int MWG_ControlPlayer(MWG_Player * p, MWG_Menu * menu, D_Event * e, D_uint8 * ke
  * imageH: The height the image should be drawn,
  *  this does NOT have to match the width of the
  *  image itself.
- * returns: 0 on success or a negative number on
- *  failure.
+ * returns: The index of the player added on
+ *  success or a negative number on failure.
  */
 int MWG_AddPlayer(MWG_Map * map, int x, int y, int hitboxW, int hitboxH, D_Surf * image, int imageW, int imageH){
 
@@ -557,7 +557,7 @@ int MWG_AddPlayer(MWG_Map * map, int x, int y, int hitboxW, int hitboxH, D_Surf 
 
     map->numPlayers = map->numPlayers + 1;
 
-    return 0;
+    return i;
 };
 
 int main(int argc, char ** argv){
