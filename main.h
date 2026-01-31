@@ -1,6 +1,7 @@
 #ifndef MWG_MAIN_H
 #define MWG_MAIN_H
 
+#include"beginCode.h"
 #include"d.h"
 
 
@@ -66,5 +67,7 @@ typedef struct MWG_Player {
     D_double angle;
 } MWG_Player;
 
+
+int MWG_AddPlayer(MWG_Map * map, int x, int y, int hitboxW, int hitboxH, D_Surf * image, int imageW, int imageH);
 
 #endif
