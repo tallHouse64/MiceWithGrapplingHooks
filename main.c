@@ -307,57 +307,7 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
  * returns: 0 on success or a negative number on
  *  failure.
  */
-int MWG_ControlPlayer(MWG_Player * p, MWG_Menu * menu, D_Event * e, D_uint8 * keyboardState, MWG_Map * map){
-
-    if(menu != D_NULL && e != D_NULL){
-        switch(e->type){
-            case D_KEYDOWN:
-
-                /* When any button is pressed, if
-                 *  no button is being hovered
-                 *  over then hover over the
-                 *  zeroth one. */
-                if(menu->hoveredButton < 0){
-                    menu->hoveredButton = 0;
-                };
-
-                if((e->keyboard.key == D_Kw || e->keyboard.key == D_KUp) && menu->button[menu->hoveredButton].upButton >= 0){
-                    menu->hoveredButton = menu->button[menu->hoveredButton].upButton;
-                };
-
-                if((e->keyboard.key == D_Ks || e->keyboard.key == D_KDown) && menu->button[menu->hoveredButton].downButton >= 0){
-                    menu->hoveredButton = menu->button[menu->hoveredButton].downButton;
-                };
-
-                if((e->keyboard.key == D_Ka || e->keyboard.key == D_KLeft) && menu->button[menu->hoveredButton].leftButton >= 0){
-                    menu->hoveredButton = menu->button[menu->hoveredButton].leftButton;
-                };
-
-                if((e->keyboard.key == D_Kd || e->keyboard.key == D_KRight) && menu->button[menu->hoveredButton].rightButton >= 0){
-                    menu->hoveredButton = menu->button[menu->hoveredButton].rightButton;
-                };
-
-                /* If space or enter have been
-                 *  pressed. */
-                if(e->keyboard.key == D_KSpace || e->keyboard.key == D_KEnter){
-
-                    /* Change the menu if this
-                     *  button points to another
-                     *  menu. */
-                    if(menu->button[menu->hoveredButton].nextMenu != D_NULL){
-                        *menu = *((MWG_Menu *)(menu->button[menu->hoveredButton].nextMenu));
-
-                    /* Otherwise change the map
-                     *  if this button points to
-                     *  a map. */
-                    }else if(menu->button[menu->hoveredButton].nextMap != D_NULL && map != D_NULL){
-                        *map = *(menu->button[menu->hoveredButton].nextMap);
-                    };
-                };
-
-                break;
-        };
-    };
+int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_Map * map){
 
     /* The code below only handles player input
      *  on a map (not a menu). This is why it
@@ -585,7 +535,7 @@ int main(int argc, char ** argv){
 
         while(D_GetEvent(&e) != -1){
 
-            MWG_ControlPlayer(&map.player[0], &menu, &e, D_NULL, &map);
+            MWG_ControlPlayer(&map.player[0], &e, D_NULL, &map);
 
             switch(e.type){
                 case D_QUIT:
@@ -604,7 +554,7 @@ int main(int argc, char ** argv){
 
         MWG_CalcPhysics(&map);
 
-        MWG_ControlPlayer(&map.player[0], &menu, D_NULL, keyboardState, &map);
+        MWG_ControlPlayer(&map.player[0], D_NULL, keyboardState, &map);
 
         /* Control zoom with the i and o keys */
         if(keyboardState[D_Ki]){zoom -= 10;};
