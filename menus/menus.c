@@ -83,7 +83,33 @@ MWG_Menu levelMenu = {
     3 /* Num buttons */
 };
 
-int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, int * playerIndex){
+/* This function handles player input on a menu.
+ *
+ * When a button is pressed on a menu, if the
+ *  button opens a new map, this function
+ *  overwrites the map passed in using a pointer
+ *  with the new map. The menu passed in may also
+ *  be overwritten if a button is pressed that
+ *  opens a new menu.
+ *
+ * If a map gets opened, this function also adds a player to the map
+ *
+ * menu: The menu to control, and overwrite when
+ *  a new menu is opened.
+ * e: An event to handle.
+ * map: A map to overwrite if a new map gets
+ *  opened.
+ * player: The player structure to copy into a
+ *  map using MWG_AddPlayer() when a map gets
+ *  opened.
+ * playerIndex: If a new map gets opened and a
+ *  player gets added using MWG_AddPlayer(), this
+ *  number gets overwritten with the index of
+ *  that player.
+ * returns: 0 on success or a negative number on
+ *  failure.
+ */
+int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, MWG_Player * player, int * playerIndex){
 
     if(menu == D_NULL || e == D_NULL){
         return -1;
@@ -131,6 +157,10 @@ int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, int * playerInd
                      *  a map. */
                 }else if(menu->button[menu->hoveredButton].nextMap != D_NULL && map != D_NULL){
                     *map = *(menu->button[menu->hoveredButton].nextMap);
+
+                    if(player != D_NULL && playerIndex != D_NULL){
+                        *playerIndex = MWG_AddPlayer(map, player);
+                    };
                 };
             };
 

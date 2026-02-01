@@ -507,6 +507,8 @@ int main(int argc, char ** argv){
         0.0 /* Angle */
     };
 
+    int player1Index = 0;
+
     MWG_AddPlayer(&map, &player1);
 
 
@@ -518,6 +520,7 @@ int main(int argc, char ** argv){
         while(D_GetEvent(&e) != -1){
 
             MWG_ControlPlayer(&map.player[0], &e, D_NULL, &map);
+            MWG_ControlMenu(&menu, &e, &map, &player1, &player1Index);
 
             switch(e.type){
                 case D_QUIT:
