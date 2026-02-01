@@ -509,8 +509,6 @@ int main(int argc, char ** argv){
 
     int player1Index = 0;
 
-    MWG_AddPlayer(&map, &player1);
-
 
     D_StartEvents();
 
