@@ -11,6 +11,9 @@ typedef struct MWG_MapRect {
 
     /* Box colour */
     int r, g, b;
+
+    /* friction can be between 0 and 256 */
+    int friction;
 } MWG_MapRect;
 
 typedef struct MWG_Map {
