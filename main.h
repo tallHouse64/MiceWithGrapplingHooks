@@ -68,6 +68,6 @@ typedef struct MWG_Player {
 } MWG_Player;
 
 
-int MWG_AddPlayer(MWG_Map * map, int x, int y, int hitboxW, int hitboxH, D_Surf * image, int imageW, int imageH);
+int MWG_AddPlayer(MWG_Map * map, MWG_Player * player);
 
 #endif
