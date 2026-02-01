@@ -22,3 +22,30 @@ MWG_Map testMap = {
 
     0 /* numPlayers*/
 };
+
+MWG_Map level1 = {
+    /* MapRects */
+    {
+        {
+            -250, 40, 400, 70,
+            D_NULL,
+            17, 127, 11
+        },
+        {
+            -250, -290, 70, 400,
+            D_NULL,
+            17, 127, 11
+        },
+        {
+            -250, -290, 400, 70,
+            D_NULL,
+            17, 127, 11
+        }
+    },
+    3, /* numRects */
+
+    /* Players */
+    {},
+
+    0 /* numPlayers*/
+};

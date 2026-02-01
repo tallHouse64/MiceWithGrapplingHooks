@@ -23,4 +23,6 @@ typedef struct MWG_Map {
 
 extern MWG_Map testMap;
 
+extern MWG_Map level1;
+
 #endif

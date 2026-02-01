@@ -62,7 +62,7 @@ MWG_Menu levelMenu = {
         0,
         2,
         D_NULL,
-        &testMap,
+        &level1,
         0, 0, 0, /* Colour */
         100, 100, 100 /* Hover colour */
     },
@@ -75,7 +75,7 @@ MWG_Menu levelMenu = {
         1,
         -1,
         D_NULL,
-        D_NULL,
+        &testMap,
         0, 0, 0, /* Colour */
         100, 100, 100 /* Hover colour */
     }
