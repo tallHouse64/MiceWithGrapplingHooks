@@ -517,7 +517,13 @@ int main(int argc, char ** argv){
 
         while(D_GetEvent(&e) != -1){
 
-            MWG_ControlPlayer(&map.player[0], &e, D_NULL, &map);
+            /* Only send input events to the
+             *  player if there is no menu
+             *  onscreen */
+            if(menu.numButtons <= 0){
+                MWG_ControlPlayer(&map.player[0], &e, D_NULL, &map);
+            };
+
             MWG_ControlMenu(&menu, &e, &map, &player1, &player1Index);
 
             switch(e.type){
@@ -542,7 +548,12 @@ int main(int argc, char ** argv){
 
         MWG_CalcPhysics(&map);
 
-        MWG_ControlPlayer(&map.player[0], D_NULL, keyboardState, &map);
+        /* Only send input events to the
+         *  player if there is no menu
+         *  onscreen */
+        if(menu.numButtons <= 0){
+            MWG_ControlPlayer(&map.player[0], D_NULL, keyboardState, &map);
+        };
 
         /* Control zoom with the i and o keys */
         if(keyboardState[D_Ki]){zoom -= 10;};
