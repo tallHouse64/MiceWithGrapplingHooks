@@ -527,6 +527,11 @@ int main(int argc, char ** argv){
 
                 case D_KEYDOWN:
                     keyboardState[e.keyboard.key] = 1;
+
+                    if(e.keyboard.key == D_KEscape){
+                        menu = pauseMenu;
+                    };
+
                     break;
 
                 case D_KEYUP:
