@@ -94,7 +94,7 @@ MWG_Menu pauseMenu = {
             1,
             -1,
             -1,
-            D_NULL,
+            &emptyMenu,
             D_NULL,
             0, 0, 0, /* Colour */
             100, 100, 100 /* Hover colour */
@@ -113,7 +113,7 @@ MWG_Menu pauseMenu = {
             100, 100, 100 /* Hover colour */
         },
         {
-            {-150, -30, 300, 30},
+            {-150, 30, 300, 30},
             "Main menu",
             9,
             1,
@@ -127,6 +127,12 @@ MWG_Menu pauseMenu = {
         }
     },
     3 /* Num buttons */
+};
+
+MWG_Menu emptyMenu = {
+    -1, /* hoveredButton */
+    {}, /* buttons */
+    0 /* numButtons */
 };
 
 /* This function handles player input on a menu.

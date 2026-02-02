@@ -55,6 +55,8 @@ extern MWG_Menu levelMenu;
 
 extern MWG_Menu pauseMenu;
 
+extern MWG_Menu emptyMenu;
+
 
 int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, MWG_Player * player, int * playerIndex);
 
