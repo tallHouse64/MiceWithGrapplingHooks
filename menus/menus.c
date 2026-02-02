@@ -83,6 +83,52 @@ MWG_Menu levelMenu = {
     3 /* Num buttons */
 };
 
+MWG_Menu pauseMenu = {
+    -1,
+    {
+        {
+            {-150, -70, 300, 30},
+            "Resume",
+            6,
+            -1,
+            1,
+            -1,
+            -1,
+            D_NULL,
+            D_NULL,
+            0, 0, 0, /* Colour */
+            100, 100, 100 /* Hover colour */
+        },
+        {
+            {-150, -20, 300, 30},
+            "Options",
+            7,
+            0,
+            2,
+            -1,
+            -1,
+            D_NULL,
+            D_NULL,
+            0, 0, 0, /* Colour */
+            100, 100, 100 /* Hover colour */
+        },
+        {
+            {-150, -30, 300, 30},
+            "Main menu",
+            9,
+            1,
+            -1,
+            -1,
+            -1,
+            &mainMenu,
+            D_NULL,
+            0, 0, 0, /* Colour */
+            100, 100, 100 /* Hover colour */
+        }
+    },
+    3 /* Num buttons */
+};
+
 /* This function handles player input on a menu.
  *
  * When a button is pressed on a menu, if the
