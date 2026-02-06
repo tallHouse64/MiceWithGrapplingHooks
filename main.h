@@ -26,6 +26,11 @@
 */
 #define LERP_INT(a, b, t) ( (((a) * (256 - (t))) / 256) + (((b) * (t)) / 256) )
 
+#define MWG_MIN(a, b) (( (a) < (b) ) ? (a) : (b) )
+
+#define MWG_MAX(a, b) (( (a) > (b) ) ? (a) : (b) )
+
+
 typedef enum MWG_HookState {
     MWG_HOOK_UNATTACHED,
     MWG_HOOK_ATTACHED
