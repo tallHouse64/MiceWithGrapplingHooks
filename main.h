@@ -30,6 +30,23 @@
 
 #define MWG_MAX(a, b) (( (a) > (b) ) ? (a) : (b) )
 
+/* This enum shows the walls a player hit in the
+ *  last frame. If the player was moving left and
+ *  collided with a wall, then
+ *  MWG_COLLISION_DIR_LEFT should be set. If the
+ *  player hit a celing MWG_COLLISION_DIR_UP
+ *  should be set.
+ *
+ * Any of these options can be bitwise "ORed"
+ *  togeter (|).
+ */
+typedef enum MWG_CollisionDirection {
+    MWG_COLLISION_DIR_NONE  = 0,
+    MWG_COLLISION_DIR_UP    = 0x1,
+    MWG_COLLISION_DIR_DOWN  = 0x2,
+    MWG_COLLISION_DIR_LEFT  = 0x4,
+    MWG_COLLISION_DIR_RIGHT = 0x8,
+} MWG_CollisionDirection;
 
 typedef enum MWG_HookState {
     MWG_HOOK_UNATTACHED,
@@ -70,6 +87,12 @@ typedef struct MWG_Player {
     MWG_HookState hookState;
 
     D_double angle;
+
+    /* This shows if the player collided with a
+     *  wall last frame, read the comment above
+     *  the declaration of
+     *  MWG_CollisionDirection. */
+    MWG_CollisionDirection collisionDirection;
 } MWG_Player;
 
 
