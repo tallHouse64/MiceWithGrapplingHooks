@@ -4,6 +4,10 @@
 #include"../main.h"
 #include"../maps/maps.h"
 
+typedef enum MWG_ButtonAction {
+    MWG_BUTTON_NO_ACTION,
+    MWG_BUTTON_QUIT
+} MWG_ButtonAction;
 
 typedef struct MWG_Button {
     D_Rect rect;
@@ -35,6 +39,10 @@ typedef struct MWG_Button {
 
     /* Colour when hovered over */
     int hovR, hovG, hovB;
+
+    /* This stores what the button does like quit
+     *  the program. */
+    MWG_ButtonAction action;
 } MWG_Button;
 
 typedef struct MWG_Menu {
