@@ -358,11 +358,15 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
             /*Change result y to apply friction*/
             *newY = LERP_INT(player->y + player->hitboxY, *newY, rect->friction);
 
+            player->collisionDirection = player->collisionDirection | MWG_COLLISION_DIR_LEFT;
+
         /* If the player hit the bottom wall */
         }else if(*newY == rect->y + rect->h){
 
             /*Change result x to apply friction*/
             *newX = LERP_INT(player->x + player->hitboxX, *newX, rect->friction);
+
+            player->collisionDirection = player->collisionDirection | MWG_COLLISION_DIR_UP;
         };
 
         *newX = *newX - player->hitboxX;
@@ -387,11 +391,15 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
             /*Change result y to apply friction*/
             *newY = LERP_INT(player->y + player->hitboxY, *newY, rect->friction);
 
+            player->collisionDirection = player->collisionDirection | MWG_COLLISION_DIR_RIGHT;
+
         /* If the player hit the bottom wall */
         }else if(*newY == rect->y + rect->h){
 
             /*Change result x to apply friction*/
             *newX = LERP_INT(player->x + player->hitboxX, *newX, rect->friction);
+
+            player->collisionDirection = player->collisionDirection | MWG_COLLISION_DIR_UP;
         };
 
         /* If the player's new position is
@@ -424,11 +432,15 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
             /*Change result y to apply friction*/
             *newY = LERP_INT(player->y + player->hitboxY, *newY, rect->friction);
 
+            player->collisionDirection = player->collisionDirection | MWG_COLLISION_DIR_LEFT;
+
         /* If the player hit the top wall */
         }else if(*newY == rect->y - 1){
 
             /*Change result x to apply friction*/
             *newX = LERP_INT(player->x + player->hitboxX, *newX, rect->friction);
+
+            player->collisionDirection = player->collisionDirection | MWG_COLLISION_DIR_DOWN;
         };
 
         /* If the player's new position is
@@ -461,11 +473,15 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
             /*Change result y to apply friction*/
             *newY = LERP_INT(player->y + player->hitboxY, *newY, rect->friction);
 
+            player->collisionDirection = player->collisionDirection | MWG_COLLISION_DIR_RIGHT;
+
             /* If the player hit the top wall */
         }else if(*newY == rect->y - 1){
 
             /*Change result x to apply friction*/
             *newX = LERP_INT(player->x + player->hitboxX, *newX, rect->friction);
+
+            player->collisionDirection = player->collisionDirection | MWG_COLLISION_DIR_DOWN;
         };
 
         /* If the player's new position is
@@ -565,6 +581,9 @@ int MWG_CalcPhysics(MWG_Map * map){
         map->player[i].oldX = temp1;
         map->player[i].oldY = temp2;
 
+        /* Reset the stored collision infromation
+         *  from last frame. */
+        map->player[i].collisionDirection = MWG_COLLISION_DIR_NONE;
 
         /* Loop through all the map rectangles
          *  and detect collisions. */
@@ -583,7 +602,6 @@ int MWG_CalcPhysics(MWG_Map * map){
             if(MWG_ResolveCollision(&map->player[i], &map->rect[j], &newX, &newY)){
                 map->player[i].x = newX;
                 map->player[i].y = newY;
-
             };
 
             j++;
