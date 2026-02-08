@@ -129,6 +129,39 @@ MWG_Menu pauseMenu = {
     3 /* Num buttons */
 };
 
+MWG_Menu editorMenu = {
+    -1, /* hoveredButton */
+    {
+    {
+        {-112, -80, 225, 25},
+        "Resume",
+        6,
+        -1,
+        1,
+        -1,
+        -1,
+        &emptyMenu,
+        D_NULL,
+        0, 0, 0, /* Colour */
+        100, 100, 100 /* Hover colour */
+    },
+    {
+        {-112, -50, 225, 25},
+        "Draw rect",
+        9,
+        0,
+        -1,
+        -1,
+        -1,
+        D_NULL,
+        D_NULL,
+        0, 0, 0, /* Colour */
+        100, 100, 100 /* Hover colour */
+    },
+    }, /* buttons */
+    2 /* numButtons */
+};
+
 MWG_Menu emptyMenu = {
     -1, /* hoveredButton */
     {}, /* buttons */
