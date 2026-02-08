@@ -182,6 +182,10 @@ MWG_Menu emptyMenu = {
  *  overwrites the menu with an empty one to
  *  remove the menu.
  *
+ * If 0 gets pressed and there is no menu open
+ *  (numButtons is 0), this function opens the
+ *  editor menu by overwriting "menu".
+ *
  * menu: The menu to control, and overwrite when
  *  a new menu is opened.
  * e: An event to handle.
@@ -218,6 +222,10 @@ int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, MWG_Player * pl
              *  zeroth one. */
             if(menu->hoveredButton < 0){
                 menu->hoveredButton = 0;
+            };
+
+            if(e->keyboard.key == D_K0 && menu->numButtons <= 0){
+                *menu = editorMenu;
             };
 
             if((e->keyboard.key == D_Kw || e->keyboard.key == D_KUp) && menu->button[menu->hoveredButton].upButton >= 0){
