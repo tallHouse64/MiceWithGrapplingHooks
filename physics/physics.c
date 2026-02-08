@@ -6,6 +6,21 @@
  *  entered this frame. This is useful for
  *  collision resolution.
  *
+ * Note that if this function finds valid entry
+ *  or exit points, the points will always be
+ *  outside the rectangle by 1 pixel. This means
+ *  either:
+ *   x must be rect->x - 1
+ *  or
+ *   x must be rect->x + rect->w
+ *  or
+ *   y must be rect->y - 1
+ *  or
+ *   y must be rect->y + rect->h
+ *  Remember this applies to the entry and exit
+ *  points. If the function returns 0 (success)
+ *  and does not do this, it is a bug.
+ *
  * It is safe to pass null for xEntryPoint,
  *  yEntryPoint, xExitPoint and yExitPoint if you
  *  don't need all the values.
@@ -68,7 +83,7 @@ int MWG_FindEntryPoint(int currentX, int currentY, int oldX, int oldY, MWG_MapRe
         if(oldX >= rect->x && oldX < rect->x + rect->w){
 
             pointAX = oldX;
-            pointAY = rect->y;
+            pointAY = rect->y - 1;
 
             pointBX = oldX;
             pointBY = rect->y + rect->h;
@@ -87,7 +102,7 @@ int MWG_FindEntryPoint(int currentX, int currentY, int oldX, int oldY, MWG_MapRe
          *  rect? */
         if(oldY >= rect->y && oldY < rect->y + rect->h){
 
-            pointAX = rect->x;
+            pointAX = rect->x - 1;
             pointAY = oldY;
 
             pointBX = rect->x + rect->w;
