@@ -68,6 +68,8 @@ extern MWG_Menu emptyMenu;
 extern MWG_Menu editorMenu;
 
 
+int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState);
+
 int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, MWG_Player * player, int * playerIndex);
 
 #endif

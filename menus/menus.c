@@ -168,6 +168,46 @@ MWG_Menu emptyMenu = {
     0 /* numButtons */
 };
 
+/* This function runs an action stored in a
+ *  button for when it is pressed (like quit,
+ *  change FPS, etc).
+ *
+ * If the action is not recognised, the function
+ *  would do nothing and return -2.
+ *
+ * It is safe to pass null for action and
+ *  gameState, the function would do nothing and
+ *  return -1.
+ *
+ * action: The action to take.
+ * gameState: The game state to modify in order
+ *  to take the action.
+ * returns: 0 on success or a negative number on
+ *  failure.
+ */
+int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
+
+    if(action == D_NULL || gameState == D_NULL){
+        return -1;
+    };
+
+    switch(*action){
+
+        case MWG_BUTTON_QUIT:
+            /* Stop the program from running at
+             *  the end of this frame */
+            gameState->running = 0;
+            break;
+
+        default:
+            /* Action not recognised */
+            return -2;
+            break;
+    };
+
+    return 0;
+};
+
 /* This function handles player input on a menu.
  *
  * When a button is pressed on a menu, if the
