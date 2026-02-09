@@ -28,4 +28,7 @@ extern MWG_Map testMap;
 
 extern MWG_Map level1;
 
+
+int MWG_AddMapRect(MWG_Map * map, MWG_MapRect * r);
+
 #endif
