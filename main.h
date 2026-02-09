@@ -3,6 +3,7 @@
 
 #include"beginCode.h"
 #include"d.h"
+#include"devents.h"
 
 
 #define DELAY 1000/30
@@ -94,6 +95,42 @@ typedef struct MWG_Player {
      *  MWG_CollisionDirection. */
     MWG_CollisionDirection collisionDirection;
 } MWG_Player;
+
+typedef struct MWG_GameState {
+
+    /* The output surface (screen or window) */
+    D_Surf * out;
+
+    /* Is the game running, non zero while
+     *  running */
+    int running;
+
+    /* The state of the keyboard, updated each
+     *  frame. */
+    D_uint8 keyboardState[D_NumKeys];
+
+    /* Zoom number, set this to 256 for no zoom
+     *  effect. */
+    int zoom;
+
+    /* A pointer to a font surface (see
+     *  D_PrintToSurf()) */
+    D_Surf * fontImage;
+
+    /* The current menu onscreen */
+    MWG_Menu * menu;
+
+    /* The current map loaded */
+    MWG_Map * map;
+
+    /* Data for player 1, this gets copied into a
+     *  map when it's loaded. */
+    MWG_Player player1;
+
+    /* The index of player 1 in the current map
+     *  if there is a map loaded, -1 otherwise */
+    int player1Index;
+} MWG_GameState;
 
 
 int MWG_AddPlayer(MWG_Map * map, MWG_Player * player);

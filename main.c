@@ -473,46 +473,49 @@ int MWG_AddPlayer(MWG_Map * map, MWG_Player * player){
 };
 
 int main(int argc, char ** argv){
-    D_Surf * out = D_GetOutSurf(50, 50, 640, 480, "Mice With Grappling Hooks", 0);
-    int running = 1;
-    int cameraX = 0;
-    int cameraY = 0;
-    D_Event e = {0};
-    D_uint8 keyboardState[D_NumKeys] = {0};
-    int zoom = 256;
+
+    MWG_GameState gameState = {D_NULL};
+
+    gameState.out = D_GetOutSurf(50, 50, 640, 480, "Mice With Grappling Hooks", 0);
+    gameState.running = 1;
+    gameState.zoom = 256;
+    gameState.fontImage = D_CreateSurfFrom(fontDataW, fontDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), fontData);
+    gameState.player1Index = -1;
+
+    MWG_Menu currentMenu = mainMenu;
+    gameState.menu = &currentMenu;
+
+    MWG_Map currentMap = testMap;
+    gameState.map = &currentMap;
+
     D_Surf * mouseImage = D_CreateSurfFrom(mouseDataW, mouseDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), mouseData);
-    D_Surf * fontImage = D_CreateSurfFrom(fontDataW, fontDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), fontData);
+    D_Event e = {0};
 
-    MWG_Menu menu = mainMenu;
-    MWG_Map map = testMap;
-    MWG_Player player1 = {
-        0, 0, /* x, y */
-        0, 0, /* oldX, oldY */
-        -20, -20, /* hitbox x, y */
-        40, 40, /* hitbox w, h */
-        mouseImage,
-        -mouseDataW, -mouseDataH, /*image x, y*/
+    gameState.player1.x = 0;
+    gameState.player1.y = 0;
+    gameState.player1.oldX = 0;
+    gameState.player1.oldY = 0;
+    gameState.player1.hitboxX = -20;
+    gameState.player1.hitboxY = -20;
+    gameState.player1.hitboxW = 40;
+    gameState.player1.hitboxH = 40;
+    gameState.player1.image = mouseImage;
+    gameState.player1.imageX = -mouseDataW;
+    gameState.player1.imageY = -mouseDataH;
+    gameState.player1.imageW = mouseDataW * 2;
+    gameState.player1.imageH = mouseDataH * 2;
+    gameState.player1.rotateCentreX = mouseDataW;
+    gameState.player1.rotateCentreY = mouseDataH;
+    gameState.player1.hookX = 0;
+    gameState.player1.hookY = 0;
+    gameState.player1.hookState = MWG_HOOK_UNATTACHED;
+    gameState.player1.angle = 0.0;
 
-        /* image w, h*/
-        mouseDataW * 2, mouseDataH * 2,
-
-        /* Rotation centre x, y*/
-        mouseDataW, mouseDataH,
-
-        /* hook x, y */
-        0, 0,
-
-        MWG_HOOK_UNATTACHED,
-
-        0.0 /* Angle */
-    };
-
-    int player1Index = 0;
 
 
     D_StartEvents();
 
-    while(running){
+    while(gameState.running){
         D_PumpEvents();
 
         while(D_GetEvent(&e) != -1){
@@ -520,60 +523,60 @@ int main(int argc, char ** argv){
             /* Only send input events to the
              *  player if there is no menu
              *  onscreen */
-            if(menu.numButtons <= 0){
-                MWG_ControlPlayer(&map.player[0], &e, D_NULL, &map);
+            if(gameState.menu->numButtons <= 0){
+                MWG_ControlPlayer(&gameState.map->player[0], &e, D_NULL, gameState.map);
             };
 
-            MWG_ControlMenu(&menu, &e, &map, &player1, &player1Index);
+            MWG_ControlMenu(gameState.menu, &e, gameState.map, &gameState.player1, &gameState.player1Index);
 
             switch(e.type){
                 case D_QUIT:
-                    running = 0;
+                    gameState.running = 0;
                     break;
 
                 case D_KEYDOWN:
-                    keyboardState[e.keyboard.key] = 1;
+                    gameState.keyboardState[e.keyboard.key] = 1;
 
                     if(e.keyboard.key == D_KEscape){
-                        menu = pauseMenu;
+                        *gameState.menu = pauseMenu;
                     };
 
                     break;
 
                 case D_KEYUP:
-                    keyboardState[e.keyboard.key] = 0;
+                    gameState.keyboardState[e.keyboard.key] = 0;
                     break;
             };
         };
 
-        MWG_CalcPhysics(&map);
+        MWG_CalcPhysics(gameState.map);
 
         /* Only send input events to the
          *  player if there is no menu
          *  onscreen */
-        if(menu.numButtons <= 0){
-            MWG_ControlPlayer(&map.player[0], D_NULL, keyboardState, &map);
+        if(gameState.menu->numButtons <= 0){
+            MWG_ControlPlayer(&gameState.map->player[0], D_NULL, gameState.keyboardState, gameState.map);
         };
 
         /* Control zoom with the i and o keys */
-        if(keyboardState[D_Ki]){zoom -= 10;};
-        if(keyboardState[D_Ko]){zoom += 10;};
+        if(gameState.keyboardState[D_Ki]){gameState.zoom -= 10;};
+        if(gameState.keyboardState[D_Ko]){gameState.zoom += 10;};
 
 
-        D_FillRect(out, D_NULL, D_rgbaToFormat(out->format, 181, 233, 255, 255));
+        D_FillRect(gameState.out, D_NULL, D_rgbaToFormat(gameState.out->format, 181, 233, 255, 255));
 
-        MWG_DrawMap(out, &map, map.player[0].x, map.player[0].y, zoom);
-        MWG_DrawMenu(out, &menu, fontImage, zoom);
+        MWG_DrawMap(gameState.out, gameState.map, gameState.map->player[0].x, gameState.map->player[0].y, gameState.zoom);
+        MWG_DrawMenu(gameState.out, gameState.menu, gameState.fontImage, gameState.zoom);
 
-        D_FlipOutSurf(out);
+        D_FlipOutSurf(gameState.out);
 
         D_Delay(DELAY);
     };
 
     D_StopEvents();
 
-    D_FreeOutSurf(out);
-    out = D_NULL;
+    D_FreeOutSurf(gameState.out);
+    gameState.out = D_NULL;
 
     return 0;
 };

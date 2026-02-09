@@ -11,4 +11,8 @@ struct MWG_Map;
 
 typedef struct MWG_Map MWG_Map;
 
+struct MWG_Menu;
+
+typedef struct MWG_Menu MWG_Menu;
+
 #endif
