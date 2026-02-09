@@ -85,7 +85,7 @@ MWG_Menu levelMenu = {
 };
 
 MWG_Menu pauseMenu = {
-    -1,
+    0,
     {
         {
             {-150, -70, 300, 30},
