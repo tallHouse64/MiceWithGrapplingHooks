@@ -5,7 +5,7 @@
 #include"../maps/maps.h"
 
 MWG_Menu mainMenu = {
-    -1,
+    0,
     {
         {
             {-210, -50, 420, 30},
@@ -39,7 +39,7 @@ MWG_Menu mainMenu = {
 };
 
 MWG_Menu levelMenu = {
-    -1,
+    0,
     {
     {
         {-135, -25, 100, 25},
