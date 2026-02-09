@@ -537,7 +537,7 @@ int main(int argc, char ** argv){
                 case D_KEYDOWN:
                     gameState.keyboardState[e.keyboard.key] = 1;
 
-                    if(e.keyboard.key == D_KEscape){
+                    if(e.keyboard.key == D_KEscape && gameState.menu->numButtons <= 0){
                         *gameState.menu = pauseMenu;
                     };
 
