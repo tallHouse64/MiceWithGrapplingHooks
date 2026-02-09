@@ -31,7 +31,8 @@ MWG_Menu mainMenu = {
             D_NULL,
             D_NULL,
             0, 0, 0, /* Colour */
-            100, 100, 100 /* Hover colour */
+            100, 100, 100, /* Hover colour */
+            MWG_BUTTON_QUIT
         }
     },
     2 /* Num buttons */
