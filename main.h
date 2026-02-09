@@ -49,6 +49,21 @@ typedef enum MWG_CollisionDirection {
     MWG_COLLISION_DIR_RIGHT = 0x8,
 } MWG_CollisionDirection;
 
+/* These flags control abilities and other
+ *  options the player may have (like weather the
+ *  player can edit the map or fly).
+ *
+ * Any flag can be enabled and disabled
+ *  independently, you can use bit-wise OR to mix
+ *  any flags.
+ */
+typedef enum MWG_PlayerFlags {
+    MWG_PLAYER_NO_FLAG      = 0,
+    MWG_PLAYER_CAN_EDIT     = 0x1,
+    MWG_PLAYER_DRAWING_RECT = 0x2
+    /* add flying and hook enabled flags? */
+} MWG_PlayerFlags;
+
 typedef enum MWG_HookState {
     MWG_HOOK_UNATTACHED,
     MWG_HOOK_ATTACHED
@@ -94,6 +109,11 @@ typedef struct MWG_Player {
      *  the declaration of
      *  MWG_CollisionDirection. */
     MWG_CollisionDirection collisionDirection;
+
+    /* Flags that control the abilities and other
+     *  options of the player, read the
+     *  declaration of MWG_PlayerFlags above. */
+    MWG_PlayerFlags flags;
 } MWG_Player;
 
 typedef struct MWG_GameState {
