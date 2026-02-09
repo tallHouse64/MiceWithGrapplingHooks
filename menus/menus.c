@@ -226,6 +226,11 @@ int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
  *  (numButtons is 0), this function opens the
  *  editor menu by overwriting "menu".
  *
+ * Some buttons need to change the game state,
+ *  like "quit". This is what the gameState
+ *  pointer is for. It is safe to pass null for
+ *  this but some buttons may not work.
+ *
  * menu: The menu to control, and overwrite when
  *  a new menu is opened.
  * e: An event to handle.
@@ -238,10 +243,12 @@ int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
  *  player gets added using MWG_AddPlayer(), this
  *  number gets overwritten with the index of
  *  that player.
+ * gameState: The game state to modify when some
+ *  buttons are pressed.
  * returns: 0 on success or a negative number on
  *  failure.
  */
-int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, MWG_Player * player, int * playerIndex){
+int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, MWG_Player * player, int * playerIndex, MWG_GameState * gameState){
 
     MWG_Menu emptyMenu = {
         -1, /* hoveredButton */
@@ -287,6 +294,10 @@ int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, MWG_Player * pl
             /* If space or enter have been
              *  pressed. */
             if(e->keyboard.key == D_KSpace || e->keyboard.key == D_KEnter){
+
+                if(gameState != D_NULL){
+                    MWG_RunAction(&menu->button[menu->hoveredButton].action, gameState);
+                };
 
                 /* Change the menu if this
                  *  button points to another
