@@ -69,7 +69,8 @@ MWG_Map level1 = {
  *
  * map: The map to copy the rectangle into.
  * r: The rectangle to copy.
- * returns: 0 on success or a negative number on
+ * returns: The index of the new rectangle in
+ *  "map" on success or a negative number on
  *  failure.
  */
 int MWG_AddMapRect(MWG_Map * map, MWG_MapRect * r){
@@ -91,5 +92,5 @@ int MWG_AddMapRect(MWG_Map * map, MWG_MapRect * r){
 
     map->numRects = map->numRects + 1;
 
-    return 0;
+    return i;
 };
