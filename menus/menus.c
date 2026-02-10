@@ -200,6 +200,81 @@ int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
             gameState->running = 0;
             break;
 
+        case MWG_BUTTON_DRAW_RECT:
+
+            /* If player 1 is not drawing a rect
+             */
+            if(gameState->player1.drawingRect == -1){
+
+                /* Start drawing a rect (point 1
+                 *  of the rectangle is set here,
+                 *  read below). */
+                MWG_MapRect r = {gameState->player1.x, gameState->player1.y, 8, 8, D_NULL, 255, 255, 255, 8};
+                gameState->player1.drawingRect = MWG_AddMapRect(gameState->map, &r);
+
+                /* If creating the new rectangle
+                 *  failed */
+                if(gameState->player1.drawingRect < 0){
+
+                    /* Stop drawing */
+                    gameState->player1.drawingRect = -1;
+                };
+
+            }else{
+                /* Otherwise finish drawing the
+                 *  rect that is being drawn now.
+                 *  By setting one of the corners
+                 *  of the new rectangle to where
+                 *  the player is now.
+                 *
+                 * Point 1 of the rectangle is
+                 *  where the rectangle started
+                 *  being drawn.
+                 *
+                 * Point 2 of the rectangle is
+                 *  where the player is at this
+                 *  point of the logic (where the
+                 *  rectangle stops being drawn).
+                 *
+                 * The name of that rect is:
+                 *  gameState->map->rect[gameState->player1.drawingRect]
+                 */
+
+                /* Is the player to the left of
+                 *  point 1 of the rectanlge? */
+                if(gameState->player1.x < gameState->map->rect[gameState->player1.drawingRect].x){
+
+                    gameState->map->rect[gameState->player1.drawingRect].w =
+                    gameState->map->rect[gameState->player1.drawingRect].x - gameState->player1.x;
+
+                    gameState->map->rect[gameState->player1.drawingRect].x = gameState->player1.x;
+                }else{
+
+                    gameState->map->rect[gameState->player1.drawingRect].w =
+                    gameState->player1.x - gameState->map->rect[gameState->player1.drawingRect].x;
+
+                };
+
+                /* Is the player above point 1 of
+                 *  the rectanlge? */
+                if(gameState->player1.y < gameState->map->rect[gameState->player1.drawingRect].y){
+
+                    gameState->map->rect[gameState->player1.drawingRect].h =
+                    gameState->map->rect[gameState->player1.drawingRect].y - gameState->player1.y;
+
+                    gameState->map->rect[gameState->player1.drawingRect].y = gameState->player1.y;
+                }else{
+
+                    gameState->map->rect[gameState->player1.drawingRect].h =
+                    gameState->player1.y - gameState->map->rect[gameState->player1.drawingRect].y;
+
+                };
+
+                gameState->player1.drawingRect = -1;
+            };
+
+            break;
+
         default:
             /* Action not recognised */
             return -2;

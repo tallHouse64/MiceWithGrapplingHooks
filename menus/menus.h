@@ -6,7 +6,8 @@
 
 typedef enum MWG_ButtonAction {
     MWG_BUTTON_NO_ACTION,
-    MWG_BUTTON_QUIT
+    MWG_BUTTON_QUIT,
+    MWG_BUTTON_DRAW_RECT
 } MWG_ButtonAction;
 
 typedef struct MWG_Button {
