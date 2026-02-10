@@ -512,6 +512,7 @@ int main(int argc, char ** argv){
     gameState.player1.angle = 0.0;
     gameState.player1.collisionDirection = MWG_COLLISION_DIR_NONE;
     gameState.player1.flags = MWG_PLAYER_NO_FLAG;
+    gameState.player1.drawingRect = -1;
 
 
 

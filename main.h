@@ -113,6 +113,13 @@ typedef struct MWG_Player {
      *  options of the player, read the
      *  declaration of MWG_PlayerFlags above. */
     MWG_PlayerFlags flags;
+
+    /* This number is the index of the rectangle
+     *  that the player is drawing, if the player
+     *  isn't drawing one this is -1. This is
+     *  used for level editing. */
+    int drawingRect;
+
 } MWG_Player;
 
 typedef struct MWG_GameState {
