@@ -131,7 +131,7 @@ MWG_Menu pauseMenu = {
 };
 
 MWG_Menu editorMenu = {
-    -1, /* hoveredButton */
+    0, /* hoveredButton */
     {
     {
         {-112, -80, 225, 25},
