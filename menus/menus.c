@@ -154,7 +154,7 @@ MWG_Menu editorMenu = {
         -1,
         -1,
         -1,
-        D_NULL,
+        &emptyMenu,
         D_NULL,
         0, 0, 0, /* Colour */
         100, 100, 100, /* Hover colour */
