@@ -151,7 +151,7 @@ MWG_Menu editorMenu = {
         "Draw rect",
         9,
         0,
-        -1,
+        2,
         -1,
         -1,
         &emptyMenu,
@@ -160,8 +160,22 @@ MWG_Menu editorMenu = {
         100, 100, 100, /* Hover colour */
         MWG_BUTTON_DRAW_RECT
     },
+    {
+        {-112, -20, 225, 25},
+        "Fly",
+        3,
+        1,
+        -1,
+        -1,
+        -1,
+        &emptyMenu,
+        D_NULL,
+        0, 0, 0, /* Colour */
+        100, 100, 100, /* Hover colour */
+        MWG_BUTTON_FLY
+    },
     }, /* buttons */
-    2 /* numButtons */
+    3 /* numButtons */
 };
 
 MWG_Menu emptyMenu = {
