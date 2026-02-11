@@ -294,6 +294,10 @@ int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
 
             break;
 
+        case MWG_BUTTON_FLY:
+            player1->flags = player1->flags | MWG_PLAYER_FLYING;
+            break;
+
         default:
             /* Action not recognised */
             return -2;
