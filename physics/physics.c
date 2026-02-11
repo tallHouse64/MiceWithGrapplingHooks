@@ -554,9 +554,10 @@ int MWG_CalcPhysics(MWG_Map * map){
 
 
 
-        /* Apply gravity */
-        /*map->player[i].oldY = map->player[i].oldY - 5;*/
-        map->player[i].oldY = map->player[i].oldY - ((70 * DELAY)/256);
+        /* Apply gravity unless flying */
+        if(!(map->player[i].flags & MWG_PLAYER_FLYING)){
+            map->player[i].oldY = map->player[i].oldY - ((70 * DELAY)/256);
+        };
 
         /* Apply air resistance (halve the
          *  speed) */
