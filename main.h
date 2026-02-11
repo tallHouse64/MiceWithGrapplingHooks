@@ -60,7 +60,8 @@ typedef enum MWG_CollisionDirection {
 typedef enum MWG_PlayerFlags {
     MWG_PLAYER_NO_FLAG      = 0,
     MWG_PLAYER_CAN_EDIT     = 0x1,
-    /* add flying and hook enabled flags? */
+    MWG_PLAYER_FLYING       = 0x2
+    /* Add a hook enabled flag? */
 } MWG_PlayerFlags;
 
 typedef enum MWG_HookState {
