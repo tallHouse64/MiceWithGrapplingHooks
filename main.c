@@ -447,12 +447,37 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
         };
     };
 
-    if(keyboardState[D_Kw] && map != D_NULL){
-        MWG_FireHook(map, p);
+    if(keyboardState[D_Kw]){
+
+        /* If the player is flying, move up */
+        if(p->flags & MWG_PLAYER_FLYING){
+            p->oldY += (78 * DELAY) / 256;
+
+        }else if(map != D_NULL){
+
+            /* Otherwise fire the grappling hook,
+             *  if map is safe to use. */
+            MWG_FireHook(map, p);
+        };
     };
 
     if(keyboardState[D_Ks]){
-        p->hookState = MWG_HOOK_UNATTACHED;
+
+        /* If the player is flying, move down */
+        if(p->flags & MWG_PLAYER_FLYING){
+            p->oldY -= (78 * DELAY) / 256;
+
+        }else{
+
+            /* Otherwise release the grappling
+             *  hook */
+            p->hookState = MWG_HOOK_UNATTACHED;
+        };
+    };
+
+    /* If the player is flying, move up */
+    if(keyboardState[D_KSpace] && p->flags & MWG_PLAYER_FLYING){
+        p->oldY += (78 * DELAY) / 256;
     };
 
     return 0;
