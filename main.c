@@ -86,10 +86,33 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
         centre.x = (map->player[i].rotateCentreX * 256) / zoom;
         centre.y = (map->player[i].rotateCentreY * 256) / zoom;
 
+        /* Is the player drawing a rectangle? */
+        if(map->player[i].drawingRect >= 0){
+
+            /* Show it onscreen */
+            r.x = (((MWG_MIN(map->player[i].x, map->rect[map->player[i].drawingRect].x) - cameraX) * 256) / zoom) + (s->w / 2);
+            r.y = (((MWG_MIN(map->player[i].y, map->rect[map->player[i].drawingRect].y) - cameraY) * 256) / zoom) + (s->h / 2);
+
+            r.w = map->rect[map->player[i].drawingRect].x - map->player[i].x;
+            r.h = map->rect[map->player[i].drawingRect].y - map->player[i].y;
+
+            /* make the width and height
+             *  positive */
+            r.w = (MWG_MAX(r.w, -r.w) * 256) / zoom;
+            r.h = (MWG_MAX(r.h, -r.h) * 256) / zoom;
+
+            D_FillRect(s, &r, D_rgbaToFormat(s->format, 255, 255, 255, 255));
+        };
+
+
         /* Is the player looking right? */
         if(map->player[i].angle <= 90 && map->player[i].angle >= -90){
+
+            /* Draw the player looking right */
             D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle, 0, 0);
         }else{
+
+            /* Draw the player looking left */
             D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle, 1, 0);
         };
 
