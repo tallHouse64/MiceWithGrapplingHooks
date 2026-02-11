@@ -78,13 +78,6 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
             D_DrawLine(s, &hook, &player, (5 * 256) / zoom, D_rgbaToFormat(s->format, 70, 70, 70, 255));
         };
 
-        r.x = ((((map->player[i].x + map->player[i].imageX) - cameraX) * 256) / zoom) + (s->w / 2);
-        r.y = ((((map->player[i].y + map->player[i].imageY) - cameraY) * 256) / zoom) + (s->h / 2);
-        r.w = (map->player[i].imageW * 256) / zoom;
-        r.h = (map->player[i].imageH * 256) / zoom;
-
-        centre.x = (map->player[i].rotateCentreX * 256) / zoom;
-        centre.y = (map->player[i].rotateCentreY * 256) / zoom;
 
         /* Is the player drawing a rectangle? */
         if(map->player[i].drawingRect >= 0){
@@ -103,6 +96,14 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
 
             D_FillRect(s, &r, D_rgbaToFormat(s->format, 255, 255, 255, 255));
         };
+
+        r.x = ((((map->player[i].x + map->player[i].imageX) - cameraX) * 256) / zoom) + (s->w / 2);
+        r.y = ((((map->player[i].y + map->player[i].imageY) - cameraY) * 256) / zoom) + (s->h / 2);
+        r.w = (map->player[i].imageW * 256) / zoom;
+        r.h = (map->player[i].imageH * 256) / zoom;
+
+        centre.x = (map->player[i].rotateCentreX * 256) / zoom;
+        centre.y = (map->player[i].rotateCentreY * 256) / zoom;
 
 
         /* Is the player looking right? */
