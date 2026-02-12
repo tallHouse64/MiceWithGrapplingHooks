@@ -295,7 +295,19 @@ int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
             break;
 
         case MWG_BUTTON_NOCLIP_FLY:
-            player1->flags = player1->flags ^ MWG_PLAYER_FLYING;
+
+            /* If the player is flying */
+            if(player1->flags & MWG_PLAYER_FLYING){
+
+                /* Turn off flying and noclip */
+                player1->flags = player1->flags & (~(MWG_PLAYER_FLYING | MWG_PLAYER_NOCLIP));
+            }else{
+
+                /* Otherwise turn on flying and
+                 *  noclip */
+                player1->flags = player1->flags | MWG_PLAYER_FLYING | MWG_PLAYER_NOCLIP;
+            };
+
             break;
 
         default:
