@@ -78,6 +78,10 @@ typedef struct MWG_Player {
 
     int oldX, oldY;
 
+    /* Zoom number, set this to 256 for no zoom
+     *  effect. */
+    int zoom;
+
     /* The hitbox is relative to the x, y of the
      *  player, it is recommended to set the
      *  hitboxX to -(hitboxW / 2) and set hitboxY
@@ -136,10 +140,6 @@ typedef struct MWG_GameState {
     /* The state of the keyboard, updated each
      *  frame. */
     D_uint8 keyboardState[D_NumKeys];
-
-    /* Zoom number, set this to 256 for no zoom
-     *  effect. */
-    int zoom;
 
     /* A pointer to a font surface (see
      *  D_PrintToSurf()) */

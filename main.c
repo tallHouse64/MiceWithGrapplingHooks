@@ -480,6 +480,10 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
         p->oldY += (78 * DELAY) / 256;
     };
 
+    /* Control zoom with the i and o keys */
+    if(keyboardState[D_Ki]){p->zoom -= 10;};
+    if(keyboardState[D_Ko]){p->zoom += 10;};
+
     return 0;
 };
 
@@ -527,7 +531,6 @@ int main(int argc, char ** argv){
 
     gameState.out = D_GetOutSurf(50, 50, 640, 480, "Mice With Grappling Hooks", 0);
     gameState.running = 1;
-    gameState.zoom = 256;
     gameState.fontImage = D_CreateSurfFrom(fontDataW, fontDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), fontData);
     gameState.player1Index = -1;
 
@@ -544,6 +547,7 @@ int main(int argc, char ** argv){
     gameState.player1.y = 0;
     gameState.player1.oldX = 0;
     gameState.player1.oldY = 0;
+    gameState.player1.zoom = 256;
     gameState.player1.hitboxX = -20;
     gameState.player1.hitboxY = -20;
     gameState.player1.hitboxW = 40;
@@ -603,24 +607,32 @@ int main(int argc, char ** argv){
 
         MWG_CalcPhysics(gameState.map);
 
-        /* Only send input events to the
-         *  player if there is no menu
-         *  onscreen */
-        if(gameState.menu->numButtons <= 0){
-            MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], D_NULL, gameState.keyboardState, gameState.map);
-        };
-
-        /* Control zoom with the i and o keys */
-        if(gameState.keyboardState[D_Ki]){gameState.zoom -= 10;};
-        if(gameState.keyboardState[D_Ko]){gameState.zoom += 10;};
-
 
         D_FillRect(gameState.out, D_NULL, D_rgbaToFormat(gameState.out->format, 181, 233, 255, 255));
 
+
+
+        /* If player1 is loaded (copied) into the
+         *  map. */
         if(gameState.player1Index >= 0){
-            MWG_DrawMap(gameState.out, gameState.map, gameState.map->player[gameState.player1Index].x, gameState.map->player[gameState.player1Index].y, gameState.zoom);
+
+            /* Only send input events to the
+             *  player if there is no menu
+             *  onscreen */
+            if(gameState.menu->numButtons <= 0){
+                MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], D_NULL, gameState.keyboardState, gameState.map);
+            };
+
+            MWG_DrawMap(gameState.out, gameState.map, gameState.map->player[gameState.player1Index].x, gameState.map->player[gameState.player1Index].y, gameState.map->player[gameState.player1Index].zoom);
+
+
+            MWG_DrawMenu(gameState.out, gameState.menu, gameState.fontImage, gameState.map->player[gameState.player1Index].zoom);
+        }else{
+            /* In case there is no player loaded
+             *  into the map. */
+
+            MWG_DrawMenu(gameState.out, gameState.menu, gameState.fontImage, gameState.player1.zoom);
         };
-        MWG_DrawMenu(gameState.out, gameState.menu, gameState.fontImage, gameState.zoom);
 
         D_FlipOutSurf(gameState.out);
 
