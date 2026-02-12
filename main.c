@@ -576,7 +576,7 @@ int main(int argc, char ** argv){
              *  player if there is no menu
              *  onscreen */
             if(gameState.menu->numButtons <= 0){
-                MWG_ControlPlayer(&gameState.map->player[0], &e, D_NULL, gameState.map);
+                MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], &e, D_NULL, gameState.map);
             };
 
             MWG_ControlMenu(gameState.menu, &e, gameState.map, &gameState.player1, &gameState.player1Index, &gameState);
@@ -607,7 +607,7 @@ int main(int argc, char ** argv){
          *  player if there is no menu
          *  onscreen */
         if(gameState.menu->numButtons <= 0){
-            MWG_ControlPlayer(&gameState.map->player[0], D_NULL, gameState.keyboardState, gameState.map);
+            MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], D_NULL, gameState.keyboardState, gameState.map);
         };
 
         /* Control zoom with the i and o keys */
@@ -617,7 +617,9 @@ int main(int argc, char ** argv){
 
         D_FillRect(gameState.out, D_NULL, D_rgbaToFormat(gameState.out->format, 181, 233, 255, 255));
 
-        MWG_DrawMap(gameState.out, gameState.map, gameState.map->player[0].x, gameState.map->player[0].y, gameState.zoom);
+        if(gameState.player1Index >= 0){
+            MWG_DrawMap(gameState.out, gameState.map, gameState.map->player[gameState.player1Index].x, gameState.map->player[gameState.player1Index].y, gameState.zoom);
+        };
         MWG_DrawMenu(gameState.out, gameState.menu, gameState.fontImage, gameState.zoom);
 
         D_FlipOutSurf(gameState.out);
