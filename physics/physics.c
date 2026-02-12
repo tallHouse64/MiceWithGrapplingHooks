@@ -549,7 +549,7 @@ int MWG_CalcPhysics(MWG_Map * map){
     int temp2 = 0;
     int newX = 0;
     int newY = 0;
-    while(i < map->numPlayers){
+    for(; i < map->numPlayers; i++){
 
 
 
@@ -601,6 +601,15 @@ int MWG_CalcPhysics(MWG_Map * map){
          *  from last frame. */
         map->player[i].collisionDirection = MWG_COLLISION_DIR_NONE;
 
+
+        /* If noclip is enabled on the player,
+         *  don't run the below collision
+         *  detection and resolution (just skip
+         *  the text player). */
+        if(map->player[i].flags & MWG_PLAYER_NOCLIP){
+            continue;
+        };
+
         /* Loop through all the map rectangles
          *  and detect collisions. */
         j = 0;
@@ -624,7 +633,6 @@ int MWG_CalcPhysics(MWG_Map * map){
         };
 
 
-        i++;
     };
 
     return 0;
