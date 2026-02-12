@@ -134,7 +134,7 @@ MWG_Menu editorMenu = {
     0, /* hoveredButton */
     {
     {
-        {-112, -80, 225, 25},
+        {-125, -80, 250, 25},
         "Resume",
         6,
         -1,
@@ -147,7 +147,7 @@ MWG_Menu editorMenu = {
         100, 100, 100 /* Hover colour */
     },
     {
-        {-112, -50, 225, 25},
+        {-125, -50, 250, 25},
         "Draw rect",
         9,
         0,
@@ -161,9 +161,9 @@ MWG_Menu editorMenu = {
         MWG_BUTTON_DRAW_RECT
     },
     {
-        {-112, -20, 225, 25},
-        "Fly",
-        3,
+        {-125, -20, 250, 25},
+        "Noclip fly",
+        10,
         1,
         -1,
         -1,
@@ -172,7 +172,7 @@ MWG_Menu editorMenu = {
         D_NULL,
         0, 0, 0, /* Colour */
         100, 100, 100, /* Hover colour */
-        MWG_BUTTON_FLY
+        MWG_BUTTON_NOCLIP_FLY
     },
     }, /* buttons */
     3 /* numButtons */
@@ -294,7 +294,7 @@ int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
 
             break;
 
-        case MWG_BUTTON_FLY:
+        case MWG_BUTTON_NOCLIP_FLY:
             player1->flags = player1->flags ^ MWG_PLAYER_FLYING;
             break;
 
