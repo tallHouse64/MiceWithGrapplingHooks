@@ -353,6 +353,12 @@ int MWG_PointInRect(int rx, int ry, int rw, int rh, int px, int py){
  */
 int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, int * newY){
 
+    /* The force that the player is launched
+     *  backward when detected inside a
+     *  rectangle. -256 for a full bounce with no
+     *  energy lost or 0 for no bounce. */
+    int const clippingBounceBackForce = 0;
+
     if(player == D_NULL || rect == D_NULL || newX == D_NULL || newY == D_NULL){
         return -1;
     };
@@ -382,6 +388,14 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
             *newX = LERP_INT(player->x + player->hitboxX, *newX, rect->friction);
 
             player->collisionDirection = player->collisionDirection | MWG_COLLISION_DIR_UP;
+        }else{
+
+            /* Clipping detected, bounce the
+             *  player backward. Bear in mind
+             *  it's repeated below 4 times. */
+            *newX = LERP_INT(player->oldX, player->x, clippingBounceBackForce);
+            *newY = LERP_INT(player->oldY, player->y, clippingBounceBackForce);
+            return 1;
         };
 
         *newX = *newX - player->hitboxX;
@@ -415,6 +429,13 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
             *newX = LERP_INT(player->x + player->hitboxX, *newX, rect->friction);
 
             player->collisionDirection = player->collisionDirection | MWG_COLLISION_DIR_UP;
+        }else{
+
+            /* Clipping detected, bounce the
+             *  player backward. */
+            *newX = LERP_INT(player->oldX, player->x, clippingBounceBackForce);
+            *newY = LERP_INT(player->oldY, player->y, clippingBounceBackForce);
+            return 1;
         };
 
         /* If the player's new position is
@@ -456,6 +477,13 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
             *newX = LERP_INT(player->x + player->hitboxX, *newX, rect->friction);
 
             player->collisionDirection = player->collisionDirection | MWG_COLLISION_DIR_DOWN;
+        }else{
+
+            /* Clipping detected, bounce the
+             *  player backward. */
+            *newX = LERP_INT(player->oldX, player->x, clippingBounceBackForce);
+            *newY = LERP_INT(player->oldY, player->y, clippingBounceBackForce);
+            return 1;
         };
 
         /* If the player's new position is
@@ -497,6 +525,13 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
             *newX = LERP_INT(player->x + player->hitboxX, *newX, rect->friction);
 
             player->collisionDirection = player->collisionDirection | MWG_COLLISION_DIR_DOWN;
+        }else{
+
+            /* Clipping detected, bounce the
+             *  player backward. */
+            *newX = LERP_INT(player->oldX, player->x, clippingBounceBackForce);
+            *newY = LERP_INT(player->oldY, player->y, clippingBounceBackForce);
+            return 1;
         };
 
         /* If the player's new position is
