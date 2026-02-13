@@ -4,6 +4,19 @@
 #include"../main.h"
 
 
+/* These flags control the qualities of a
+ *  rectangle like whether you can walk through it
+ *  (intangible).
+ *
+ * These flags can combined using bit-wise OR
+ *  (|).
+ */
+typedef enum MWG_MapRectFlags {
+    MWG_MAP_RECT_NO_FLAGS     = 0,
+    MWG_MAP_RECT_INTANGIBLE   = 0x1,
+    MWG_MAP_RECT_CANT_GRAPPLE = 0x2
+} MWG_MapRectFlags;
+
 typedef struct MWG_MapRect {
     int x, y, w, h;
 
@@ -14,6 +27,11 @@ typedef struct MWG_MapRect {
 
     /* friction can be between 0 and 256 */
     int friction;
+
+    /* These flags control how the rectangle
+     *  works in game (read the above declaration
+     *  of MWG_MapRectFlags). */
+    MWG_MapRectFlags flags;
 } MWG_MapRect;
 
 typedef struct MWG_Map {
