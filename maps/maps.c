@@ -15,9 +15,16 @@ MWG_Map testMap = {
             D_NULL,
             17, 127, 11,
             8
+        },
+        {
+            200, -100, 100, 100,
+            D_NULL,
+            8, 63, 5,
+            8,
+            MWG_MAP_RECT_INTANGIBLE
         }
     },
-    2, /* numRects */
+    3, /* numRects */
 
     /* Players */
     {},
