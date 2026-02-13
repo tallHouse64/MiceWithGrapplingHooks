@@ -647,8 +647,11 @@ int MWG_CalcPhysics(MWG_Map * map){
 
         /* Loop through all the map rectangles
          *  and detect collisions. */
-        j = 0;
-        while(j < map->numRects){
+        for(j = 0;j < map->numRects; j++){
+
+            if(map->rect[j].flags & MWG_MAP_RECT_INTANGIBLE){
+                continue;
+            };
 
             /* If newX and newY are not
              *  overwritten by
@@ -663,8 +666,6 @@ int MWG_CalcPhysics(MWG_Map * map){
                 map->player[i].x = newX;
                 map->player[i].y = newY;
             };
-
-            j++;
         };
 
 
