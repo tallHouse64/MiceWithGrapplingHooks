@@ -94,7 +94,7 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
             r.w = (MWG_MAX(r.w, -r.w) * 256) / zoom;
             r.h = (MWG_MAX(r.h, -r.h) * 256) / zoom;
 
-            D_FillRect(s, &r, D_rgbaToFormat(s->format, 255, 255, 255, 255));
+            D_FillRect(s, &r, D_rgbaToFormat(s->format, 17, 127, 11, 255));
         };
 
         r.x = ((((map->player[i].x + map->player[i].imageX) - cameraX) * 256) / zoom) + (s->w / 2);

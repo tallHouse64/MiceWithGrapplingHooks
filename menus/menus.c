@@ -228,7 +228,7 @@ int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
                 /* Start drawing a rect (point 1
                  *  of the rectangle is set here,
                  *  read below). */
-                MWG_MapRect r = {player1->x, player1->y, 8, 8, D_NULL, 255, 255, 255, 128};
+                MWG_MapRect r = {player1->x, player1->y, 8, 8, D_NULL, 17, 127, 11, 128};
                 player1->drawingRect = MWG_AddMapRect(gameState->map, &r);
 
                 /* If creating the new rectangle
