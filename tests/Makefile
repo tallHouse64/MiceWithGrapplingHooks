@@ -13,5 +13,8 @@ findEntryPointTest: findEntryPointTest.c ../physics/physics.c
 detectCollisionTest: detectCollisionTest.c ../physics/physics.c
 	$(CC) detectCollisionTest.c ../physics/physics.c -o detectCollisionTest $(FLAGS)
 
+lerpinttest: lerpinttest.c ../main.h
+	$(CC) lerpinttest.c -o lerpinttest $(FLAGS)
+
 clean:
 	-rm $(TEST_EXECUTABLES)

@@ -22,3 +22,5 @@ tests/findEntryPointTest
 tests/findEntryPointTest.exe
 tests/detectCollisionTest
 tests/detectCollisionTest.exe
+tests/lerpinttest
+tests/lerpinttest.exe
