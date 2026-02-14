@@ -2,6 +2,8 @@
 #Ignore the exe
 MWGH
 MWGH.exe
+MWGH.js
+MWGH.wasm
 
 #Ignore the asset converter
 assets/convert
