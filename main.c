@@ -228,9 +228,22 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
     hookDirectionX = hookDirectionX + player->x;
     hookDirectionY = hookDirectionY + player->y;
 
+
+    /* The algorithm below looks through each
+     *  rectangle and checks if they are being
+     *  aimed at, one by one. If one is being
+     *  aimed at, then it is checked if it is
+     *  closer than the last rectangle being
+     *  aimed at. If it is closer then
+     *  closestHookX and closestHookY are set.
+     *  Think of it like king of the hill, the
+     *  closest one to the player wins. */
     int i = 0;
+    int grappledRect = -1;
     int tempHookX = 0;
     int tempHookY = 0;
+    int closestHookX = 0;
+    int closestHookY = 0;
     int foundAHookPosition = 0;
     for(; i < map->numRects; i++){
         if(MWG_FindEntryPoint(hookDirectionX, hookDirectionY, player->x, player->y, &map->rect[i], &tempHookX, &tempHookY, D_NULL, D_NULL) == 0){
@@ -285,10 +298,26 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
                 ((player->hookX - player->x) * (player->hookX - player->x)) + ((player->hookY - player->y) * (player->hookY - player->y))
             ){
                 foundAHookPosition = 1;
-                player->hookX = tempHookX;
-                player->hookY = tempHookY;
-                player->hookState = MWG_HOOK_ATTACHED;
+                closestHookX = tempHookX;
+                closestHookY = tempHookY;
+                grappledRect = i;
             };
+        };
+    };
+
+    if(foundAHookPosition){
+
+        /* If the grappling hook attached to a
+         *  rectangle that can't be grappled. */
+        if(map->rect[grappledRect].flags & MWG_MAP_RECT_CANT_GRAPPLE){
+
+            /* In this case just do nothing */
+
+        }else if(foundAHookPosition){
+
+            player->hookX = closestHookX;
+            player->hookY = closestHookY;
+            player->hookState = MWG_HOOK_ATTACHED;
         };
     };
 
