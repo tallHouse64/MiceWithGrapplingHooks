@@ -59,15 +59,15 @@ typedef struct MWG_Menu {
 } MWG_Menu;
 
 
-extern MWG_Menu mainMenu;
+extern const MWG_Menu mainMenu;
 
-extern MWG_Menu levelMenu;
+extern const MWG_Menu levelMenu;
 
-extern MWG_Menu pauseMenu;
+extern const MWG_Menu pauseMenu;
 
-extern MWG_Menu emptyMenu;
+extern const MWG_Menu emptyMenu;
 
-extern MWG_Menu editorMenu;
+extern const MWG_Menu editorMenu;
 
 
 int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState);

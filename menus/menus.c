@@ -4,7 +4,7 @@
 #include"menus.h"
 #include"../maps/maps.h"
 
-MWG_Menu mainMenu = {
+const MWG_Menu mainMenu = {
     0,
     {
         {
@@ -38,7 +38,7 @@ MWG_Menu mainMenu = {
     2 /* Num buttons */
 };
 
-MWG_Menu levelMenu = {
+const MWG_Menu levelMenu = {
     0,
     {
     {
@@ -84,7 +84,7 @@ MWG_Menu levelMenu = {
     3 /* Num buttons */
 };
 
-MWG_Menu pauseMenu = {
+const MWG_Menu pauseMenu = {
     0,
     {
         {
@@ -130,7 +130,7 @@ MWG_Menu pauseMenu = {
     3 /* Num buttons */
 };
 
-MWG_Menu editorMenu = {
+const MWG_Menu editorMenu = {
     0, /* hoveredButton */
     {
     {
@@ -178,7 +178,7 @@ MWG_Menu editorMenu = {
     3 /* numButtons */
 };
 
-MWG_Menu emptyMenu = {
+const MWG_Menu emptyMenu = {
     -1, /* hoveredButton */
     {}, /* buttons */
     0 /* numButtons */
