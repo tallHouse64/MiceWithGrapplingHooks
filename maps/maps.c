@@ -1,7 +1,7 @@
 #include"maps.h"
 #include"../main.h"
 
-MWG_Map testMap = {
+const MWG_Map testMap = {
     /* MapRects */
     {
         {
@@ -49,7 +49,7 @@ MWG_Map testMap = {
     0 /* numPlayers*/
 };
 
-MWG_Map level1 = {
+const MWG_Map level1 = {
     /* MapRects */
     {
         {
