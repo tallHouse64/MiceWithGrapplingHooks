@@ -246,6 +246,15 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
     int closestHookY = 0;
     int foundAHookPosition = 0;
     for(; i < map->numRects; i++){
+
+        /* Skip rectangles that are intangible
+         *  and that can't be grappled. That way
+         *  grappling hooks can shoot through
+         *  them. */
+        if((map->rect[i].flags & MWG_MAP_RECT_INTANGIBLE) && (map->rect[i].flags & MWG_MAP_RECT_CANT_GRAPPLE)){
+            continue;
+        };
+
         if(MWG_FindEntryPoint(hookDirectionX, hookDirectionY, player->x, player->y, &map->rect[i], &tempHookX, &tempHookY, D_NULL, D_NULL) == 0){
 
             /* Is the player looking right? */
