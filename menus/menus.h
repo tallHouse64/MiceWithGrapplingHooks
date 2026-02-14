@@ -33,8 +33,8 @@ typedef struct MWG_Button {
      *  menu to nextMenu. If nextMenu is null
      *  then set the map to nextMap and hide the
      *  menu. If both are null then do nothing.*/
-    void * nextMenu;
-    MWG_Map * nextMap;
+    const void * nextMenu;
+    const MWG_Map * nextMap;
 
     /* Colour */
     int r, g, b;
