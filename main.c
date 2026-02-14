@@ -5,7 +5,15 @@
 #include"devents.h"
 
 #define D_PLATFORM_IMPLEMENTATION
+
+#ifdef WEB
+#include"platform/webd.h"
+
+#else
 #include"platform/sdld.h"
+
+#endif
+
 
 #include"main.h"
 #include"physics/physics.h"
