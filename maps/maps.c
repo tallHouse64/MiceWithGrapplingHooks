@@ -31,9 +31,17 @@ MWG_Map testMap = {
             /*Could use this colour 14, 131, 52*/
             8,
             MWG_MAP_RECT_CANT_GRAPPLE
+        },
+        {
+            100, 150, 100, 100,
+            D_NULL,
+            85, 85, 85,
+            8,
+            MWG_MAP_RECT_CANT_GRAPPLE |
+            MWG_MAP_RECT_INTANGIBLE
         }
     },
-    4, /* numRects */
+    5, /* numRects */
 
     /* Players */
     {},
