@@ -7,6 +7,10 @@
  *  this file very trivial, like incomplete types
  *  and preprocessor defines.*/
 
+#define MWG_VERSION_MAJOR 0
+#define MWG_VERSION_MINOR 0
+#define MWG_VERSION_PATCH 1
+
 struct MWG_Map;
 
 typedef struct MWG_Map MWG_Map;
