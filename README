@@ -1,0 +1,18 @@
+
+# Mice With Grappling Hooks
+
+This is a 2D game where you can fly around as a mouse using a grappling hook.
+
+
+# Installing
+
+To install MWGH, go to the releases page
+
+
+# Compiling
+
+To compile MWGH, you need to install the following:
+- gcc
+- libsdl2
+
+Note for Windows users, you also need to install Msys2. The above list of software needs to be installed inside Msys2.
