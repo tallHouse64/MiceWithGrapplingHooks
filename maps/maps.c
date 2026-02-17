@@ -43,6 +43,15 @@ const MWG_Map testMap = {
     },
     5, /* numRects */
 
+    /* labels */
+    {
+        0, 0, /* x, y */
+        20, /* Text height*/
+        "Test",
+        4 /* textLen */
+    },
+    1, /* numLabels */
+
     /* Players */
     {},
 
@@ -72,6 +81,10 @@ const MWG_Map level1 = {
         }
     },
     3, /* numRects */
+
+    /* labels */
+    {},
+    0, /* numLabels */
 
     /* Players */
     {},

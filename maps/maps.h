@@ -34,9 +34,29 @@ typedef struct MWG_MapRect {
     MWG_MapRectFlags flags;
 } MWG_MapRect;
 
+typedef struct MWG_MapLabel {
+
+    /* The position of the top left of the label
+     */
+    int x, y;
+
+    int textHeight;
+
+    /* The width of the label is
+     *  textLen * textHeight */
+
+    char text[16];
+
+    int textLen;
+} MWG_MapLabel;
+
 typedef struct MWG_Map {
     MWG_MapRect rect[MWG_MAX_MAP_RECTS];
     int numRects;
+
+    MWG_MapLabel label[MWG_MAX_MAP_LABELS];
+    int numLabels;
+
     MWG_Player player[MWG_MAX_PLAYER];
     int numPlayers;
 } MWG_Map;
