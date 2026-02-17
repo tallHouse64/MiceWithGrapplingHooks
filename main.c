@@ -42,7 +42,7 @@
  * returns: 0 on success or a negative number on
  *  failure.
  */
-int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
+int MWG_DrawMap(D_Surf * s, MWG_Map * map, D_Surf * font, int cameraX, int cameraY, int zoom){
 
     if(s == D_NULL || map == D_NULL){
         return -1;
@@ -65,6 +65,22 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, int cameraX, int cameraY, int zoom){
         D_FillRect(s, &r, D_rgbaToFormat(s->format, map->rect[i].r, map->rect[i].g, map->rect[i].b, 255));
 
         D_SurfCopyScale(map->rect[i].image, D_NULL, s, &r);
+
+        i++;
+    };
+
+    /* Draw the labels */
+    D_Point textPoint = {0};
+    int textHeight = 0;
+    int labels = MWG_MIN(map->numLabels, MWG_MAX_MAP_LABELS);
+    i = 0;
+    while(i < labels){
+
+        textPoint.x = (((map->label[i].x - cameraX) * 256) / zoom) + (s->w / 2);
+        textPoint.y = (((map->label[i].y - cameraY) * 256) / zoom) + (s->h / 2);
+        textHeight = (map->label[i].textHeight * 256) / zoom;
+
+        D_PrintToSurf(s, font, &textPoint, textHeight, 0, map->label[i].text);
 
         i++;
     };
@@ -669,7 +685,7 @@ int main(int argc, char ** argv){
                 MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], D_NULL, gameState.keyboardState, gameState.map);
             };
 
-            MWG_DrawMap(gameState.out, gameState.map, gameState.map->player[gameState.player1Index].x, gameState.map->player[gameState.player1Index].y, gameState.map->player[gameState.player1Index].zoom);
+            MWG_DrawMap(gameState.out, gameState.map, gameState.fontImage, gameState.map->player[gameState.player1Index].x, gameState.map->player[gameState.player1Index].y, gameState.map->player[gameState.player1Index].zoom);
 
 
             MWG_DrawMenu(gameState.out, gameState.menu, gameState.fontImage, gameState.map->player[gameState.player1Index].zoom);
