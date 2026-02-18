@@ -44,9 +44,17 @@ const MWG_Map testMap = {
             0, 0, /* tpX, tpY */
             MWG_MAP_RECT_CANT_GRAPPLE |
             MWG_MAP_RECT_INTANGIBLE
+        },
+        {
+            400, 100, 100, 100,
+            D_NULL,
+            237, 59, 53, /* 240, 84, 79 */
+            8,
+            50, -50, /* tpX, tpY */
+            MWG_MAP_RECT_TELEPORT
         }
     },
-    5, /* numRects */
+    6, /* numRects */
 
     /* labels */
     {
