@@ -43,6 +43,12 @@ typedef struct MWG_MapRect {
      *  works in game (read the above declaration
      *  of MWG_MapRectFlags). */
     MWG_MapRectFlags flags;
+
+    /* If powerup is set to anything other than
+     *  MWG_POWERUP_NONE, then any player that
+     *  touches this rectangle is given a power
+     *  up.*/
+    MWG_Powerup powerup;
 } MWG_MapRect;
 
 typedef struct MWG_MapLabel {
