@@ -8,13 +8,15 @@ const MWG_Map testMap = {
             -250, 30, 500, 40,
             D_NULL,
             17, 127, 11,
-            8
+            8,
+            0, 0, /* tpX, tpY */
         },
         {
             -200, -210, 100, 100,
             D_NULL,
             17, 127, 11,
-            8
+            8,
+            0, 0, /* tpX, tpY */
         },
         {
             200, -100, 100, 100,
@@ -22,6 +24,7 @@ const MWG_Map testMap = {
             8, 63, 5,
             /*Could use this colour 17, 80, 43*/
             8,
+            0, 0, /* tpX, tpY */
             MWG_MAP_RECT_INTANGIBLE
         },
         {
@@ -30,6 +33,7 @@ const MWG_Map testMap = {
             57, 148, 52,
             /*Could use this colour 14, 131, 52*/
             8,
+            0, 0, /* tpX, tpY */
             MWG_MAP_RECT_CANT_GRAPPLE
         },
         {
@@ -37,6 +41,7 @@ const MWG_Map testMap = {
             D_NULL,
             85, 85, 85,
             8,
+            0, 0, /* tpX, tpY */
             MWG_MAP_RECT_CANT_GRAPPLE |
             MWG_MAP_RECT_INTANGIBLE
         }
@@ -65,19 +70,22 @@ const MWG_Map level1 = {
             -250, 40, 400, 70,
             D_NULL,
             17, 127, 11,
-            256
+            256,
+            0, 0, /* tpX, tpY */
         },
         {
             -250, -290, 70, 400,
             D_NULL,
             17, 127, 11,
-            256
+            256,
+            0, 0, /* tpX, tpY */
         },
         {
             -250, -290, 400, 70,
             D_NULL,
             17, 127, 11,
-            256
+            256,
+            0, 0, /* tpX, tpY */
         }
     },
     3, /* numRects */

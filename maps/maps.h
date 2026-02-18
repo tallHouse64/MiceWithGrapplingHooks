@@ -14,7 +14,8 @@
 typedef enum MWG_MapRectFlags {
     MWG_MAP_RECT_NO_FLAGS     = 0,
     MWG_MAP_RECT_INTANGIBLE   = 0x1,
-    MWG_MAP_RECT_CANT_GRAPPLE = 0x2
+    MWG_MAP_RECT_CANT_GRAPPLE = 0x2,
+    MWG_MAP_RECT_TELEPORT     = 0x4
 } MWG_MapRectFlags;
 
 typedef struct MWG_MapRect {
@@ -27,6 +28,11 @@ typedef struct MWG_MapRect {
 
     /* friction can be between 0 and 256 */
     int friction;
+
+    /* If the teleport flag is set then players
+     *  that touch this rectangle teleport to
+     *  this position. */
+    int tpX, tpY;
 
     /* These flags control how the rectangle
      *  works in game (read the above declaration
