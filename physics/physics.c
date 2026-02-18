@@ -663,6 +663,22 @@ int MWG_CalcPhysics(MWG_Map * map){
             newY = LERP_INT(map->player[i].oldY, map->player[i].y, -256);
 
             if(MWG_ResolveCollision(&map->player[i], &map->rect[j], &newX, &newY)){
+
+                if(map->rect[j].flags & MWG_MAP_RECT_TELEPORT){
+
+                    map->player[i].oldX = map->rect[j].tpX - (map->player[i].x - map->player[i].oldX);
+                    map->player[i].oldY = map->rect[j].tpY - (map->player[i].y - map->player[i].oldY);
+
+                    map->player[i].x = map->rect[j].tpX;
+                    map->player[i].y = map->rect[j].tpY;
+
+                    /* When you teleport, release
+                     *  the grappling hook. */
+                    map->player[i].hookState = MWG_HOOK_UNATTACHED;
+
+                    continue;
+                };
+
                 map->player[i].x = newX;
                 map->player[i].y = newY;
             };
