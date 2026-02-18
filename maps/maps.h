@@ -18,6 +18,11 @@ typedef enum MWG_MapRectFlags {
     MWG_MAP_RECT_TELEPORT     = 0x4
 } MWG_MapRectFlags;
 
+typedef enum MWG_Powerup {
+    MWG_POWERUP_NONE = 0,
+    MWG_POWERUP_WINGS
+} MWG_Powerup;
+
 typedef struct MWG_MapRect {
     int x, y, w, h;
 
