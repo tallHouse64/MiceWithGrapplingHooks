@@ -38,6 +38,22 @@ typedef struct MWG_MapRect {
      *  works in game (read the above declaration
      *  of MWG_MapRectFlags). */
     MWG_MapRectFlags flags;
+
+    /* If a player touches this rectangle, then
+     *  the flags that are set (to 1) in
+     *  enableFlags will also be set (to 1) on
+     *  the player. The flags that are not set
+     *  (they are 0), these will be ignored and
+     *  not affect the player. This is how
+     *  powerups work. */
+    MWG_PlayerFlags enableFlags;
+
+    /* If a player touches this rectangle, then
+     *  the flags set (to 1) in disableFlags will
+     *  be turned off (set to 0) on the player.
+     *  The flags that are 0 are ignored and do
+     *  not affect the player. */
+    MWG_PlayerFlags disableFlags;
 } MWG_MapRect;
 
 typedef struct MWG_MapLabel {
