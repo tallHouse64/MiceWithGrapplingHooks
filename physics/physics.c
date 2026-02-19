@@ -679,6 +679,14 @@ int MWG_CalcPhysics(MWG_Map * map){
                     continue;
                 };
 
+                /* Enable flags that this
+                 *  rectangle enables. */
+                map->player[i].flags = map->player[i].flags | map->rect[j].enableFlags;
+
+                /* Disable player flags that this
+                 *  rectangle disables. */
+                map->player[i].flags = map->player[i].flags & (~map->rect[j].disableFlags);
+
                 map->player[i].x = newX;
                 map->player[i].y = newY;
             };
