@@ -18,11 +18,6 @@ typedef enum MWG_MapRectFlags {
     MWG_MAP_RECT_TELEPORT     = 0x4
 } MWG_MapRectFlags;
 
-typedef enum MWG_Powerup {
-    MWG_POWERUP_NONE = 0,
-    MWG_POWERUP_WINGS
-} MWG_Powerup;
-
 typedef struct MWG_MapRect {
     int x, y, w, h;
 
@@ -43,12 +38,6 @@ typedef struct MWG_MapRect {
      *  works in game (read the above declaration
      *  of MWG_MapRectFlags). */
     MWG_MapRectFlags flags;
-
-    /* If powerup is set to anything other than
-     *  MWG_POWERUP_NONE, then any player that
-     *  touches this rectangle is given a power
-     *  up.*/
-    MWG_Powerup powerup;
 } MWG_MapRect;
 
 typedef struct MWG_MapLabel {
