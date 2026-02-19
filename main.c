@@ -405,7 +405,8 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
 
     if(e != D_NULL){
         if(e->type == D_KEYDOWN){
-            if(e->keyboard.key == D_KSpace && (p->collisionDirection & MWG_COLLISION_DIR_DOWN)){
+            if(e->keyboard.key == D_KSpace &&
+                ((p->collisionDirection & MWG_COLLISION_DIR_DOWN) || (p->flags & MWG_PLAYER_HAS_WINGS))){
 
                 /* Jump when the space key goes
                  *  down. */
