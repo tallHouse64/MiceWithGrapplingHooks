@@ -26,3 +26,6 @@ tests/detectCollisionTest
 tests/detectCollisionTest.exe
 tests/lerpinttest
 tests/lerpinttest.exe
+
+#Ignore the generated build files for nds
+nds
