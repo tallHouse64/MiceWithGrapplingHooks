@@ -52,9 +52,37 @@ const MWG_Map testMap = {
             8,
             50, -50, /* tpX, tpY */
             MWG_MAP_RECT_TELEPORT
+        },
+        {
+            -300, -30, 50, 50,
+            D_NULL,
+            255, 255, 255,
+            8,
+            50, -50, /* tpX, tpY */
+            MWG_MAP_RECT_NO_FLAGS,
+
+            /* Enable player flags */
+            MWG_PLAYER_HAS_WINGS,
+
+            /* Disable player flags */
+            MWG_PLAYER_NO_FLAG
+        },
+        {
+            200, -30, 50, 50,
+            D_NULL,
+            0, 0, 0,
+            8,
+            50, -50, /* tpX, tpY */
+            MWG_MAP_RECT_NO_FLAGS,
+
+            /* Enable player flags */
+            MWG_PLAYER_NO_FLAG,
+
+            /* Disable player flags */
+            MWG_PLAYER_HAS_WINGS
         }
     },
-    6, /* numRects */
+    8, /* numRects */
 
     /* labels */
     {
