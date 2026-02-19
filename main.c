@@ -9,6 +9,9 @@
 #ifdef WEB
 #include"platform/webd.h"
 
+#elif defined(NDS)
+#include"platform/ndsd.h"
+
 #else
 #include"platform/sdld.h"
 
