@@ -38,7 +38,7 @@ nds: $(IMAGE_HEADERS)
 	cp -R platform nds/source/
 	cp specialNdsMakefile nds/Makefile
 	# Handle the assets folder seperately
-	mkdir nds/source/assets
+	-mkdir nds/source/assets
 	cp assets/mouse.h nds/source/assets/mouse.h
 	cp assets/font.h nds/source/assets/font.h
 	$(MAKE) -C nds
