@@ -25,6 +25,11 @@ web:
 nds: $(IMAGE_HEADERS)
 	-mkdir nds
 	-mkdir nds/source
+	-mkdir nds/source/physics
+	-mkdir nds/source/assets
+	-mkdir nds/source/maps
+	-mkdir nds/source/menus
+	-mkdir nds/source/assets
 	# Copy all the source files to nds/source
 	cp main.c nds/source/main.c
 	cp main.h nds/source/main.h
@@ -32,18 +37,22 @@ nds: $(IMAGE_HEADERS)
 	cp devents.h nds/source/devents.h
 	cp dplatform.h nds/source/dplatform.h
 	cp beginCode.h nds/source/beginCode.h
-	cp -R physics nds/source/
-	cp -R maps nds/source/
-	cp -R menus nds/source/
+	# Copy physics
+	cp physics/physics.c nds/source/physics/physics.c
+	cp physics/physics.h nds/source/physics/physics.h
+	# Copy maps
+	cp maps/maps.c nds/source/maps/maps.c
+	cp maps/maps.h nds/source/maps/maps.h
+	# Copy menus
+	cp menus/menus.c nds/source/menus/menus.c
+	cp menus/menus.h nds/source/menus/menus.h
+	# Copy platform
 	cp -R platform nds/source/
-	cp specialNdsMakefile nds/Makefile
-	# Handle the assets folder seperately
-	-mkdir nds/source/assets
+	# Copy assets
 	cp assets/mouse.h nds/source/assets/mouse.h
+	cp assets/icon.png nds/source/assets/icon.png
 	cp assets/font.h nds/source/assets/font.h
-	$(MAKE) -C nds
-	# Rename the ROM (DS executable)
-	mv nds/nds.nds nds/MWGH.nds
+	$(MAKE) --makefile=../ndsMakefile --directory=nds
 
 main.o: main.c $(IMAGE_HEADERS)
 	$(CC) main.c -c -o main.o $(FLAGS)
