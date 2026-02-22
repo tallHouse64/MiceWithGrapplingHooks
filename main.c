@@ -633,6 +633,9 @@ int main(int argc, char ** argv){
     gameState.player1.flags = MWG_PLAYER_NO_FLAG;
     gameState.player1.drawingRect = -1;
 
+#ifdef NDS
+    gameState.player1.zoom = 512;
+#endif
 
 
     D_StartEvents();
