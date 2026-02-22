@@ -4,6 +4,21 @@
 #include"menus.h"
 #include"../maps/maps.h"
 
+#ifdef NDS
+/* This is temporary */
+#include<nds.h>
+#else
+
+/* This is also a hack to get the code to compile
+ *  for PC */
+#define KEY_UP 0
+#define KEY_DOWN 0
+#define KEY_LEFT 0
+#define KEY_RIGHT 0
+#define KEY_A 0
+
+#endif
+
 const MWG_Menu mainMenu = {
     0,
     {
@@ -361,6 +376,22 @@ int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
  */
 int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, MWG_Player * player, int * playerIndex, MWG_GameState * gameState){
 
+    /* Keys up on a DS */
+    D_uint32 keysReleased = 0;
+
+#ifdef NDS
+    /* This is a hack to get input working on a
+     *  DS and should be removed after drws-lib
+     *  gets controller support. */
+
+    keysReleased = keysUp();
+
+    /* These 2 lines especially are a hack */
+    e->type = D_KEYDOWN;
+    e->keyboard.key = D_KNone;
+
+#endif
+
     MWG_Menu emptyMenu = {
         -1, /* hoveredButton */
         {}, /* buttons */
@@ -386,25 +417,25 @@ int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, MWG_Player * pl
                 *menu = editorMenu;
             };
 
-            if((e->keyboard.key == D_Kw || e->keyboard.key == D_KUp) && menu->button[menu->hoveredButton].upButton >= 0){
+            if((e->keyboard.key == D_Kw || e->keyboard.key == D_KUp || (keysReleased & KEY_UP)) && menu->button[menu->hoveredButton].upButton >= 0){
                 menu->hoveredButton = menu->button[menu->hoveredButton].upButton;
             };
 
-            if((e->keyboard.key == D_Ks || e->keyboard.key == D_KDown) && menu->button[menu->hoveredButton].downButton >= 0){
+            if((e->keyboard.key == D_Ks || e->keyboard.key == D_KDown || (keysReleased & KEY_DOWN)) && menu->button[menu->hoveredButton].downButton >= 0){
                 menu->hoveredButton = menu->button[menu->hoveredButton].downButton;
             };
 
-            if((e->keyboard.key == D_Ka || e->keyboard.key == D_KLeft) && menu->button[menu->hoveredButton].leftButton >= 0){
+            if((e->keyboard.key == D_Ka || e->keyboard.key == D_KLeft || (keysReleased & KEY_LEFT)) && menu->button[menu->hoveredButton].leftButton >= 0){
                 menu->hoveredButton = menu->button[menu->hoveredButton].leftButton;
             };
 
-            if((e->keyboard.key == D_Kd || e->keyboard.key == D_KRight) && menu->button[menu->hoveredButton].rightButton >= 0){
+            if((e->keyboard.key == D_Kd || e->keyboard.key == D_KRight || (keysReleased & KEY_RIGHT)) && menu->button[menu->hoveredButton].rightButton >= 0){
                 menu->hoveredButton = menu->button[menu->hoveredButton].rightButton;
             };
 
             /* If space or enter have been
              *  pressed. */
-            if(e->keyboard.key == D_KSpace || e->keyboard.key == D_KEnter){
+            if(e->keyboard.key == D_KSpace || e->keyboard.key == D_KEnter || (keysReleased & KEY_A)){
 
                 if(gameState != D_NULL){
                     MWG_RunAction(&menu->button[menu->hoveredButton].action, gameState);

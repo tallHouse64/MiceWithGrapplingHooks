@@ -677,6 +677,18 @@ int main(int argc, char ** argv){
         MWG_CalcPhysics(gameState.map);
 
 
+#ifdef NDS
+        /* This is a hack to get controller input
+         *  working and should be removed after
+         *  drws-lib gets controller support. */
+        if(gameState.menu->numButtons <= 0 && gameState.player1Index >= 0){
+            MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], &e, D_NULL, gameState.map);
+        };
+
+        MWG_ControlMenu(gameState.menu, &e, gameState.map, &gameState.player1, &gameState.player1Index, &gameState);
+#endif
+
+
         D_FillRect(gameState.out, D_NULL, D_rgbaToFormat(gameState.out->format, 181, 233, 255, 255));
 
 
