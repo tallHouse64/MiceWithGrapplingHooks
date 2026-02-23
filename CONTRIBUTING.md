@@ -22,6 +22,7 @@ MWGH is built using drws-lib, it inherits the same ideas when it comes to cross 
 
 If any file includes a header using angle brackets ("<" and ">"), this is a bug. Unless it's in an optional dependency or if the code does not end up in the final executable (like assets/convert.c). Including files with double quote marks is okay, as long as those files are in the repository.
 
+It's okay to include headers with angle brackets temporarily as a "hack" to make what would otherwise be impossible. As long as the include line is conditionally included so it only affects specific platforms. This probably means that drws-lib doesn't have a feature that makes the "hack" necessary.
 
 ## Cross compiling
 
