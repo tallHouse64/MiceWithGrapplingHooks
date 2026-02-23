@@ -398,18 +398,18 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
  */
 int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_Map * map){
 
-    /* Keys held on a DS */
+    /* Keys held on a DS (key state) */
     D_uint32 keys = 0;
 
-    /* Keys released on a DS */
-    D_uint32 keysReleased = 0;
+    /* Keys down on a DS (went down this frame) */
+    D_uint32 keysPressed = 0;
 
 #ifdef NDS
     /* This is a hack to get input working on a
      *  DS and should be removed after drws-lib
      *  gets controller support. */
     keys = keysHeld();
-    keysReleased = keysUp();
+    keysPressed = keysDown();
 #endif
 
     /* The code below only handles player input
@@ -422,7 +422,7 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
 
     if(e != D_NULL){
         if(e->type == D_KEYDOWN){
-            if((e->keyboard.key == D_KSpace || (keysReleased & KEY_A)) &&
+            if((e->keyboard.key == D_KSpace || (keysPressed & KEY_A)) &&
                 ((p->collisionDirection & MWG_COLLISION_DIR_DOWN) || (p->flags & MWG_PLAYER_HAS_WINGS))){
 
                 /* Jump when the space key goes
