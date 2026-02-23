@@ -398,6 +398,20 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
  */
 int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_Map * map){
 
+    /* Keys held on a DS */
+    D_uint32 keys = 0;
+
+    /* Keys released on a DS */
+    D_uint32 keysReleased = 0;
+
+#ifdef NDS
+    /* This is a hack to get input working on a
+     *  DS and should be removed after drws-lib
+     *  gets controller support. */
+    keys = keysHeld();
+    keysReleased = keysUp();
+#endif
+
     /* The code below only handles player input
      *  on a map (not a menu). This is why it
      *  returns -1 if p is null. */
@@ -408,7 +422,7 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
 
     if(e != D_NULL){
         if(e->type == D_KEYDOWN){
-            if(e->keyboard.key == D_KSpace &&
+            if((e->keyboard.key == D_KSpace || (keysReleased & KEY_A)) &&
                 ((p->collisionDirection & MWG_COLLISION_DIR_DOWN) || (p->flags & MWG_PLAYER_HAS_WINGS))){
 
                 /* Jump when the space key goes
@@ -417,6 +431,7 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
             };
         };
     };
+
 
     /* At this point onwards in the function, all
      *  the key press checks need keyboard state
@@ -430,7 +445,7 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
     };
 
     /* When a is pressed move left */
-    if(keyboardState[D_Ka]){
+    if(keyboardState[D_Ka] || (keys & KEY_LEFT)){
         p->oldX += (78 * DELAY) / 256;
 
         /* Is the player looking right? */
@@ -442,7 +457,7 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
     };
 
     /* When d is pressed move right */
-    if(keyboardState[D_Kd]){
+    if(keyboardState[D_Kd] || (keys & KEY_RIGHT)){
         p->oldX -= (78 * DELAY) / 256;
 
         /* Is the player looking left? */
@@ -455,7 +470,7 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
 
     /* When e is pressed change the player's
      *  angle */
-    if(keyboardState[D_Ke]){
+    if(keyboardState[D_Ke] || (keys & KEY_R)){
 
         /* Is the player looking right? */
         if( p->angle <= 90 && p->angle >= -90){
@@ -485,7 +500,7 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
 
     /* When q is pressed change the player's
      *  angle (the opposite way) */
-    if(keyboardState[D_Kq]){
+    if(keyboardState[D_Kq] || (keys & KEY_L)){
 
         /* Is the player looking right? */
         if( p->angle <= 90 && p->angle >= -90){
@@ -513,7 +528,7 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
         };
     };
 
-    if(keyboardState[D_Kw]){
+    if(keyboardState[D_Kw] || (keys & KEY_UP)){
 
         /* If the player is flying, move up */
         if(p->flags & MWG_PLAYER_FLYING){
@@ -527,7 +542,7 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
         };
     };
 
-    if(keyboardState[D_Ks]){
+    if(keyboardState[D_Ks] || (keys & KEY_DOWN)){
 
         /* If the player is flying, move down */
         if(p->flags & MWG_PLAYER_FLYING){
@@ -542,13 +557,13 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
     };
 
     /* If the player is flying, move up */
-    if(keyboardState[D_KSpace] && p->flags & MWG_PLAYER_FLYING){
+    if((keyboardState[D_KSpace] || (keys & KEY_A)) && p->flags & MWG_PLAYER_FLYING){
         p->oldY += (78 * DELAY) / 256;
     };
 
     /* Control zoom with the i and o keys */
-    if(keyboardState[D_Ki]){p->zoom -= 10;};
-    if(keyboardState[D_Ko]){p->zoom += 10;};
+    if(keyboardState[D_Ki] || (keys & KEY_X)){p->zoom -= 10;};
+    if(keyboardState[D_Ko] || (keys & KEY_Y)){p->zoom += 10;};
 
     return 0;
 };
