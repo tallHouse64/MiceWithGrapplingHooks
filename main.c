@@ -15,6 +15,18 @@
 #else
 #include"platform/sdld.h"
 
+/* These define statements are temporary code so
+ *  the program compiles for PC. */
+#define KEY_UP 0
+#define KEY_DOWN 0
+#define KEY_LEFT 0
+#define KEY_RIGHT 0
+#define KEY_A 0
+#define KEY_R 0
+#define KEY_L 0
+#define KEY_X 0
+#define KEY_Y 0
+
 #endif
 
 
