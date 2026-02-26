@@ -17,6 +17,7 @@
 #define KEY_RIGHT 0
 #define KEY_A 0
 #define KEY_START 0
+#define KEY_SELECT 0
 
 #endif
 
@@ -416,10 +417,11 @@ int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, MWG_Player * pl
                 menu->hoveredButton = 0;
             };
 
-            /* If 0 is pressed and there is no
+            /* If 0 is pressed (or select is
+             *  pressed on nds) and there is no
              *  menu onscreen, then open the
              *  editor menu. */
-            if(e->keyboard.key == D_K0 && menu->numButtons <= 0){
+            if((e->keyboard.key == D_K0 || (keysReleased & KEY_SELECT)) && menu->numButtons <= 0){
                 *menu = editorMenu;
             };
 
