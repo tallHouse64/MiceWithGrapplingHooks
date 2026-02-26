@@ -350,7 +350,9 @@ int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
  *
  * If 0 gets pressed and there is no menu open
  *  (numButtons is 0), this function opens the
- *  editor menu by overwriting "menu".
+ *  editor menu by overwriting "menu". This also
+ *  happens when escape is pressed except the
+ *  pause menu opens.
  *
  * Some buttons need to change the game state,
  *  like "quit". This is what the gameState
@@ -413,8 +415,18 @@ int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, MWG_Player * pl
                 menu->hoveredButton = 0;
             };
 
+            /* If 0 is pressed and there is no
+             *  menu onscreen, then open the
+             *  editor menu. */
             if(e->keyboard.key == D_K0 && menu->numButtons <= 0){
                 *menu = editorMenu;
+            };
+
+            /* If escape is pressed and there is
+             *  no menu onscreen, then open the
+             *  pause menu. */
+            if(e->keyboard.key == D_KEscape && menu->numButtons <= 0){
+                *menu = pauseMenu;
             };
 
             if((e->keyboard.key == D_Kw || e->keyboard.key == D_KUp || (keysReleased & KEY_UP)) && menu->button[menu->hoveredButton].upButton >= 0){
