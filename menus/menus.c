@@ -16,6 +16,7 @@
 #define KEY_LEFT 0
 #define KEY_RIGHT 0
 #define KEY_A 0
+#define KEY_START 0
 
 #endif
 
@@ -422,10 +423,11 @@ int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, MWG_Player * pl
                 *menu = editorMenu;
             };
 
-            /* If escape is pressed and there is
-             *  no menu onscreen, then open the
+            /* If escape is pressed (or start is
+             *  pressed on nds) and there is no
+             *  menu onscreen, then open the
              *  pause menu. */
-            if(e->keyboard.key == D_KEscape && menu->numButtons <= 0){
+            if((e->keyboard.key == D_KEscape || keysReleased & KEY_START) && menu->numButtons <= 0){
                 *menu = pauseMenu;
             };
 
