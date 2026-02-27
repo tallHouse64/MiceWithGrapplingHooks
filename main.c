@@ -234,9 +234,14 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
      *  complex plane. */
 
     /* Note that this pR and pC rotate a point by
-     *  0.01 degrees, not 1 degree. */
-    const D_double pR = 0.999999984769;
-    const D_double pC = 0.000174532924313;
+     *  1 degree. */
+    const D_double pR = 0.999847695156;
+    const D_double pC = 0.0174524064373;
+
+    /* Note that this pRSmall and pCSmall rotate
+     *  a point by 0.01 degrees, not 1 degree. */
+    const D_double pRSmall = 0.999999984769;
+    const D_double pCSmall = 0.000174532924313;
 
     D_double temp = 0;
 
@@ -252,11 +257,21 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
     /* Convert angle2 from degrees to a point on
      *  the complex plane */
     D_double reps = 0;
+    while(reps < (angle2 - 0.99)){
+
+        /* Add 1 degree to degR and degC */
+        temp = D_COMPLEXMULTR(hookDirectionX, hookDirectionY, pR, pC);
+        hookDirectionY = D_COMPLEXMULTC(hookDirectionX, hookDirectionY, pR, pC);
+        hookDirectionX = temp;
+
+        reps += 1;
+    };
+
     while(reps < angle2){
 
         /* Add 0.01 degree to degR and degC */
-        temp = D_COMPLEXMULTR(hookDirectionX, hookDirectionY, pR, pC);
-        hookDirectionY = D_COMPLEXMULTC(hookDirectionX, hookDirectionY, pR, pC);
+        temp = D_COMPLEXMULTR(hookDirectionX, hookDirectionY, pRSmall, pCSmall);
+        hookDirectionY = D_COMPLEXMULTC(hookDirectionX, hookDirectionY, pRSmall, pCSmall);
         hookDirectionX = temp;
 
         reps += 0.01;
