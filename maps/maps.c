@@ -136,6 +136,28 @@ const MWG_Map level1 = {
     0 /* numPlayers*/
 };
 
+const MWG_Map level2 = {
+    {
+    {
+        -250, 40, 400, 70,
+        D_NULL,
+        17, 127, 11,
+        256,
+        0, 0, /* tpX, tpY */
+    }
+    },
+    1, /* numRects */
+
+    /* labels */
+    {},
+    0, /* numLabels */
+
+    /* Players */
+    {},
+
+    0 /* numPlayers*/
+};
+
 /* This function adds a rectangle to a map.
  *
  * The rectangle gets copied into the map so it
