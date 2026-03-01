@@ -138,19 +138,159 @@ const MWG_Map level1 = {
 
 const MWG_Map level2 = {
     {
-    {
-        -250, 40, 400, 70,
+    { /* 0 */
+        -60, 20, 160, 40,
         D_NULL,
         17, 127, 11,
         256,
         0, 0, /* tpX, tpY */
+    },
+    { /* 1 */
+        100, -140, 1120, 40,
+        D_NULL,
+        17, 127, 11,
+        256,
+        0, 0, /* tpX, tpY */
+    },
+    { /* 2 */
+        300, -340, 1100, 40,
+        D_NULL,
+        17, 127, 11,
+        256,
+        0, 0, /* tpX, tpY */
+    },
+    { /* 3 */
+        100, -540, 1100, 40,
+        D_NULL,
+        17, 127, 11,
+        256,
+        0, 0, /* tpX, tpY */
+    },
+    { /* 4 */
+        300, -740, 1100, 40,
+        D_NULL,
+        17, 127, 11,
+        256,
+        0, 0, /* tpX, tpY */
+    },
+    { /* 5 */
+        100, -940, 1100, 40,
+        D_NULL,
+        17, 127, 11,
+        256,
+        0, 0, /* tpX, tpY */
+    },
+    { /* 6 */
+        80, -940, 40, 840,
+        D_NULL,
+        17, 127, 11,
+        256,
+        0, 0, /* tpX, tpY */
+    },
+    { /* 7 */
+        1380, -940, 40, 960,
+        D_NULL,
+        17, 127, 11,
+        256,
+        0, 0, /* tpX, tpY */
+    },
+    { /* 8 */
+        1340, -1220, 120, 40,
+        D_NULL,
+        17, 127, 11,
+        256,
+        0, 0, /* tpX, tpY */
+    },
+    { /* 9 */
+        -380, -740, 460, 40,
+        D_NULL,
+        237, 59, 53,
+        256,
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_TELEPORT |
+        MWG_MAP_RECT_CANT_GRAPPLE
+    },
+    { /* 10 */
+        120, -160, 1020, 20,
+        D_NULL,
+        237, 59, 53,
+        256,
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_TELEPORT
+    },
+    { /* 11 */
+        360, -360, 1020, 20,
+        D_NULL,
+        237, 59, 53,
+        256,
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_TELEPORT
+    },
+    { /* 12 */
+        120, -560, 1020, 20,
+        D_NULL,
+        237, 59, 53,
+        256,
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_TELEPORT
+    },
+    { /* 13 */
+        360, -760, 1020, 20,
+        D_NULL,
+        237, 59, 53,
+        256,
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_TELEPORT
+    },
+    { /* 14 */
+        -2100, 1040, 5000, 760,
+        D_NULL,
+        181, 233, 255,
+        256,
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_TELEPORT |
+        MWG_MAP_RECT_CANT_GRAPPLE
     }
     },
-    1, /* numRects */
+    15, /* numRects */
 
     /* labels */
-    {},
-    0, /* numLabels */
+    {
+    {
+        580, -940, /* x, y */
+        20, /* Text height*/
+#ifdef NDS
+        "Hold X or Y to",
+#else
+        "Hold i or o to",
+#endif
+        14 /* textLen */
+    },
+    {
+        880, -940, /* x, y */
+        20, /* Text height*/
+        "zoom in or out",
+        14 /* textLen */
+    },
+    {
+        120, -140, /* x, y */
+        20, /* Text height*/
+        "Hold",
+        9 /* textLen */
+    },
+    {
+        220, -140, /* x, y */
+        20, /* Text height*/
+#ifdef NDS
+        "Up to zipline",
+        13 /* textLen */
+#else
+        "W to zipline",
+        12 /* textLen */
+#endif
+    }
+    },
+    4, /* numLabels */
 
     /* Players */
     {},
