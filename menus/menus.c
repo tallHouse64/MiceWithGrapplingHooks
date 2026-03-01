@@ -62,7 +62,7 @@ const MWG_Menu levelMenu = {
         {-135, -25, 100, 25},
         "Back",
         4,
-        3,  /* Press up for test level */
+        4,  /* Press up for test level */
         -1, /* Pressing down does nothing */
         -1, /* Pressing left does nothing */
         1,  /* Press right for level 1 */
@@ -75,7 +75,7 @@ const MWG_Menu levelMenu = {
         {-25, -25, 50, 50},
         "1",
         1,
-        3,  /* Press up for test level */
+        4,  /* Press up for test level */
         -1, /* Pressing down does nothing */
         0,  /* Press left for the back button */
         2,  /* Press right for level 2 */
@@ -88,12 +88,25 @@ const MWG_Menu levelMenu = {
         {35, -25, 50, 50},
         "2",
         1,
-        3,  /* Press up for test level */
+        4,  /* Press up for test level */
         -1, /* Pressing down does nothing */
         1,  /* Press left for level 1 */
-        -1, /* Pressing right does nothing */
+        3,  /* Press left for level 3 */
         D_NULL,
         &level2,
+        0, 0, 0, /* Colour */
+        100, 100, 100 /* Hover colour */
+    },
+    {
+        {95, -25, 50, 50}, /* x, y, w, h */
+        "3", /* Text */
+        1, /* Text length */
+        4,  /* Press up for test level */
+        -1, /* Pressing down does nothing */
+        2,  /* Press left for level 2 */
+        -1, /* Pressing right does nothing */
+        D_NULL, /* Open this menu on press */
+        &level3, /* Open this map on press */
         0, 0, 0, /* Colour */
         100, 100, 100 /* Hover colour */
     },
@@ -111,7 +124,7 @@ const MWG_Menu levelMenu = {
         100, 100, 100 /* Hover colour */
     }
     },
-    4 /* Num buttons */
+    5 /* Num buttons */
 };
 
 const MWG_Menu pauseMenu = {

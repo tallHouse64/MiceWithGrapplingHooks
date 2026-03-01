@@ -90,6 +90,8 @@ extern const MWG_Map level1;
 
 extern const MWG_Map level2;
 
+extern const MWG_Map level3;
+
 
 int MWG_AddMapRect(MWG_Map * map, MWG_MapRect * r);
 
