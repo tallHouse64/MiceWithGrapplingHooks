@@ -301,20 +301,195 @@ const MWG_Map level2 = {
 const MWG_Map level3 = {
     /* MapRects */
     {
-    {
-        -250, 40, 400, 70, /* x, y, w, h */
+    { /* 0 */
+        -120, 20, 280, 40, /* x, y, w, h */
         D_NULL, /* Image */
         17, 127, 11, /* Colour*/
         256, /* friction */
         0, 0, /* tpX, tpY */
         MWG_MAP_RECT_NO_FLAGS /* Flags */
+    },
+    { /* 1 */
+        -280, -340, 2680, 20, /* x, y, w, h */
+        D_NULL, /* Image */
+        8, 63, 5, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE /* Flags */
+    },
+    { /* 2 */
+        -280, -700, 2680, 20, /* x, y, w, h */
+        D_NULL, /* Image */
+        8, 63, 5, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE /* Flags */
+    },
+    { /* 3 */
+        -280, -1060, 2680, 20, /* x, y, w, h */
+        D_NULL, /* Image */
+        8, 63, 5, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE /* Flags */
+    },
+    { /* 4 */
+        -280, -1420, 2680, 20, /* x, y, w, h */
+        D_NULL, /* Image */
+        8, 63, 5, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE /* Flags */
+    },
+    { /* 5 */
+        -280, -1780, 2680, 20, /* x, y, w, h */
+        D_NULL, /* Image */
+        8, 63, 5, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE /* Flags */
+    },
+    { /* 6 */
+        0, -1880, 20, 1660, /* x, y, w, h */
+        D_NULL, /* Image */
+        8, 63, 5, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE /* Flags */
+    },
+    { /* 7 */
+        360, -1880, 20, 1660, /* x, y, w, h */
+        D_NULL, /* Image */
+        8, 63, 5, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE /* Flags */
+    },
+    { /* 8 */
+        720, -1880, 20, 1660, /* x, y, w, h */
+        D_NULL, /* Image */
+        8, 63, 5, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE /* Flags */
+    },
+    { /* 9 */
+        1080, -1880, 20, 1660, /* x, y, w, h */
+        D_NULL, /* Image */
+        8, 63, 5, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE /* Flags */
+    },
+    { /* 10 */
+        1440, -1880, 20, 1660, /* x, y, w, h */
+        D_NULL, /* Image */
+        8, 63, 5, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE /* Flags */
+    },
+    { /* 11 */
+        1800, -1880, 20, 1660, /* x, y, w, h */
+        D_NULL, /* Image */
+        8, 63, 5, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE /* Flags */
+    },
+    { /* 12 */
+        2160, -1880, 20, 1660, /* x, y, w, h */
+        D_NULL, /* Image */
+        8, 63, 5, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE /* Flags */
+    },
+    { /* 13 */
+        4860, 940, 400, 380, /* x, y, w, h */
+        D_NULL, /* Image */
+        17, 127, 11, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_NO_FLAGS /* Flags */
+    },
+    { /* 14 */
+        -240, 440, 520, 80, /* x, y, w, h */
+        D_NULL, /* Image */
+        117, 176, 255, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE | /* Flags */
+        MWG_MAP_RECT_CANT_GRAPPLE
+    },
+    { /* 15 */
+        40, 360, 160, 240, /* x, y, w, h */
+        D_NULL, /* Image */
+        117, 176, 255, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE | /* Flags */
+        MWG_MAP_RECT_CANT_GRAPPLE
+    },
+    { /* 16 */
+        40, 280, 80, 400, /* x, y, w, h */
+        D_NULL, /* Image */
+        117, 176, 255, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE | /* Flags */
+        MWG_MAP_RECT_CANT_GRAPPLE
+    },
+    { /* 17 */
+        5000, -1580, 120, 2340, /* x, y, w, h */
+        D_NULL, /* Image */
+        117, 176, 255, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE | /* Flags */
+        MWG_MAP_RECT_CANT_GRAPPLE
+    },
+    { /* 18 */
+        4900, 400, 320, 240, /* x, y, w, h */
+        D_NULL, /* Image */
+        117, 176, 255, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE | /* Flags */
+        MWG_MAP_RECT_CANT_GRAPPLE
+    },
+    { /* 19 */
+        4800, 400, 520, 120, /* x, y, w, h */
+        D_NULL, /* Image */
+        117, 176, 255, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_INTANGIBLE | /* Flags */
+        MWG_MAP_RECT_CANT_GRAPPLE
+    },
+    { /* 20 (this rectangle is not in level3.png,
+         it would be too big) */
+        -3877, 1800, 12594, 4000,/* x, y, w, h */
+        D_NULL, /* Image */
+        117, 176, 255, /* Colour*/
+        256, /* friction */
+        0, 0, /* tpX, tpY */
+        MWG_MAP_RECT_TELEPORT | /* Flags */
+        MWG_MAP_RECT_CANT_GRAPPLE
     }
     },
-    1, /* numRects */
+    21, /* numRects */
 
     /* labels */
-    {},
-    0, /* numLabels */
+    {
+    {
+        -100, 20, /* x, y */
+        20, /* Text height*/
+        "Zoom out, FAR",
+        13 /* textLen */
+    }
+    },
+    1, /* numLabels */
 
     /* Players */
     {},
