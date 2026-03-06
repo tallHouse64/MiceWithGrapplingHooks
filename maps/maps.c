@@ -471,7 +471,7 @@ const MWG_Map level3 = {
          it would be too big) */
         -3877, 1800, 12594, 4000,/* x, y, w, h */
         D_NULL, /* Image */
-        117, 176, 255, /* Colour*/
+        181, 233, 255, /* Colour*/
         256, /* friction */
         0, 0, /* tpX, tpY */
         MWG_MAP_RECT_TELEPORT | /* Flags */
