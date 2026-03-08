@@ -15,8 +15,13 @@
 #else
 #include"platform/sdld.h"
 
+#endif
+
+
+#ifndef NDS
 /* These define statements are temporary code so
- *  the program compiles for PC. */
+ *  the program compiles for platforms other than
+ *  nds. */
 #define KEY_UP 0
 #define KEY_DOWN 0
 #define KEY_LEFT 0
@@ -26,8 +31,8 @@
 #define KEY_L 0
 #define KEY_X 0
 #define KEY_Y 0
-
 #endif
+
 
 
 #include"main.h"
