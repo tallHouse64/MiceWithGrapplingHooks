@@ -95,4 +95,7 @@ extern const MWG_Map level3;
 
 int MWG_AddMapRect(MWG_Map * map, MWG_MapRect * r);
 
+int MWG_OpenMap(MWG_Map const * map, MWG_GameState * gameState);
+
+
 #endif

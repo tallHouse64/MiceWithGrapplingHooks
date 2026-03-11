@@ -536,3 +536,26 @@ int MWG_AddMapRect(MWG_Map * map, MWG_MapRect * r){
 
     return i;
 };
+
+/* This function opens a map from memory by
+ *  copying it into the gameState.
+ *
+ * It is safe to pass null for map and gameState,
+ *  the function would do nothing and return -1.
+ *
+ * map: The map to open.
+ * gameState: The game state that can be used to
+ *  set the map.
+ * returns: 0 on success or a negative number on
+ *  failure.
+ */
+int MWG_OpenMap(MWG_Map const * map, MWG_GameState * gameState){
+
+    if(map == D_NULL || gameState == D_NULL){
+        return -1;
+    };
+
+    *gameState->map = *map;
+
+    return 0;
+};
