@@ -80,9 +80,26 @@ const MWG_Map testMap = {
 
             /* Disable player flags */
             MWG_PLAYER_HAS_WINGS
+        },
+        {
+            700, -30, 100, 100,
+            D_NULL,
+            255, 220, 19,
+            8,
+            50, -50, /* tpX, tpY */
+            MWG_MAP_RECT_WIN,
+
+            /* Enable player flags */
+            MWG_PLAYER_NO_FLAG,
+
+            /* Disable player flags */
+            MWG_PLAYER_NO_FLAG,
+
+            /* Jump to map */
+            &level1
         }
     },
-    8, /* numRects */
+    9, /* numRects */
 
     /* labels */
     {
