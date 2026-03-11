@@ -569,10 +569,13 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
  *
  * map: The map to move forward by one frame
  *  (it's safe to pass null for this).
+ * gameState: The state of the game, this can
+ *  safely be null but rectangles that win a
+ *  map/level won't work.
  * returns: 0 on success or a negative number on
  *  failure.
  */
-int MWG_CalcPhysics(MWG_Map * map){
+int MWG_CalcPhysics(MWG_Map * map, MWG_GameState * gameState){
 
     if(map == D_NULL){
         return -1;
@@ -663,6 +666,7 @@ int MWG_CalcPhysics(MWG_Map * map){
             newY = LERP_INT(map->player[i].oldY, map->player[i].y, -256);
 
             if(MWG_ResolveCollision(&map->player[i], &map->rect[j], &newX, &newY)){
+                /* The player touched the rectangle */
 
                 if(map->rect[j].flags & MWG_MAP_RECT_TELEPORT){
 
@@ -677,6 +681,42 @@ int MWG_CalcPhysics(MWG_Map * map){
                     map->player[i].hookState = MWG_HOOK_UNATTACHED;
 
                     continue;
+                };
+
+                /* Does touching this rectangle
+                 *  change what the next
+                 *  map/level is? */
+                if(map->rect[j].nextMap != D_NULL){
+
+                    /* Can we safely change what
+                     *  level/map will be played
+                     *  next when a victory
+                     *  rectangle is touched? */
+                    if(gameState != D_NULL){
+                        gameState->nextMap = map->rect[j].nextMap;
+                    };
+                };
+
+                if((map->rect[j].flags & MWG_MAP_RECT_WIN) && gameState != D_NULL){
+                    if(gameState->nextMap != D_NULL){
+
+                        /* Change the map */
+                        MWG_OpenMap(gameState->nextMap, gameState);
+
+                        /* Put player 1 in the
+                         *  new map */
+                        gameState->player1Index = MWG_AddPlayer(gameState->map, &gameState->player1);
+                        gameState->nextMap = D_NULL;
+
+                        /* This line breaks out
+                         *  of the outer loop
+                         *  (the map just got
+                         *  completely changed
+                         *  anyway). */
+                        i = MWG_MAX_PLAYER;
+
+                        break;
+                    };
                 };
 
                 /* Enable flags that this

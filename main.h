@@ -160,6 +160,13 @@ typedef struct MWG_GameState {
     /* The index of player 1 in the current map
      *  if there is a map loaded, -1 otherwise */
     int player1Index;
+
+    /* When a level is "won" (by touching a
+     *  victory rectangle, where MWG_MAP_RECT_WIN
+     *  is set) the level that is pointed to by
+     *  this pointer gets loaded if it's not
+     *  null. */
+    MWG_Map const * nextMap;
 } MWG_GameState;
 
 

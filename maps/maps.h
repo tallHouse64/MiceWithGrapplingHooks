@@ -8,6 +8,14 @@
  *  rectangle like whether you can walk through it
  *  (intangible).
  *
+ * The MWG_MAP_RECT_WIN flag changes the current
+ *  map to the map pointed to by
+ *  gameState->nextMap. When a player touches a
+ *  rectangle, if it's nextMap member is set,
+ *  then gameState->nextMap gets set to
+ *  rect->nextMap. This is how you control which
+ *  map/level comes next.
+ *
  * These flags can combined using bit-wise OR
  *  (|).
  */
@@ -15,7 +23,8 @@ typedef enum MWG_MapRectFlags {
     MWG_MAP_RECT_NO_FLAGS     = 0,
     MWG_MAP_RECT_INTANGIBLE   = 0x1,
     MWG_MAP_RECT_CANT_GRAPPLE = 0x2,
-    MWG_MAP_RECT_TELEPORT     = 0x4
+    MWG_MAP_RECT_TELEPORT     = 0x4,
+    MWG_MAP_RECT_WIN          = 0x8
 } MWG_MapRectFlags;
 
 typedef struct MWG_MapRect {
@@ -54,6 +63,14 @@ typedef struct MWG_MapRect {
      *  The flags that are 0 are ignored and do
      *  not affect the player. */
     MWG_PlayerFlags disableFlags;
+
+    /* If the player touches this rectangle and
+     *  if nextMap is not null, then
+     *  gameState->nextMap is set to nextMap.
+     *  This is useful for victory rectangles, so
+     *  the next map to jump to can be
+     *  controlled. */
+    MWG_Map const * nextMap;
 } MWG_MapRect;
 
 typedef struct MWG_MapLabel {

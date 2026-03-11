@@ -716,7 +716,7 @@ int main(int argc, char ** argv){
             };
         };
 
-        MWG_CalcPhysics(gameState.map);
+        MWG_CalcPhysics(gameState.map, &gameState);
 
 
 #ifdef NDS
