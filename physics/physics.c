@@ -1,5 +1,6 @@
 #include"../main.h"
 #include"../maps/maps.h"
+#include"../menus/menus.h"
 
 /* This function finds the entry point of a
  *  player into a rect if that player has just
@@ -587,6 +588,12 @@ int MWG_CalcPhysics(MWG_Map * map, MWG_GameState * gameState){
     int temp2 = 0;
     int newX = 0;
     int newY = 0;
+
+    /* This stores the collision direction of
+     *  each player and gets set each time the
+     *  player loop below iterates. */
+    MWG_CollisionDirection oldDirection = MWG_COLLISION_DIR_NONE;
+
     for(; i < map->numPlayers; i++){
 
 
@@ -635,7 +642,15 @@ int MWG_CalcPhysics(MWG_Map * map, MWG_GameState * gameState){
         map->player[i].oldX = temp1;
         map->player[i].oldY = temp2;
 
-        /* Reset the stored collision infromation
+        /* MWG_ResolveCollision() stores the
+         *  collision direction for what
+         *  happened in the current frame,
+         *  this line temporarily keeps the
+         *  value from last frame until it's
+         *  overwritten. */
+        oldDirection = map->player[i].collisionDirection;
+
+        /* Reset the stored collision information
          *  from last frame. */
         map->player[i].collisionDirection = MWG_COLLISION_DIR_NONE;
 
@@ -647,6 +662,7 @@ int MWG_CalcPhysics(MWG_Map * map, MWG_GameState * gameState){
         if(map->player[i].flags & MWG_PLAYER_NOCLIP){
             continue;
         };
+
 
         /* Loop through all the map rectangles
          *  and detect collisions. */
@@ -664,6 +680,7 @@ int MWG_CalcPhysics(MWG_Map * map, MWG_GameState * gameState){
              *  the two lines below. */
             newX = LERP_INT(map->player[i].oldX, map->player[i].x, -256);
             newY = LERP_INT(map->player[i].oldY, map->player[i].y, -256);
+
 
             if(MWG_ResolveCollision(&map->player[i], &map->rect[j], &newX, &newY)){
                 /* The player touched the rectangle */
@@ -697,25 +714,28 @@ int MWG_CalcPhysics(MWG_Map * map, MWG_GameState * gameState){
                     };
                 };
 
+                /* If this rectangle is a victory
+                 *  rectangle and if we have the
+                 *  gameState so we can change
+                 *  the menu onscreen... */
                 if((map->rect[j].flags & MWG_MAP_RECT_WIN) && gameState != D_NULL){
-                    if(gameState->nextMap != D_NULL){
 
-                        /* Change the map */
-                        MWG_OpenMap(gameState->nextMap, gameState);
+                    /* If the current map has set
+                     *  what the next map should
+                     *  be and there is no menu
+                     *  onscreen and if the
+                     *  player just started
+                     *  touching the rectangle...
+                     */
+                    if(gameState->nextMap != D_NULL && gameState->menu->numButtons <= 0 && (map->player[i].collisionDirection != oldDirection)){
 
-                        /* Put player 1 in the
-                         *  new map */
-                        gameState->player1Index = MWG_AddPlayer(gameState->map, &gameState->player1);
-                        gameState->nextMap = D_NULL;
+                        /* Open the win menu */
+                        *gameState->menu = winMenu;
 
-                        /* This line breaks out
-                         *  of the outer loop
-                         *  (the map just got
-                         *  completely changed
-                         *  anyway). */
-                        i = MWG_MAX_PLAYER;
-
-                        break;
+                        /* Make the "next level"
+                         *  button open the next
+                         *  map when pressed */
+                        gameState->menu->button[0].nextMap = gameState->nextMap;
                     };
                 };
 
