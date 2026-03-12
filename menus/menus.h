@@ -69,6 +69,8 @@ extern const MWG_Menu emptyMenu;
 
 extern const MWG_Menu editorMenu;
 
+extern const MWG_Menu winMenu;
+
 
 int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState);
 

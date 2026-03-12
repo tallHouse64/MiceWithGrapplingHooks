@@ -221,6 +221,39 @@ const MWG_Menu editorMenu = {
     3 /* numButtons */
 };
 
+const MWG_Menu winMenu = {
+    0, /* hoveredButton */
+    {
+    {
+        {-150, -50, 300, 30}, /* x, y, w, h */
+        "Next level", /* Text */
+        10, /* Text length */
+        -1, /* Pressing up does nothing */
+        1,  /* Press down for "Close" */
+        -1, /* Pressing left does nothing */
+        -1, /* Pressing right does nothing */
+        D_NULL, /* Open this menu on press */
+        D_NULL, /* Open this map on press */
+        0, 0, 0, /* Colour */
+        100, 100, 100 /* Hover colour */
+    },
+    {
+        {-150, -10, 150, 30}, /* x, y, w, h */
+        "Close", /* Text */
+        5, /* Text length */
+        0,  /* Press up for "Next level" */
+        -1, /* Pressing down does nothing */
+        -1, /* Pressing left does nothing */
+        -1, /* Pressing right does nothing */
+        &emptyMenu, /* Open this menu on press */
+        D_NULL, /* Open this map on press */
+        0, 0, 0, /* Colour */
+        100, 100, 100 /* Hover colour */
+    },
+    }, /* buttons */
+    2 /* numButtons */
+};
+
 const MWG_Menu emptyMenu = {
     -1, /* hoveredButton */
     {}, /* buttons */
