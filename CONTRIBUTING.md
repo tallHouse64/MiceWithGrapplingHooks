@@ -8,8 +8,6 @@ Thank you for taking the time to help with this project. Reading this file will 
 
 Please note that most of the documentation for MWGH is in the source code. Every function and structure should be explained there.
 
-Run "make" to compile, then run "./MWGH" to start the game.
-
 
 ## Architecture
 
@@ -67,6 +65,35 @@ If any file includes a header using angle brackets ("<" and ">"), this is a bug.
 
 It's okay to include headers with angle brackets temporarily as a "hack" to make what would otherwise be impossible. As long as the include line is conditionally included so it only affects specific platforms. This probably means that drws-lib doesn't have a feature that makes the "hack" necessary.
 
-## Cross compiling
 
-Remember to run "make clean" before compiling to a new platform.
+## Compiling
+
+Before building for Linux or Windows, you need to install:
+- make
+- gcc
+- SDL2 (or SDL3 with the SDL2 compatibility layer)
+
+Windows users need MSYS2 as well as the above installed inside MSYS2.
+
+To build for your machine run "make". This works for Linux and Windows. You can then run "./MWGH" to start the game.
+
+
+## Cross Compiling
+
+Remember to run "make clean" before compiling to a new platform if you have already compiled for a different platform.
+
+
+Before building for nds you need to install:
+- make
+- Blocks DS (https://blocksds.skylyrac.net/)
+- The Wonderful tool chain (the website above has instructions to install this)
+
+To build for nds run "make nds" in the repository folder, this creates the MWGH.nds file in the "nds" folder. MWGH.nds can be run in an emulator or on a jailbroken DS.
+
+
+If you want to build for web, you need to install:
+- make
+- Emscripten
+- Any simple http server (like "python3 -m http.server") so you can test with localhost.
+
+To build for web run "make web" in the repository folder. You can then test your build by running a server in the web folder (if you have python 3 try running "cd web && python3 -m http.server") then open "http://localhost:8000/" in a browser.

@@ -13,8 +13,4 @@ Note that the Linux build is only tested for Manjaro Linux, you also need to ins
 
 ## Compiling
 
-To compile MWGH, you need to install the following:
-- gcc
-- libsdl2
-
-Note for Windows users, you also need to install Msys2. The above list of software needs to be installed inside Msys2.
+To compile MWGH read 'Compiling' in CONTRIBUTING.md.
