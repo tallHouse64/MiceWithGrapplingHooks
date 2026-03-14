@@ -699,7 +699,7 @@ int main(int argc, char ** argv){
                 MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], &e, D_NULL, gameState.map);
             };
 
-            MWG_ControlMenu(gameState.menu, &e, gameState.map, &gameState.player1, &gameState.player1Index, &gameState);
+            MWG_ControlMenu(gameState.menu, &e, &gameState.player1, &gameState.player1Index, &gameState);
 
             switch(e.type){
                 case D_QUIT:
@@ -727,7 +727,7 @@ int main(int argc, char ** argv){
             MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], &e, D_NULL, gameState.map);
         };
 
-        MWG_ControlMenu(gameState.menu, &e, gameState.map, &gameState.player1, &gameState.player1Index, &gameState);
+        MWG_ControlMenu(gameState.menu, &e, &gameState.player1, &gameState.player1Index, &gameState);
 #endif
 
 

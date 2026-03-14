@@ -399,15 +399,18 @@ int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
  *
  * When a button is pressed on a menu, if the
  *  button opens a new map, this function
- *  overwrites the map passed in using a pointer
- *  with the new map. The menu passed in may also
- *  be overwritten if a button is pressed that
- *  opens a new menu.
+ *  overwrites the map in gameState->map using a
+ *  pointer with the new map. The menu passed in
+ *  may also be overwritten if a button is
+ *  pressed that opens a new menu.
  *
  * If a map gets opened, this function also adds
- *  a player to the map using MWG_AddPlayer() and
- *  overwrites the menu with an empty one to
- *  remove the menu.
+ *  a player to the map using MWG_AddPlayer() (if
+ *  profile is not null) and overwrites the menu
+ *  with an empty one to remove the menu.
+ *
+ * This function calls MWG_OpenMap() to open
+ *  maps.
  *
  * If 0 gets pressed and there is no menu open
  *  (numButtons is 0), this function opens the
@@ -423,9 +426,7 @@ int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
  * menu: The menu to control, and overwrite when
  *  a new menu is opened.
  * e: An event to handle.
- * map: A map to overwrite if a new map gets
- *  opened.
- * player: The player structure to copy into a
+ * profile: The player structure to copy into a
  *  map using MWG_AddPlayer() when a map gets
  *  opened.
  * playerIndex: If a new map gets opened and a
@@ -433,14 +434,18 @@ int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
  *  number gets overwritten with the index of
  *  that player.
  * gameState: The game state to modify when some
- *  buttons are pressed.
+ *  buttons are pressed or when a map is opened.
  * returns: 0 on success or a negative number on
  *  failure.
  */
-int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, MWG_Player * player, int * playerIndex, MWG_GameState * gameState){
+int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Player * profile, int * playerIndex, MWG_GameState * gameState){
 
     /* Keys up on a DS */
     D_uint32 keysReleased = 0;
+
+    /* This is only used when opening a map and
+     *  adding a player to it. */
+    int newPlayerIndex = -1;
 
 #ifdef NDS
     /* This is a hack to get input working on a
@@ -525,8 +530,9 @@ int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, MWG_Player * pl
                     /* Otherwise change the map
                      *  if this button points to
                      *  a map. */
-                }else if(menu->button[menu->hoveredButton].nextMap != D_NULL && map != D_NULL){
-                    *map = *(menu->button[menu->hoveredButton].nextMap);
+                }else if(menu->button[menu->hoveredButton].nextMap != D_NULL && gameState->map != D_NULL){
+
+                    MWG_OpenMap(menu->button[menu->hoveredButton].nextMap, gameState);
 
                     /* If a player stucture was
                      *  passed into the function
@@ -534,8 +540,12 @@ int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Map * map, MWG_Player * pl
                      *  the index, then add
                      *  (copy) the player onto
                      *  the map. */
-                    if(player != D_NULL && playerIndex != D_NULL){
-                        *playerIndex = MWG_AddPlayer(map, player);
+                    if(profile != D_NULL){
+                        newPlayerIndex = MWG_AddPlayer(gameState->map, profile);
+
+                        if(playerIndex != D_NULL){
+                            *playerIndex = newPlayerIndex;
+                        };
                     };
 
                     /* Remove the menu */
