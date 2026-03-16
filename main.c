@@ -642,7 +642,7 @@ int main(int argc, char ** argv){
 
     MWG_GameState gameState = {D_NULL};
 
-    gameState.out = D_GetOutSurf(50, 50, 640, 480, "Mice With Grappling Hooks", 0);
+    gameState.out = D_GetOutSurf(50, 50, 640, 480, "Mice With Grappling Hooks", D_OUTSURFRESIZABLE);
     gameState.running = 1;
     gameState.fontImage = D_CreateSurfFrom(fontDataW, fontDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), fontData);
     gameState.player1Index = -1;
@@ -712,6 +712,10 @@ int main(int argc, char ** argv){
 
                 case D_KEYUP:
                     gameState.keyboardState[e.keyboard.key] = 0;
+                    break;
+
+                case D_OUTSURFRESIZE:
+                    gameState.out = D_GetResizedOutSurf(gameState.out);
                     break;
             };
         };
