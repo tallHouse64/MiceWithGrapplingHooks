@@ -177,11 +177,11 @@ const MWG_Menu optionsMenu = {
     0, /* hoveredButton */
     {
     {
-        {-150, -70, 300, 30},
+        {-195, -70, 390, 30},
         "Back",
         4, /* text len */
         -1, /* Pressing up does nothing */
-        1,  /* Press down for "frame rate" */
+        2,  /* Press down for "up" (FPS) */
         -1, /* Pressing left does nothing */
         -1, /* Pressing right does nothing */
         &pauseMenu,
@@ -190,9 +190,9 @@ const MWG_Menu optionsMenu = {
         100, 100, 100 /* Hover colour */
     },
     {
-        {-150, -30, 300, 30},
-        "Frame rate",
-        10, /* text len */
+        {-195, -30, 165, 30},
+        "FPS",
+        3, /* text len */
         0,  /* Press up for "back" */
         -1, /* Pressing down does nothing */
         -1, /* Pressing left does nothing */
@@ -201,9 +201,48 @@ const MWG_Menu optionsMenu = {
         D_NULL,
         0, 0, 0, /* Colour */
         100, 100, 100 /* Hover colour */
+    },
+    {
+        {-25, -30, 60, 30},
+        "dn",
+        2, /* text len */
+        0,  /* Press up for "back" */
+        -1, /* Pressing down does nothing */
+        -1, /* Pressing left does nothing */
+        4, /* Press right for "up" */
+        D_NULL,
+        D_NULL,
+        0, 0, 0, /* Colour */
+        100, 100, 100 /* Hover colour */
+    },
+    {
+        {40, -30, 90, 30},
+        " ??",
+        3, /* text len */
+        0,  /* Press up for "back" */
+        -1, /* Pressing down does nothing */
+        -1, /* Pressing left does nothing */
+        -1, /* Pressing right does nothing */
+        D_NULL,
+        D_NULL,
+        0, 0, 0, /* Colour */
+        100, 100, 100 /* Hover colour */
+    },
+    {
+        {135, -30, 60, 30},
+        "up",
+        2, /* text len */
+        0,  /* Press up for "back" */
+        -1, /* Pressing down does nothing */
+        2,  /* Press left for "dn" */
+        -1, /* Pressing right does nothing */
+        D_NULL,
+        D_NULL,
+        0, 0, 0, /* Colour */
+        100, 100, 100 /* Hover colour */
     }
     },
-    2 /* numButtons */
+    5 /* numButtons */
 };
 
 const MWG_Menu editorMenu = {
