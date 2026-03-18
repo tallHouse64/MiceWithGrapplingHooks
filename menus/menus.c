@@ -151,7 +151,7 @@ const MWG_Menu pauseMenu = {
             2,
             -1,
             -1,
-            D_NULL,
+            &optionsMenu,
             D_NULL,
             0, 0, 0, /* Colour */
             100, 100, 100 /* Hover colour */
@@ -171,6 +171,39 @@ const MWG_Menu pauseMenu = {
         }
     },
     3 /* Num buttons */
+};
+
+const MWG_Menu optionsMenu = {
+    0, /* hoveredButton */
+    {
+    {
+        {-150, -70, 300, 30},
+        "Back",
+        4, /* text len */
+        -1, /* Pressing up does nothing */
+        1,  /* Press down for "frame rate" */
+        -1, /* Pressing left does nothing */
+        -1, /* Pressing right does nothing */
+        &pauseMenu,
+        D_NULL,
+        0, 0, 0, /* Colour */
+        100, 100, 100 /* Hover colour */
+    },
+    {
+        {-150, -30, 300, 30},
+        "Frame rate",
+        10, /* text len */
+        0,  /* Press up for "back" */
+        -1, /* Pressing down does nothing */
+        -1, /* Pressing left does nothing */
+        -1, /* Pressing right does nothing */
+        D_NULL,
+        D_NULL,
+        0, 0, 0, /* Colour */
+        100, 100, 100 /* Hover colour */
+    }
+    },
+    2 /* numButtons */
 };
 
 const MWG_Menu editorMenu = {

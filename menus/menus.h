@@ -65,6 +65,8 @@ extern const MWG_Menu levelMenu;
 
 extern const MWG_Menu pauseMenu;
 
+extern const MWG_Menu optionsMenu;
+
 extern const MWG_Menu emptyMenu;
 
 extern const MWG_Menu editorMenu;
