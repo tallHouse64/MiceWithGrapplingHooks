@@ -568,6 +568,10 @@ int MWG_ResolveCollision(MWG_Player * player, MWG_MapRect * rect, int * newX, in
  * It's safe to pass null for map, the function
  *  would do nothing and return -1.
  *
+ * This function uses the frameRate member in
+ *  gameState (as the time between each frame)
+ *  for physics calculations.
+ *
  * map: The map to move forward by one frame
  *  (it's safe to pass null for this).
  * gameState: The state of the game, this can
@@ -601,7 +605,7 @@ int MWG_CalcPhysics(MWG_Map * map, MWG_GameState * gameState){
 
         /* Apply gravity unless flying */
         if(!(map->player[i].flags & MWG_PLAYER_FLYING)){
-            map->player[i].oldY = map->player[i].oldY - ((70 * DELAY)/256);
+            map->player[i].oldY = map->player[i].oldY - ((70 * (1000 / gameState->frameRate))/256);
         };
 
         /* Apply air resistance (halve the

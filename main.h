@@ -6,7 +6,6 @@
 #include"devents.h"
 
 
-#define DELAY 1000/30
 #define MWG_MAX_MAP_RECTS 256
 #define MWG_MAX_MAP_LABELS 128
 #define MWG_MAX_PLAYER 128
@@ -167,6 +166,10 @@ typedef struct MWG_GameState {
      *  this pointer gets loaded if it's not
      *  null. */
     MWG_Map const * nextMap;
+
+    /* The frame rate (frames per second) the
+     *  game should run at. */
+    int frameRate;
 } MWG_GameState;
 
 

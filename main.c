@@ -418,6 +418,10 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
  *  null, the function would do nothing and
  *  return -1.
  *
+ * The frame rate passed in is used for physics
+ *  so that players jump and move at the same
+ *  speed regardless of the frame rate.
+ *
  * p: The player to control.
  * menu: The menu to control (if there is one).
  * e: An input event.
@@ -425,10 +429,12 @@ int MWG_FireHook(MWG_Map * map, MWG_Player * player){
  *  length of D_NumKeys.
  * map: The map the player is in (needed when the
  *  player fires a grappling hook).
+ * frameRate: The number of frames per second
+ *  that the game is running at.
  * returns: 0 on success or a negative number on
  *  failure.
  */
-int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_Map * map){
+int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_Map * map, int frameRate){
 
     /* Keys held on a DS (key state) */
     D_uint32 keys = 0;
@@ -478,7 +484,7 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
 
     /* When a is pressed move left */
     if(keyboardState[D_Ka] || (keys & KEY_LEFT)){
-        p->oldX += (78 * DELAY) / 256;
+        p->oldX += (78 * (1000 / frameRate)) / 256;
 
         /* Is the player looking right? */
         if(p->angle <= 90 && p->angle >= -90){
@@ -490,7 +496,7 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
 
     /* When d is pressed move right */
     if(keyboardState[D_Kd] || (keys & KEY_RIGHT)){
-        p->oldX -= (78 * DELAY) / 256;
+        p->oldX -= (78 * (1000 / frameRate)) / 256;
 
         /* Is the player looking left? */
         if(p->angle > 90 || p->angle < -90){
@@ -564,7 +570,7 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
 
         /* If the player is flying, move up */
         if(p->flags & MWG_PLAYER_FLYING){
-            p->oldY += (78 * DELAY) / 256;
+            p->oldY += (78 * (1000 / frameRate)) / 256;
 
         }else if(map != D_NULL){
 
@@ -578,7 +584,7 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
 
         /* If the player is flying, move down */
         if(p->flags & MWG_PLAYER_FLYING){
-            p->oldY -= (78 * DELAY) / 256;
+            p->oldY -= (78 * (1000 / frameRate)) / 256;
 
         }else{
 
@@ -590,7 +596,7 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
 
     /* If the player is flying, move up */
     if((keyboardState[D_KSpace] || (keys & KEY_A)) && p->flags & MWG_PLAYER_FLYING){
-        p->oldY += (78 * DELAY) / 256;
+        p->oldY += (78 * (1000 / frameRate)) / 256;
     };
 
     /* Control zoom with the i and o keys */
@@ -646,6 +652,7 @@ int main(int argc, char ** argv){
     gameState.running = 1;
     gameState.fontImage = D_CreateSurfFrom(fontDataW, fontDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), fontData);
     gameState.player1Index = -1;
+    gameState.frameRate = 30;
 
     MWG_Menu currentMenu = mainMenu;
     gameState.menu = &currentMenu;
@@ -696,7 +703,7 @@ int main(int argc, char ** argv){
              *  player if there is no menu
              *  onscreen */
             if(gameState.menu->numButtons <= 0){
-                MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], &e, D_NULL, gameState.map);
+                MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], &e, D_NULL, gameState.map, gameState.frameRate);
             };
 
             MWG_ControlMenu(gameState.menu, &e, &gameState.player1, &gameState.player1Index, &gameState);
@@ -728,7 +735,7 @@ int main(int argc, char ** argv){
          *  working and should be removed after
          *  drws-lib gets controller support. */
         if(gameState.menu->numButtons <= 0 && gameState.player1Index >= 0){
-            MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], &e, D_NULL, gameState.map);
+            MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], &e, D_NULL, gameState.map, gameState.frameRate);
         };
 
         MWG_ControlMenu(gameState.menu, &e, &gameState.player1, &gameState.player1Index, &gameState);
@@ -747,7 +754,7 @@ int main(int argc, char ** argv){
              *  player if there is no menu
              *  onscreen */
             if(gameState.menu->numButtons <= 0){
-                MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], D_NULL, gameState.keyboardState, gameState.map);
+                MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], D_NULL, gameState.keyboardState, gameState.map, gameState.frameRate);
             };
 
             MWG_DrawMap(gameState.out, gameState.map, gameState.fontImage, gameState.map->player[gameState.player1Index].x, gameState.map->player[gameState.player1Index].y, gameState.map->player[gameState.player1Index].zoom);
@@ -763,7 +770,7 @@ int main(int argc, char ** argv){
 
         D_FlipOutSurf(gameState.out);
 
-        D_Delay(DELAY);
+        D_Delay(1000 / gameState.frameRate);
     };
 
     D_StopEvents();
