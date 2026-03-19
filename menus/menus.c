@@ -458,6 +458,18 @@ int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
 
             break;
 
+        case MWG_BUTTON_FPS_UP:
+            /* When the FPS up button in the
+             *  options menu is pressed... */
+            gameState->frameRate = gameState->frameRate + 5;
+            break;
+
+        case MWG_BUTTON_FPS_DOWN:
+            /* When the FPS down button in the
+             *  options menu is pressed... */
+            gameState->frameRate = gameState->frameRate - 5;
+            break;
+
         default:
             /* Action not recognised */
             return -2;
