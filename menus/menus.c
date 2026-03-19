@@ -213,7 +213,8 @@ const MWG_Menu optionsMenu = {
         D_NULL,
         D_NULL,
         0, 0, 0, /* Colour */
-        100, 100, 100 /* Hover colour */
+        100, 100, 100, /* Hover colour */
+        MWG_BUTTON_FPS_DOWN
     },
     {
         {40, -30, 90, 30},
@@ -239,7 +240,8 @@ const MWG_Menu optionsMenu = {
         D_NULL,
         D_NULL,
         0, 0, 0, /* Colour */
-        100, 100, 100 /* Hover colour */
+        100, 100, 100, /* Hover colour */
+        MWG_BUTTON_FPS_UP
     }
     },
     5 /* numButtons */
