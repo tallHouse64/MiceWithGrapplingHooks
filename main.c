@@ -178,20 +178,27 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, D_Surf * font, int cameraX, int camer
  * If there are too many buttons in the menu, the
  *  function returns -3.
  *
+ * You can pass null for gameState and the
+ *  function would work normally but buttons that
+ *  rely on values in the gameState won't show
+ *  any text (like frame rate).
+ *
  * s: The surface to draw on.
  * menu: The menu to draw.
  * font: The font to draw text with (see the
  *  documentation for D_PrintToSurf()).
  * zoom: How much to zoom (256 for no zoom
  *  effect).
+ * gameState: The state of the game (read above).
  * returns: 0 on success or a negative number on
  *  failure.
  */
-int MWG_DrawMenu(D_Surf * s, MWG_Menu * menu, D_Surf * font, int zoom){
+int MWG_DrawMenu(D_Surf * s, MWG_Menu * menu, D_Surf * font, int zoom, MWG_GameState * gameState){
 
     int i = 0;
     D_Rect r = {0};
     D_Point textPoint = {0};
+    char textBuf[16] = "\0";
 
     if(s == D_NULL || font == D_NULL || menu == D_NULL){
         return -1;
@@ -222,7 +229,48 @@ int MWG_DrawMenu(D_Surf * s, MWG_Menu * menu, D_Surf * font, int zoom){
         /* Draw the text */
         textPoint.x = r.x;
         textPoint.y = r.y;
-        D_PrintToSurf(s, font, &textPoint, r.h, 0, menu->button[i].text);
+
+        switch(menu->button[i].replacementText){
+            case MWG_BUTTON_TEXT_ORIGINAL:
+                D_PrintToSurf(s, font, &textPoint, r.h, 0, menu->button[i].text);
+                break;
+
+            case MWG_BUTTON_TEXT_FPS:
+                /* Write the FPS instead */
+
+                /* The gameState is needed to
+                 *  know the frame rate */
+                if(gameState == D_NULL){
+                    /* gameState unavailable, so
+                     *  don't draw any text */
+                    break;
+                };
+
+                /* The following 4 lines are a
+                 *  hack because sprintf is not
+                 *  available at the moment and
+                 *  should be replaced when it
+                 *  is. The code converts
+                 *  gameState->frameRate to a
+                 *  string. */
+                textBuf[3] = '\0';
+                textBuf[2] = ( gameState->frameRate        % 10) + 48;
+                textBuf[1] = ((gameState->frameRate / 10 ) % 10) + 48;
+                textBuf[0] = ((gameState->frameRate / 100) % 10) + 48;
+
+                D_PrintToSurf(s, font, &textPoint, r.h, 0, textBuf);
+                break;
+
+            default:
+                /* This shouldn't run, if it does
+                 *  it means the button has an
+                 *  invalid replacement text
+                 *  value and will be treated as
+                 *  if it was
+                 *  MWG_BUTTON_TEXT_ORIGINAL.*/
+                D_PrintToSurf(s, font, &textPoint, r.h, 0, menu->button[i].text);
+                break;
+        };
     };
 
     return 0;
@@ -760,12 +808,12 @@ int main(int argc, char ** argv){
             MWG_DrawMap(gameState.out, gameState.map, gameState.fontImage, gameState.map->player[gameState.player1Index].x, gameState.map->player[gameState.player1Index].y, gameState.map->player[gameState.player1Index].zoom);
 
 
-            MWG_DrawMenu(gameState.out, gameState.menu, gameState.fontImage, gameState.map->player[gameState.player1Index].zoom);
+            MWG_DrawMenu(gameState.out, gameState.menu, gameState.fontImage, gameState.map->player[gameState.player1Index].zoom, &gameState);
         }else{
             /* In case there is no player loaded
              *  into the map. */
 
-            MWG_DrawMenu(gameState.out, gameState.menu, gameState.fontImage, gameState.player1.zoom);
+            MWG_DrawMenu(gameState.out, gameState.menu, gameState.fontImage, gameState.player1.zoom, &gameState);
         };
 
         D_FlipOutSurf(gameState.out);
