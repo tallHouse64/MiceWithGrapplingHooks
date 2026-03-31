@@ -13,6 +13,21 @@ typedef enum MWG_ButtonAction {
     MWG_BUTTON_FPS_DOWN
 } MWG_ButtonAction;
 
+/* This enum can be used to set the text on a
+ *  button to anything non-static like
+ *  framerates, battery, IP addresses, etc. Use
+ *  MWG_BUTTON_TEXT_ORIGINAL to show the original
+ *  static text.
+ *
+ * Note that MWG_BUTTON_TEXT_FPS shows the frame
+ *  rate to aim for which is shown in the options
+ *  menu (not a detected frame rate).
+ */
+typedef enum MWG_ButtonReplacementText {
+    MWG_BUTTON_TEXT_ORIGINAL = 0,
+    MWG_BUTTON_TEXT_FPS
+} MWG_ButtonReplacementText;
+
 typedef struct MWG_Button {
     D_Rect rect;
 
@@ -47,6 +62,22 @@ typedef struct MWG_Button {
     /* This stores what the button does like quit
      *  the program. */
     MWG_ButtonAction action;
+
+    /* For buttons that show a number, string or
+     *  other variable that can change at
+     *  runtime, setting this value changes what
+     *  text appears on the button. This is for
+     *  text that is unknown at compile time and
+     *  cannot be entered the usual way like ip
+     *  addresses, battery, frame rate, etc.
+     *
+     * This value can be set to
+     *  MWG_BUTTON_TEXT_FPS to show the current
+     *  frame rate set in the options menu for
+     *  example. Set this to
+     *  MWG_BUTTON_TEXT_ORIGINAL to show the
+     *  original text (the text member above). */
+    MWG_ButtonReplacementText replacementText;
 } MWG_Button;
 
 typedef struct MWG_Menu {
