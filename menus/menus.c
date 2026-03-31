@@ -227,7 +227,14 @@ const MWG_Menu optionsMenu = {
         D_NULL,
         D_NULL,
         0, 0, 0, /* Colour */
-        100, 100, 100 /* Hover colour */
+        100, 100, 100, /* Hover colour */
+
+        /*When the button is pressed do nothing*/
+        MWG_BUTTON_NO_ACTION,
+
+        /* Replace the text with
+         *  gameState->frameRate */
+        MWG_BUTTON_TEXT_FPS
     },
     {
         {135, -30, 60, 30},
