@@ -35,8 +35,8 @@ int main(int argc, char ** argv){
     fprintf(f, "\n#ifndef IMAGE_%s_H\n", argv[3]);
     fprintf(f,   "#define IMAGE_%s_H\n", argv[3]);
 
-    fprintf(f, "\nint %sW = %d;\n", argv[3], w);
-    fprintf(f,   "int %sH = %d;\n", argv[3], h);
+    fprintf(f, "\nconst int %sW = %d;\n", argv[3], w);
+    fprintf(f,   "const int %sH = %d;\n", argv[3], h);
 
     fprintf(f, "\nchar %s[] = {", argv[3]);
 
