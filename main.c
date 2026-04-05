@@ -43,6 +43,32 @@
 #include"assets/mouse.h"
 #include"assets/font.h"
 
+const MWG_Player defaultProfile = {
+    0, /* x */
+    0, /* y */
+    0, /* oldX */
+    0, /* oldY */
+    256, /* zoom */
+    -20, /* hitBoxX */
+    -20, /* hitBoxY */
+    40, /* hitBoxW */
+    40, /* hitBoxH */
+    D_NULL, /* image */
+    -mouseDataW, /* imageX */
+    -mouseDataH, /* imageY */
+    mouseDataW * 2, /* imageW */
+    mouseDataH * 2, /* imageH */
+    mouseDataW, /* rotateCentreX */
+    mouseDataH, /* rotateCentreY */
+    0, /* hookX */
+    0, /* hookY */
+    MWG_HOOK_UNATTACHED, /* hookState */
+    0.0, /* angle */
+    MWG_COLLISION_DIR_NONE, /* collisionDirection */
+    MWG_PLAYER_NO_FLAG, /* flags */
+    -1 /* drawingRect */
+};
+
 
 /* This function draws a map onto a surface.
  *
@@ -710,29 +736,9 @@ int main(int argc, char ** argv){
     D_Surf * mouseImage = D_CreateSurfFrom(mouseDataW, mouseDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), mouseData);
     D_Event e = {0};
 
-    gameState.player1.x = 0;
-    gameState.player1.y = 0;
-    gameState.player1.oldX = 0;
-    gameState.player1.oldY = 0;
-    gameState.player1.zoom = 256;
-    gameState.player1.hitboxX = -20;
-    gameState.player1.hitboxY = -20;
-    gameState.player1.hitboxW = 40;
-    gameState.player1.hitboxH = 40;
+
+    gameState.player1 = defaultProfile;
     gameState.player1.image = mouseImage;
-    gameState.player1.imageX = -mouseDataW;
-    gameState.player1.imageY = -mouseDataH;
-    gameState.player1.imageW = mouseDataW * 2;
-    gameState.player1.imageH = mouseDataH * 2;
-    gameState.player1.rotateCentreX = mouseDataW;
-    gameState.player1.rotateCentreY = mouseDataH;
-    gameState.player1.hookX = 0;
-    gameState.player1.hookY = 0;
-    gameState.player1.hookState = MWG_HOOK_UNATTACHED;
-    gameState.player1.angle = 0.0;
-    gameState.player1.collisionDirection = MWG_COLLISION_DIR_NONE;
-    gameState.player1.flags = MWG_PLAYER_NO_FLAG;
-    gameState.player1.drawingRect = -1;
 
 #ifdef NDS
     gameState.player1.zoom = 512;
