@@ -647,10 +647,6 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
         p->oldY += (78 * (1000 / frameRate)) / 256;
     };
 
-    /* Control zoom with the i and o keys */
-    if(keyboardState[D_Ki] || (keys & KEY_X)){p->zoom -= 10;};
-    if(keyboardState[D_Ko] || (keys & KEY_Y)){p->zoom += 10;};
-
     return 0;
 };
 
@@ -701,6 +697,9 @@ int main(int argc, char ** argv){
     gameState.fontImage = D_CreateSurfFrom(fontDataW, fontDataH, 0, D_NULL, D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, 32), fontData);
     gameState.player1Index = -1;
     gameState.frameRate = 30;
+
+    /* Keys held for DS */
+    D_uint32 keys = 0;
 
     MWG_Menu currentMenu = mainMenu;
     gameState.menu = &currentMenu;
@@ -787,7 +786,26 @@ int main(int argc, char ** argv){
         };
 
         MWG_ControlMenu(gameState.menu, &e, &gameState.player1, &gameState.player1Index, &gameState);
+
+        keys = keysHeld();
 #endif
+
+        /* Control zoom with the i and o keys */
+        if(gameState.keyboardState[D_Ki] || (keys & KEY_X)){
+            gameState.player1.zoom -= 10;
+
+            /* Immediately copy the profile's
+             *  zoom to the player's zoom */
+            gameState.map->player[gameState.player1Index].zoom = gameState.player1.zoom;
+        };
+
+        if(gameState.keyboardState[D_Ko] || (keys & KEY_Y)){
+            gameState.player1.zoom += 10;
+
+            /* Immediately copy the profile's
+             *  zoom to the player's zoom */
+            gameState.map->player[gameState.player1Index].zoom = gameState.player1.zoom;
+        };
 
 
         D_FillRect(gameState.out, D_NULL, D_rgbaToFormat(gameState.out->format, 181, 233, 255, 255));
