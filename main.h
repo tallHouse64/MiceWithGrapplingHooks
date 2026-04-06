@@ -157,9 +157,10 @@ typedef struct MWG_GameState {
     /* The current map loaded */
     MWG_Map * map;
 
-    /* Data for player 1, this gets copied into a
-     *  map when it's loaded. */
-    MWG_Player player1;
+    /* Data for profile1, this gets copied into a
+     *  map when it's loaded, that copy of the
+     *  data is called player1. */
+    MWG_Player profile1;
 
     /* The index of player 1 in the current map
      *  if there is a map loaded, -1 otherwise */

@@ -739,8 +739,8 @@ int main(int argc, char ** argv){
     D_Event e = {0};
 
 
-    gameState.player1 = defaultProfile;
-    gameState.player1.image = mouseImage;
+    gameState.profile1 = defaultProfile;
+    gameState.profile1.image = mouseImage;
 
 #ifdef NDS
     gameState.player1.zoom = 512;
@@ -761,7 +761,7 @@ int main(int argc, char ** argv){
                 MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], &e, D_NULL, gameState.map, gameState.frameRate);
             };
 
-            MWG_ControlMenu(gameState.menu, &e, &gameState.player1, &gameState.player1Index, &gameState);
+            MWG_ControlMenu(gameState.menu, &e, &gameState.profile1, &gameState.player1Index, &gameState);
 
             switch(e.type){
                 case D_QUIT:
@@ -800,19 +800,19 @@ int main(int argc, char ** argv){
 
         /* Control zoom with the i and o keys */
         if(gameState.keyboardState[D_Ki] || (keys & KEY_X)){
-            gameState.player1.zoom -= 10;
+            gameState.profile1.zoom -= 10;
 
             /* Immediately copy the profile's
              *  zoom to the player's zoom */
-            gameState.map->player[gameState.player1Index].zoom = gameState.player1.zoom;
+            gameState.map->player[gameState.player1Index].zoom = gameState.profile1.zoom;
         };
 
         if(gameState.keyboardState[D_Ko] || (keys & KEY_Y)){
-            gameState.player1.zoom += 10;
+            gameState.profile1.zoom += 10;
 
             /* Immediately copy the profile's
              *  zoom to the player's zoom */
-            gameState.map->player[gameState.player1Index].zoom = gameState.player1.zoom;
+            gameState.map->player[gameState.player1Index].zoom = gameState.profile1.zoom;
         };
 
 
@@ -839,7 +839,7 @@ int main(int argc, char ** argv){
             /* In case there is no player loaded
              *  into the map. */
 
-            MWG_DrawMenu(gameState.out, gameState.menu, gameState.fontImage, gameState.player1.zoom, &gameState);
+            MWG_DrawMenu(gameState.out, gameState.menu, gameState.fontImage, gameState.profile1.zoom, &gameState);
         };
 
         D_FlipOutSurf(gameState.out);
