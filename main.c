@@ -724,6 +724,8 @@ int main(int argc, char ** argv){
     gameState.player1Index = -1;
     gameState.frameRate = 30;
 
+    gameState.imageData = D_CALLOC(MWG_MAX_PLAYER, MWG_PLAYER_IMAGE_MAX_WIDTH * MWG_PLAYER_IMAGE_MAX_HEIGHT * (MWG_PLAYER_IMAGE_BIT_DEPTH / 8));
+
     /* Keys held for DS */
     D_uint32 keys = 0;
 

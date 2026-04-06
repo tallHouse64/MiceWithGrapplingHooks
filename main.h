@@ -14,6 +14,10 @@
 #define MWG_MAX_BUTTONS 50
 #define MWG_MAX_TEXT_LEN 16
 
+#define MWG_PLAYER_IMAGE_MAX_WIDTH 64
+#define MWG_PLAYER_IMAGE_MAX_HEIGHT 64
+#define MWG_PLAYER_IMAGE_BIT_DEPTH 32 /*in bits*/
+
 /* This is an integer lerp macro (linear
  *  interpolation).
  *
@@ -127,6 +131,7 @@ typedef struct MWG_Player {
      *  used for level editing. */
     int drawingRect;
 
+
 } MWG_Player;
 
 typedef struct MWG_GameState {
@@ -170,6 +175,22 @@ typedef struct MWG_GameState {
     /* The frame rate (frames per second) the
      *  game should run at. */
     int frameRate;
+
+    /* This data is enough for each player to
+     *  have an image 64 by 64 (the numbers in
+     *  MWG_PLAYER_IMAGE_MAX_WIDTH and
+     *  MWG_PLAYER_IMAGE_MAX_HEIGHT).
+     *
+     * To access a player's image data use
+     *  imageData[playerIndex * (MWG_PLAYER_IMAGE_MAX_WIDTH * MWG_PLAYER_IMAGE_MAX_HEIGHT * (MWG_PLAYER_IMAGE_BIT_DEPTH / 8))].
+     *
+     * If this is null, just use the default
+     *  mouse image (this is to support platforms
+     *  that may not have enough memory, a little
+     *  more than 2MB).
+     */
+    void * imageData;
+
 } MWG_GameState;
 
 
