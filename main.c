@@ -714,6 +714,98 @@ int MWG_AddPlayer(MWG_Map * map, MWG_Player * player){
     return i;
 };
 
+/* This function gets a profile image for any
+ *  local player.
+ *
+ * All this function does is write the correct
+ *  width, height, pixel format, pixel data
+ *  pointer and other information to a surface
+ *  structure so you don't have to. This should
+ *  make bugs less likely to be written.
+ *
+ * To use this function you declare a surface,
+ *  and pass it to this function. Don't allocate
+ *  memory for the pixel data. Also don't use
+ *  D_CreateSurf().
+ *
+ * Example:
+ *  D_Surf img = {D_NULL};
+ *  MWG_GetProfileImage(&img, &gameState);
+ *
+ * After running this function you can draw to
+ *  the surface either directly to pixel data or
+ *  call any drws-lib function to draw for you.
+ *
+ * Because the surface was declared as a local
+ *  variable, it gets put on the stack. This
+ *  means you don't have to free it. You can use
+ *  malloc() but this is not recommended. Every
+ *  time you need this surface just run the
+ *  function again.
+ *
+ * If MWGH has not allocated a buffer for the
+ *  profile's image data, the function does
+ *  nothing and returns -3. This may happen on
+ *  platforms with little memory like GBA. This
+ *  means the player always appears as the
+ *  default mouse image and the image can't be
+ *  personalized.
+ *
+ * If the number passed in for "which" is
+ *  invalid, the function does nothing and
+ *  returns -2.
+ *
+ * It is safe to pass null for s and state, the
+ *  function would do nothing and return -1.
+ *
+ * s: A surface structure to point to a profile's
+ *  image data.
+ * which: Which local profile to get the surface
+ *  of (for now there is only one, the 0th one,
+ *  so just pass 0).
+ * state: The current game state.
+ * returns: 0 on success or a negative number on
+ *  failure.
+ */
+int MWG_GetProfileImage(D_Surf * s, int which, MWG_GameState * state){
+
+    if(s == D_NULL || state == D_NULL){
+        return -1;
+    };
+
+    /* For now there is only one profile, the 0th
+     *  one. */
+    if(which != 0){
+        return -2;
+    };
+
+    if(state->profile1ImageData == D_NULL){
+        return -3;
+    };
+
+
+    s->pix = state->profile1ImageData;
+
+    s->w = MWG_PLAYER_IMAGE_MAX_WIDTH;
+    s->h = MWG_PLAYER_IMAGE_MAX_HEIGHT;
+
+    s->pitch = 0;
+
+    s->safeArea.x = 0;
+    s->safeArea.y = 0;
+    s->safeArea.w = s->w;
+    s->safeArea.h = s->h;
+
+    s->outId = -1;
+    s->alphaMod = 255;
+    s->blendMode = D_BLENDMODE_NORMAL;
+    s->flags = 0;
+    s->outSurfFlags = 0;
+    s->format = MWG_PLAYER_IMAGE_FORMAT;
+
+    return 0;
+};
+
 int main(int argc, char ** argv){
 
     MWG_GameState gameState = {D_NULL};
