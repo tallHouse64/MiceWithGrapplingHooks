@@ -192,6 +192,16 @@ typedef struct MWG_GameState {
      */
     void * imageData;
 
+    /* When profile1 gets copied into a map, this
+     *  can be copied at the same time as long as
+     *  imageData above is not null. This pointer
+     *  should point to either null or a buffer
+     *  that is exactly
+     *  MWG_PLAYER_IMAGE_MAX_WIDTH * MWG_PLAYER_IMAGE_MAX_HEIGHT * (MWG_PLAYER_IMAGE_BIT_DEPTH / 8)
+     *  bytes large.
+     */
+    void * profile1ImageData;
+
 } MWG_GameState;
 
 

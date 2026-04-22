@@ -739,8 +739,11 @@ int main(int argc, char ** argv){
     D_Event e = {0};
 
 
+    /* Setup profile 1 */
     gameState.profile1 = defaultProfile;
     gameState.profile1.image = mouseImage;
+    gameState.profile1ImageData = D_CALLOC(1, MWG_PLAYER_IMAGE_MAX_WIDTH * MWG_PLAYER_IMAGE_MAX_HEIGHT * (MWG_PLAYER_IMAGE_BIT_DEPTH / 8));
+
 
 #ifdef NDS
     gameState.player1.zoom = 512;
