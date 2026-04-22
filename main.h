@@ -17,6 +17,7 @@
 #define MWG_PLAYER_IMAGE_MAX_WIDTH 64
 #define MWG_PLAYER_IMAGE_MAX_HEIGHT 64
 #define MWG_PLAYER_IMAGE_BIT_DEPTH 32 /*in bits*/
+#define MWG_PLAYER_IMAGE_FORMAT D_FindPixFormat(0xFF, 0xFF00, 0xFF0000, 0xFF000000, MWG_PLAYER_IMAGE_BIT_DEPTH)
 
 /* This is an integer lerp macro (linear
  *  interpolation).
