@@ -851,6 +851,18 @@ int main(int argc, char ** argv){
     gameState.profile1.image = mouseImage;
     gameState.profile1ImageData = D_CALLOC(1, MWG_PLAYER_IMAGE_MAX_WIDTH * MWG_PLAYER_IMAGE_MAX_HEIGHT * (MWG_PLAYER_IMAGE_BIT_DEPTH / 8));
 
+    gameState.profile1ImageWidth = mouseImage->w;
+    gameState.profile1ImageHeight = mouseImage->h;
+
+    /* Make sure the buffer is not null (this may
+     *  be null on platforms with little memory)
+     */
+    if(gameState.profile1ImageData != D_NULL){
+        D_Surf profile1Image = {D_NULL};
+        MWG_GetProfileImage(&profile1Image, 0, &gameState);
+        D_SurfCopyScale(mouseImage, D_NULL, &profile1Image, D_NULL);
+    };
+
 
 #ifdef NDS
     gameState.player1.zoom = 512;
