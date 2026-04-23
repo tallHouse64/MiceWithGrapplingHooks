@@ -823,6 +823,105 @@ int MWG_GetProfileImage(D_Surf * s, int which, MWG_GameState * state){
     return 0;
 };
 
+/* This function gets the image for any player in
+ *  the currently loaded map.
+ *
+ * This function just points a surface structure
+ *  to the pixel data that stores the player's
+ *  image and sets the correct width, height,
+ *  pixel format, etc.
+ *
+ * To know the difference between a player and a
+ *  profile, please read CONTRIBUTING.md.
+ *
+ * Like MWG_GetProfileImage(), to use this
+ *  function you need to declare a surface as a
+ *  local variable and pass it into the function.
+ *
+ * Exapmle:
+ *  D_Surf img = {D_NULL};
+ *  MWG_GetPlayerImage(s, playerIndex, &gameState);
+ *
+ * After running this, you can then read/write to
+ *  this surface. Don't free it because it was
+ *  declared as a local variable.
+ *
+ * It is safe to pass null for s and state, the
+ *  function would do nothing and return -1.
+ *
+ * If the index is out of bounds then the
+ *  function does nothing and returns -2.
+ *
+ * If imageData in the game state is null, the
+ *  function does nothing and returns -3.
+ *
+ * If the map in the game state is null (no map
+ *  loaded), the function does nothing and
+ *  returns -5.
+ *
+ * If the player in the map (that was found using
+ *  the index) says the width or height is a
+ *  value that is too big or small, the function
+ *  does nothing and returns -4.
+ *
+ * s: The surface to point to a player's image
+ *  data.
+ * index: The index of a player in the map.
+ * state: The current game state.
+ * returns: 0 on success or a negative number on
+ *  failure.
+ */
+int MWG_GetPlayerImage(D_Surf * s, int index, MWG_GameState * state){
+
+    if(s == D_NULL || state == D_NULL){
+        return -1;
+    };
+
+    if(index < 0 || index >= MWG_MAX_PLAYER){
+        return -2;
+    };
+
+    if(state->imageData == D_NULL){
+        return -3;
+    };
+
+    if(state->map == D_NULL){
+        return -5;
+    };
+
+    /* If the player structure says the image is
+     *  too big or too small */
+    if( state->map->player[index].imageDataWidth  > MWG_PLAYER_IMAGE_MAX_WIDTH  ||
+        state->map->player[index].imageDataHeight > MWG_PLAYER_IMAGE_MAX_HEIGHT ||
+        state->map->player[index].imageDataWidth  < 1 ||
+        state->map->player[index].imageDataHeight < 1
+    ){
+        return -4;
+    };
+
+
+    s->pix = &((D_uint8 *)state->imageData)[index * (MWG_PLAYER_IMAGE_MAX_WIDTH * MWG_PLAYER_IMAGE_MAX_HEIGHT * (MWG_PLAYER_IMAGE_BIT_DEPTH / 8))];
+
+    s->w = state->map->player[index].imageDataWidth;
+    s->h = state->map->player[index].imageDataHeight;
+
+    s->pitch = (MWG_PLAYER_IMAGE_MAX_WIDTH - s->w) * (MWG_PLAYER_IMAGE_BIT_DEPTH / 8);
+
+    s->safeArea.x = 0;
+    s->safeArea.y = 0;
+    s->safeArea.w = s->w;
+    s->safeArea.h = s->h;
+
+    s->outId = -1;
+    s->alphaMod = 255;
+    s->blendMode = D_BLENDMODE_NORMAL;
+    s->flags = 0;
+    s->outSurfFlags = 0;
+    s->format = MWG_PLAYER_IMAGE_FORMAT;
+
+    return 0;
+};
+
 int main(int argc, char ** argv){
 
     MWG_GameState gameState = {D_NULL};
