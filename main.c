@@ -182,11 +182,11 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, D_Surf * font, int cameraX, int camer
         if(map->player[i].angle <= 90 && map->player[i].angle >= -90){
 
             /* Draw the player looking right */
-            D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle, 0, 0);
+            /*D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle, 0, 0);*/
         }else{
 
             /* Draw the player looking left */
-            D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle, 1, 0);
+            /*D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle, 1, 0);*/
         };
 
         i++;
@@ -850,7 +850,6 @@ int main(int argc, char ** argv){
 
     /* Setup profile 1 */
     gameState.profile1 = defaultProfile;
-    gameState.profile1.image = mouseImage;
     gameState.profile1ImageData = D_CALLOC(1, MWG_PLAYER_IMAGE_MAX_WIDTH * MWG_PLAYER_IMAGE_MAX_HEIGHT * (MWG_PLAYER_IMAGE_BIT_DEPTH / 8));
 
     gameState.profile1ImageWidth = mouseImage->w;
