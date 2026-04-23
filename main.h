@@ -97,7 +97,11 @@ typedef struct MWG_Player {
     D_Surf * image;
 
     /* The image rectangle is relative to the x,
-     *  y of the player.*/
+     *  y of the player. This is not the width
+     *  and height of the image, this is the
+     *  width and height of the size it should
+     *  appear. So changing these values would
+     *  only stretch/shrink the image. */
     int imageX, imageY, imageW, imageH;
 
     /* This is the centre of rotation for the
@@ -202,6 +206,11 @@ typedef struct MWG_GameState {
      *  bytes large.
      */
     void * profile1ImageData;
+
+    /* This is the the width and height of the
+     *  profile 1 image. */
+    int profile1ImageWidth;
+    int profile1ImageHeight;
 
 } MWG_GameState;
 
