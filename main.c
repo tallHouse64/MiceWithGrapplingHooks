@@ -58,6 +58,8 @@ const MWG_Player defaultProfile = {
     -mouseDataH, /* imageY */
     mouseDataW * 2, /* imageW */
     mouseDataH * 2, /* imageH */
+    mouseDataW, /* imageDataWidth */
+    mouseDataH, /* imageDataHeight */
     mouseDataW, /* rotateCentreX */
     mouseDataH, /* rotateCentreY */
     0, /* hookX */

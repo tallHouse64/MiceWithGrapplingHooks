@@ -107,6 +107,16 @@ typedef struct MWG_Player {
      *  only stretch/shrink the image. */
     int imageX, imageY, imageW, imageH;
 
+    /* This is the real width and height of the
+     *  player's image itself. Changing these
+     *  values doesn't stretch or shrink the
+     *  image, it add/removes rows/columns of
+     *  pixels. These values should always be
+     *  equal or less than
+     *  MWG_PLAYER_IMAGE_MAX_WIDTH and
+     *  MWG_PLAYER_IMAGE_MAX_HEIGHT. */
+    int imageDataWidth, imageDataHeight;
+
     /* This is the centre of rotation for the
      *  image, it is relative to the top left of
      *  the image rectangle (which is relative to
