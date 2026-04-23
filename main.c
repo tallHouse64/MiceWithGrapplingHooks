@@ -758,6 +758,11 @@ int MWG_AddPlayer(MWG_Map * map, MWG_Player * player){
  * It is safe to pass null for s and state, the
  *  function would do nothing and return -1.
  *
+ * If the game state says the image is larger
+ *  than the maximum or smaller than the minimum
+ *  size the function does nothing and returns
+ *  -4.
+ *
  * s: A surface structure to point to a profile's
  *  image data.
  * which: Which local profile to get the surface
@@ -783,13 +788,23 @@ int MWG_GetProfileImage(D_Surf * s, int which, MWG_GameState * state){
         return -3;
     };
 
+    /* If the game state says the image is too
+     *  big or too small */
+    if( state->profile1ImageWidth > MWG_PLAYER_IMAGE_MAX_WIDTH ||
+        state->profile1ImageHeight > MWG_PLAYER_IMAGE_MAX_HEIGHT ||
+        state->profile1ImageWidth < 1 ||
+        state->profile1ImageHeight < 1
+    ){
+        return -4;
+    };
+
 
     s->pix = state->profile1ImageData;
 
-    s->w = MWG_PLAYER_IMAGE_MAX_WIDTH;
-    s->h = MWG_PLAYER_IMAGE_MAX_HEIGHT;
+    s->w = state->profile1ImageWidth;
+    s->h = state->profile1ImageHeight;
 
-    s->pitch = 0;
+    s->pitch = (MWG_PLAYER_IMAGE_MAX_WIDTH - s->w) * (MWG_PLAYER_IMAGE_BIT_DEPTH / 8);
 
     s->safeArea.x = 0;
     s->safeArea.y = 0;
