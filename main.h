@@ -232,5 +232,7 @@ int MWG_AddPlayer(MWG_Map * map, MWG_Player * player);
 
 int MWG_GetProfileImage(D_Surf * s, int which, MWG_GameState * state);
 
+int MWG_GetPlayerImage(D_Surf * s, int index, MWG_GameState * state);
+
 
 #endif
