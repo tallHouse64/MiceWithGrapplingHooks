@@ -53,7 +53,7 @@ const MWG_Player defaultProfile = {
     -20, /* hitBoxY */
     40, /* hitBoxW */
     40, /* hitBoxH */
-    D_NULL, /* image */
+    /* D_NULL, image (removed) */
     -mouseDataW, /* imageX */
     -mouseDataH, /* imageY */
     mouseDataW * 2, /* imageW */

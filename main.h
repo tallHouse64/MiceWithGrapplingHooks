@@ -94,7 +94,10 @@ typedef struct MWG_Player {
      *  to -(hitboxH / 2). */
     int hitboxX, hitboxY, hitboxW, hitboxH;
 
-    D_Surf * image;
+    /* This is where "D_Surf * image;" used to
+     *  be. Now use MWG_GetPlayerImage() and
+     *  MWG_GetProfileImage() instead. See the
+     *  profile section in CONTRIBUTING.md. */
 
     /* The image rectangle is relative to the x,
      *  y of the player. This is not the width
