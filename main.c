@@ -678,28 +678,42 @@ int MWG_ControlPlayer(MWG_Player * p, D_Event * e, D_uint8 * keyboardState, MWG_
     return 0;
 };
 
-/* This function adds a player to a map (it
+/* This function adds a profile to a map (it
  *  copies the structure to the next unused
  *  element).
+ *
+ * This function also copies the profile's image
+ *  data, bear in mind this image data is not
+ *  stored in the profile structure. It gets
+ *  copied from gameState->profile1ImageData to
+ *  gameState->imageData which you can think of
+ *  as the map's image data. It uses the
+ *  functions MWG_GetProfileImage() and
+ *  MWG_GetPlayerImage().
  *
  * If the map is full, the function would do
  *  nothing and return -2.
  *
- * It is safe to pass null for all the
- *  parameters, the function would do nothing and
- *  return -1.
+ * It is safe to pass null for map and gameState,
+ *  if either are null the function would do
+ *  nothing and return -1.
+ *
+ * If the profile index is out of bounds, the
+ *  function would do nothing and returns -3.
  *
  * map: The map to add a player to.
- * player: The player structure to copy onto the
- *  map.
+ * profileIndex: Which profile to copy into a
+ *  player.
+ * gameState: The state of the game.
  * returns: The index of the player added on
- *  success or a negative number on failure.
+ *  success (0 or more) otherwise it returns a
+ *  negative number on failure.
  */
-int MWG_AddPlayer(MWG_Map * map, MWG_Player * player){
+int MWG_AddPlayer(MWG_Map * map, int profileIndex, MWG_GameState * gameState){
 
     int i = 0;
 
-    if(map == D_NULL || player == D_NULL){
+    if(map == D_NULL || gameState == D_NULL){
         return -1;
     };
 
@@ -707,9 +721,26 @@ int MWG_AddPlayer(MWG_Map * map, MWG_Player * player){
         return -2;
     };
 
+    /* For now there is only one profile */
+    if(profileIndex != 0){
+        return -3;
+    };
+
     i = map->numPlayers;
 
-    map->player[i] = *player;
+    map->player[i] = gameState->profile1;
+
+
+    D_Surf profileImage = {D_NULL};
+    MWG_GetProfileImage(&profileImage, profileIndex, gameState);
+
+    D_Surf playerImage = {D_NULL};
+    MWG_GetPlayerImage(&playerImage, i, gameState);
+
+    /* Copy the profile image to the new player's
+     *  image */
+    D_SurfCopyScale(&profileImage, D_NULL, &playerImage, D_NULL);
+
 
     map->numPlayers = map->numPlayers + 1;
 

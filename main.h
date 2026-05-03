@@ -228,7 +228,7 @@ typedef struct MWG_GameState {
 } MWG_GameState;
 
 
-int MWG_AddPlayer(MWG_Map * map, MWG_Player * player);
+int MWG_AddPlayer(MWG_Map * map, int profileIndex, MWG_GameState * gameState);
 
 int MWG_GetProfileImage(D_Surf * s, int which, MWG_GameState * state);
 
