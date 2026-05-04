@@ -498,9 +498,9 @@ int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
  *  pressed that opens a new menu.
  *
  * If a map gets opened, this function also adds
- *  a player to the map using MWG_AddPlayer() (if
- *  profile is not null) and overwrites the menu
- *  with an empty one to remove the menu.
+ *  a player to the map using MWG_AddPlayer() and
+ *  overwrites the menu with an empty one to
+ *  remove the menu.
  *
  * This function calls MWG_OpenMap() to open
  *  maps.
@@ -516,22 +516,18 @@ int MWG_RunAction(MWG_ButtonAction * action, MWG_GameState * gameState){
  *  pointer is for. It is safe to pass null for
  *  this but some buttons may not work.
  *
+ * The game state pointer is also used to open
+ *  maps and add players.
+ *
  * menu: The menu to control, and overwrite when
  *  a new menu is opened.
  * e: An event to handle.
- * profile: The player structure to copy into a
- *  map using MWG_AddPlayer() when a map gets
- *  opened.
- * playerIndex: If a new map gets opened and a
- *  player gets added using MWG_AddPlayer(), this
- *  number gets overwritten with the index of
- *  that player.
  * gameState: The game state to modify when some
  *  buttons are pressed or when a map is opened.
  * returns: 0 on success or a negative number on
  *  failure.
  */
-int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Player * profile, int * playerIndex, MWG_GameState * gameState){
+int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_GameState * gameState){
 
     /* Keys up on a DS */
     D_uint32 keysReleased = 0;
@@ -552,12 +548,6 @@ int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Player * profile, int * pl
     e->keyboard.key = D_KNone;
 
 #endif
-
-    MWG_Menu emptyMenu = {
-        -1, /* hoveredButton */
-        {}, /* buttons */
-        0 /* numButtons */
-    };
 
     if(menu == D_NULL || e == D_NULL){
         return -1;
@@ -623,26 +613,26 @@ int MWG_ControlMenu(MWG_Menu * menu, D_Event * e, MWG_Player * profile, int * pl
                     /* Otherwise change the map
                      *  if this button points to
                      *  a map. */
-                }else if(menu->button[menu->hoveredButton].nextMap != D_NULL && gameState->map != D_NULL){
+                }else if(menu->button[menu->hoveredButton].nextMap != D_NULL && gameState != D_NULL){
 
-                    MWG_OpenMap(menu->button[menu->hoveredButton].nextMap, gameState);
+                    if(gameState->map != D_NULL){
 
-                    /* If a player stucture was
-                     *  passed into the function
-                     *  and a pointer to store
-                     *  the index, then add
-                     *  (copy) the player onto
-                     *  the map. */
-                    if(profile != D_NULL){
-                        newPlayerIndex = MWG_AddPlayer(gameState->map, profile);
+                        MWG_OpenMap(menu->button[menu->hoveredButton].nextMap, gameState);
 
-                        if(playerIndex != D_NULL){
-                            *playerIndex = newPlayerIndex;
-                        };
+                        /* Copy the profile onto
+                         *  the map (at that
+                         *  point it's a player).
+                         *
+                         * For now there is just
+                         *  one profile, the 0th
+                         *  profile.
+                        */
+                        gameState->player1Index = MWG_AddPlayer(gameState->map, 0, gameState);
+
+
+                        /* Remove the menu */
+                        *menu = emptyMenu;
                     };
-
-                    /* Remove the menu */
-                    *menu = emptyMenu;
                 };
             };
 
