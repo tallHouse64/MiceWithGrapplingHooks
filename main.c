@@ -81,16 +81,21 @@ const MWG_Player defaultProfile = {
  *  If zoom is set to 0, the function would do
  *  nothing and return -2.
  *
+ * It is safe to pass null for the game state,
+ *  but players would be invisible.
+ *
  * s: The surface to draw onto.
  * map: The map to draw.
  * cameraX: The x position of the camera.
  * cameraY: The x position of the camera.
  * zoom: Zoom number to scale the result (read
  *  above).
+ * gameState: The game state used to draw each
+ *  player's image.
  * returns: 0 on success or a negative number on
  *  failure.
  */
-int MWG_DrawMap(D_Surf * s, MWG_Map * map, D_Surf * font, int cameraX, int cameraY, int zoom){
+int MWG_DrawMap(D_Surf * s, MWG_Map * map, D_Surf * font, int cameraX, int cameraY, int zoom, MWG_GameState * gameState){
 
     if(s == D_NULL || map == D_NULL){
         return -1;
@@ -102,6 +107,7 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, D_Surf * font, int cameraX, int camer
 
     D_Rect r = {0};
     D_Point centre = {0};
+    D_Surf playerImage = {D_NULL};
     int i = 0;
     while(i < map->numRects){
 
@@ -177,16 +183,24 @@ int MWG_DrawMap(D_Surf * s, MWG_Map * map, D_Surf * font, int cameraX, int camer
         centre.x = (map->player[i].rotateCentreX * 256) / zoom;
         centre.y = (map->player[i].rotateCentreY * 256) / zoom;
 
+        if(gameState != D_NULL){
+            if(gameState->imageData != D_NULL){
 
-        /* Is the player looking right? */
-        if(map->player[i].angle <= 90 && map->player[i].angle >= -90){
+                MWG_GetPlayerImage(&playerImage, i, gameState);
 
-            /* Draw the player looking right */
-            /*D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle, 0, 0);*/
-        }else{
+                /* Is the player looking right?*/
+                if(map->player[i].angle <= 90 && map->player[i].angle >= -90){
 
-            /* Draw the player looking left */
-            /*D_SurfCopyScaleRot(map->player[i].image, D_NULL, s, &r, &centre, map->player[i].angle, 1, 0);*/
+                    /* Draw the player looking
+                     *  right */
+                    D_SurfCopyScaleRot(&playerImage, D_NULL, s, &r, &centre, map->player[i].angle, 0, 0);
+                }else{
+
+                    /* Draw the player looking
+                     *  left */
+                    D_SurfCopyScaleRot(&playerImage, D_NULL, s, &r, &centre, map->player[i].angle, 1, 0);
+                };
+            };
         };
 
         i++;
@@ -1084,7 +1098,7 @@ int main(int argc, char ** argv){
                 MWG_ControlPlayer(&gameState.map->player[gameState.player1Index], D_NULL, gameState.keyboardState, gameState.map, gameState.frameRate);
             };
 
-            MWG_DrawMap(gameState.out, gameState.map, gameState.fontImage, gameState.map->player[gameState.player1Index].x, gameState.map->player[gameState.player1Index].y, gameState.map->player[gameState.player1Index].zoom);
+            MWG_DrawMap(gameState.out, gameState.map, gameState.fontImage, gameState.map->player[gameState.player1Index].x, gameState.map->player[gameState.player1Index].y, gameState.map->player[gameState.player1Index].zoom, &gameState);
 
 
             MWG_DrawMenu(gameState.out, gameState.menu, gameState.fontImage, gameState.map->player[gameState.player1Index].zoom, &gameState);
